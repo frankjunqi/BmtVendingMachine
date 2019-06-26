@@ -1,0 +1,71 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.seekwork.bangmart"
+        minSdkVersion 14
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //指定so包位置避免so包未加入编译
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    // https://stackoverflow.com/questions/49286268/error-execution-failed-for-task-app-lintvitalrelease-any-one-can-solve-it?noredirect=1&lq=1
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta1'
+    implementation files('libs/serialbmt.jar')
+    implementation files('libs/bangmart_nt_1_0.jar')
+
+    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-5'
+    api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-5'
+
+    api 'cn.bingoogolapple:bga-qrcode-zxing:1.3.6'
+
+    api 'cn.bingoogolapple:bga-photopicker:1.2.8@aar'
+    api 'cn.bingoogolapple:bga-baseadapter:1.2.9@aar'
+    api 'cn.bingoogolapple:bga-flowlayout:1.0.0@aar'
+
+    implementation 'pub.devrel:easypermissions:1.0.1'
+
+    api 'com.afollestad.material-dialogs:core:0.9.6.0'
+    api 'com.afollestad.material-dialogs:commons:0.9.6.0'
+
+    api 'com.tencent.bugly:crashreport:latest.release'
+
+    api 'com.android.support:multidex:1.0.1'
+
+
+}
