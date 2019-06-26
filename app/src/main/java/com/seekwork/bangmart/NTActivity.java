@@ -19,7 +19,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bangmart.bmtvendingmachinedemo.R;
 import com.bangmart.nt.command.Attention;
 import com.bangmart.nt.command.Command;
 import com.bangmart.nt.command.CommandDef;
@@ -41,10 +40,9 @@ import com.bangmart.nt.sys.Logger;
 import com.bangmart.nt.sys.Tools;
 import com.bangmart.nt.treatment.FaultDef;
 import com.bangmart.nt.treatment.FaultState;
-import com.bangmart.bmtvendingmachinedemo.test.data.DBHelper;
-import com.bangmart.bmtvendingmachinedemo.test.data.DataCache;
-import com.bangmart.bmtvendingmachinedemo.test.data.DataStat;
-
+import com.seekwork.bangmart.data.DBHelper;
+import com.seekwork.bangmart.data.DataCache;
+import com.seekwork.bangmart.data.DataStat;
 
 import java.io.File;
 import java.util.ArrayList;
