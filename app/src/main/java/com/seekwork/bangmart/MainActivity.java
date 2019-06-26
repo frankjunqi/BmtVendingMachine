@@ -21,11 +21,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.seekwork.bangmart.network.api.Host;
+import com.seekwork.bangmart.network.api.SeekWorkService;
+import com.seekwork.bangmart.network.api.SrvResult;
+import com.seekwork.bangmart.network.entity.seekwork.MMachineInfo;
+import com.seekwork.bangmart.network.gsonfactory.GsonConverterFactory;
 import com.seekwork.bangmart.serialport.CardReadSerialPort;
+import com.seekwork.bangmart.util.LogCat;
+import com.seekwork.bangmart.util.SeekerSoftConstant;
 
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 // 首页
@@ -82,12 +92,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         hideNavigation();
         //prohibitDropDown();
-        btn_take = findViewById(R.id.btn_take);
-        btn_take.setOnClickListener(this);
-        btn_borrow = findViewById(R.id.btn_borrow);
-        btn_borrow.setOnClickListener(this);
-        btn_back = findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(this);
 
 
         Drawable drawable_take = getResources().getDrawable(R.drawable.icon_take); //获取图片
@@ -132,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         EasyPermissions.requestPermissions(this, "请求权限", 12, PERMS_WRITE);
 
-        //startActivity(new Intent(this, ManageActivity.class));
     }
 
     private void loadRegisterMachine() {
@@ -147,33 +150,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_take) {
-            Intent intent = new Intent(MainActivity.this, TakeActivity.class);
-            intent.putExtra(SeekerSoftConstant.ActionType, SeekerSoftConstant.Take);
-            startActivity(intent);
-        } else if (v.getId() == R.id.btn_borrow) {
-            Intent intent = new Intent(MainActivity.this, TakeActivity.class);
-            intent.putExtra(SeekerSoftConstant.ActionType, SeekerSoftConstant.Borrow);
-            startActivity(intent);
-        } else if (v.getId() == R.id.btn_back) {
-            Intent intent = new Intent(MainActivity.this, TakeActivity.class);
-            intent.putExtra(SeekerSoftConstant.ActionType, SeekerSoftConstant.Back);
-            startActivity(intent);
-        }
+
     }
 
     private void registerMachine() {
 
         // 初始化串口设备
         CardReadSerialPort cardReadSerialPort = CardReadSerialPort.SingleInit();
-        VendingSerialPort vendingSerialPort = VendingSerialPort.SingleInit();
         String error = "";
         if (cardReadSerialPort == null) {
             error = "读卡器串口打开失败。\n";
-        }
-
-        if (vendingSerialPort == null) {
-            error = error + "柜子串口打开失败";
         }
 
         error = "";
@@ -336,8 +322,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (exitFlag == 1) {
             // 退出程序
             CardReadSerialPort.SingleInit().closeSerialPort();
-            VendingSerialPort.SingleInit().closeSerialPort();
-            //showNavigation();
             this.finish();
         }
     }
