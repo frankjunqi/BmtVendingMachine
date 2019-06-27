@@ -14,7 +14,7 @@
     <string name="taskTimeout">任务执行超时</string>
 
 
-
+    <string name="auth_title">设备授权验证中，请稍等....</string>
 
     <string name="run">执行</string>
     <string name="pause">暂停</string>

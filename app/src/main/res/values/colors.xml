@@ -7,4 +7,8 @@
     <color name="black_overlay">#66000000</color>
     <color name="yellow_light">#faf2bc</color>
     <color name="green_light">#cefac7</color>
+
+    <color name="bg_no">#FFD0021B</color>
+    <color name="bg_or">#FFF5A623</color>
+
 </resources>

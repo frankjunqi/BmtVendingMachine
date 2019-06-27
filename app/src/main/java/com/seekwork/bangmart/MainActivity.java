@@ -4,17 +4,13 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -41,12 +37,7 @@ import retrofit2.Retrofit;
 // 首页
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
 
-
-    //private StatusBarManager mStatusBarManager;
-
     private RelativeLayout customView;
-
-    private Button btn_take, btn_borrow, btn_back;
 
     private TextView tv_error;
 
@@ -55,11 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar pb_loadingdata;
     private Button btn_try;
 
-    private TextView tv_num, tv_name;
-
     public final static String[] PERMS_WRITE = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_SETTINGS};
-
-    private CardReadSerialPort cardReadSerialPort;
 
     private CountDownTimer timer = new CountDownTimer(10000, 1000) {
 
@@ -87,31 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // dialog tip
         customView = (RelativeLayout) inflater.inflate(R.layout.activity_main, null);
         setContentView(customView);
-
-        //mStatusBarManager = (StatusBarManager) mContext.getSystemService(Context.STATUS_BAR_SERVICE);
-
-        hideNavigation();
-        //prohibitDropDown();
-
-
-        Drawable drawable_take = getResources().getDrawable(R.drawable.icon_take); //获取图片
-        drawable_take.setBounds(0, 0, 140, 140);  //设置图片参数
-        btn_take.setCompoundDrawables(null, drawable_take, null, null);
-
-
-        Drawable drawable_back = getResources().getDrawable(R.drawable.icon_back_); //获取图片
-        drawable_back.setBounds(0, 0, 140, 140);  //设置图片参数
-        btn_back.setCompoundDrawables(null, drawable_back, null, null);
-
-        Drawable drawable_borrow = getResources().getDrawable(R.drawable.icon_borrow); //获取图片
-        drawable_borrow.setBounds(0, 0, 140, 140);  //设置图片参数
-        btn_borrow.setCompoundDrawables(null, drawable_borrow, null, null);
-
-        tv_num = findViewById(R.id.tv_num);
-        tv_name = findViewById(R.id.tv_name);
-
-        TextView tv_num = findViewById(R.id.tv_num);
-        tv_num.setOnClickListener(this);
 
         View customView = inflater.inflate(R.layout.pop_auth_layout, null);
 
@@ -188,8 +150,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (response != null && response.body() != null && response.body().getStatus() == 1 && response.body().getData() != null && response.body().getData().isAuthorize()) {
                     LogCat.e("Status: " + response.body().getStatus());
                     SeekerSoftConstant.MachineNo = response.body().getData().getMachineNo();
-                    tv_num.setText("设备编号：" + response.body().getData().getMachineNo());
-                    tv_name.setText("紧急联系人：" + response.body().getData().getContacts() + "  " + response.body().getData().getNumbers());
                     // 成功授权显示逻辑
                     promissionDialog.dismiss();
                     // 成功授权取消加载进度
@@ -275,33 +235,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public boolean hideNavigation() {
-        boolean ishide;
-        try {
-            String command = "LD_LIBRARY_PATH=/vendor/lib:/system/lib service call activity 42 s16 com.android.systemui";
-            Process proc = Runtime.getRuntime().exec(new String[]{"su", "-c", command});
-            proc.waitFor();
-            ishide = true;
-        } catch (Exception ex) {
-            ishide = false;
-        }
-        return ishide;
-    }
-
-    public boolean showNavigation() {
-        boolean isshow;
-        try {
-            String command = "LD_LIBRARY_PATH=/vendor/lib:/system/lib am startservice -n com.android.systemui/.SystemUIService";
-            Process proc = Runtime.getRuntime().exec(new String[]{"su", "-c", command});
-            proc.waitFor();
-            isshow = true;
-        } catch (Exception e) {
-            isshow = false;
-            e.printStackTrace();
-        }
-        return isshow;
-    }
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -311,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        allowDropDown();
         System.exit(0);//直接结束程序
     }
 
@@ -325,31 +257,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.finish();
         }
     }
-
-    //禁止下拉
-    private void prohibitDropDown() {
-        manager = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
-        WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams();
-        localLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
-        localLayoutParams.gravity = Gravity.TOP;
-        localLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                // this is to enable the notification to recieve touch events
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-                // Draws over status bar
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-        localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        localLayoutParams.height = (int) (50 * getResources().getDisplayMetrics().scaledDensity);
-        localLayoutParams.format = PixelFormat.TRANSPARENT;
-        manager.addView(customView, localLayoutParams);
-    }
-
-    WindowManager manager;
-
-    //允许下拉
-    private void allowDropDown() {
-        manager.removeView(customView);
-    }
-
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
