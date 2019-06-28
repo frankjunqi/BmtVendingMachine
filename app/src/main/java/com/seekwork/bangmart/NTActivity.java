@@ -94,7 +94,7 @@ public class NTActivity extends AppCompatActivity implements ILogcat {
         ContextInfo.init(getApplicationContext());
 
         /*********** 初始化设备              *************/
-        machine = Machine.create("IamTheOne.", getString(R.string.bmt_com2));
+        machine = Machine.create("IamTheOne.", getString(R.string.bmt_com3));
 
         machine.setSerialChannelListener(new SerialListener() {
             @Override
@@ -787,17 +787,17 @@ public class NTActivity extends AppCompatActivity implements ILogcat {
                         return;
                     }
 
-                    for (byte area=0; area<areaCnt; area++){
+                    for (byte area = 0; area < areaCnt; area++) {
                         int floorCnt = storageMap.getArea(area).getFloorCount();
                         if (floorCnt == 0) {
                             appendUILog("没有货道布局信息，无法执行");
                             return;
                         }
 
-                        for (byte floor=0; floor<floorCnt; floor++){
+                        for (byte floor = 0; floor < floorCnt; floor++) {
                             int locationCnt = storageMap.getArea(area).getFloor(floor).getCount();
 
-                            for (byte location=0; location<locationCnt; location++) {
+                            for (byte location = 0; location < locationCnt; location++) {
                                 byte[] paramCode = new byte[6];
                                 paramCode[0] = (byte) 0;    //不连续出货
                                 paramCode[1] = (byte) 1;    //只出一件货
@@ -1351,7 +1351,7 @@ public class NTActivity extends AppCompatActivity implements ILogcat {
                             appendUILogAsync("0x" + Tools.intToHexStrForShow(errCode) + ": " + errDesc);
                         }
                     });
-                } catch (Exception e){
+                } catch (Exception e) {
                     Logger.error(getClass().getSimpleName(), "指定的文件不存在：" + file.getAbsolutePath(), e);
                     toastLog("指定的文件不存在：" + file.getAbsolutePath());
                     return;

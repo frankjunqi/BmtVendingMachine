@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BmtVendingMachineDemo</string>
+    <string name="app_name">BmtVendingMachine</string>
     <string name="title_activity_h0331">H0331Activity</string>
     <string name="title_activity_nt">NTActivity</string>
 
@@ -26,6 +26,7 @@
     <string name="yichu_com2">dev/ttymxc2</string>
     <string name="bmt_com1">/dev/ttyS0</string>
     <string name="bmt_com2">/dev/ttyS1</string>
+    <string name="bmt_com3">/dev/ttyS3</string>
 
 
     <string name="version">R-2018-09-08</string>
