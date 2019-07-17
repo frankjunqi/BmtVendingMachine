@@ -1,6 +1,7 @@
 package com.seekwork.bangmart.network.api;
 
 /**
+ *
  */
 public class Host {
 

@@ -1,6 +1,5 @@
 package com.seekwork.bangmart;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -12,30 +11,35 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.seekwork.bangmart.adpter.GridAdapter;
 import com.seekwork.bangmart.network.api.Host;
 import com.seekwork.bangmart.network.api.SeekWorkService;
 import com.seekwork.bangmart.network.api.SrvResult;
+import com.seekwork.bangmart.network.entity.seekwork.MBangmartDetail;
+import com.seekwork.bangmart.network.entity.seekwork.MBangmartFloor;
+import com.seekwork.bangmart.network.entity.seekwork.MBangmartRoad;
 import com.seekwork.bangmart.network.entity.seekwork.MMachineInfo;
 import com.seekwork.bangmart.network.gsonfactory.GsonConverterFactory;
 import com.seekwork.bangmart.serialport.CardReadSerialPort;
 import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 // 首页
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RelativeLayout customView;
 
@@ -46,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar pb_loadingdata;
     private Button btn_try;
 
-    public final static String[] PERMS_WRITE = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_SETTINGS};
+    private TextView tv_desc;
+    private GridView gv_data;
+    private GridAdapter gridAdapter;
 
     private CountDownTimer timer = new CountDownTimer(10000, 1000) {
 
@@ -75,8 +81,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         customView = (RelativeLayout) inflater.inflate(R.layout.activity_main, null);
         setContentView(customView);
 
-        View customView = inflater.inflate(R.layout.pop_auth_layout, null);
+        tv_desc = customView.findViewById(R.id.tv_desc);
+        gv_data = customView.findViewById(R.id.gv_data);
+        gridAdapter = new GridAdapter(this);
+        gv_data.setAdapter(gridAdapter);
 
+
+        View customView = inflater.inflate(R.layout.pop_auth_layout, null);
         pb_loadingdata = customView.findViewById(R.id.pb_loadingdata);
         tv_error = customView.findViewById(R.id.tv_error);
 
@@ -95,9 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 授权弹框
         registerMachine();
-
-        EasyPermissions.requestPermissions(this, "请求权限", 12, PERMS_WRITE);
-
     }
 
     private void loadRegisterMachine() {
@@ -109,10 +117,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerMachine();
     }
 
-
     @Override
     public void onClick(View v) {
 
+    }
+
+    /**
+     * 获取货柜数据
+     */
+    private void bangMartQueryRoad() {
+        // 异步加载(get)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekWorkService service = retrofit.create(SeekWorkService.class);
+        Call<SrvResult<MBangmartDetail>> updateAction = service.queryRoad(SeekerSoftConstant.MachineNo);
+        LogCat.e("url = " + updateAction.request().url().toString());
+        updateAction.enqueue(new Callback<SrvResult<MBangmartDetail>>() {
+            @Override
+            public void onResponse(Call<SrvResult<MBangmartDetail>> call, Response<SrvResult<MBangmartDetail>> response) {
+                if (response != null && response.body() != null && response.body().getData() != null) {
+                    List<MBangmartFloor> mBangmartFloors = response.body().getData().getmBangmartAreas().get(0).getmBangmartFloors();
+                    List<MBangmartRoad> mBangmartRoads = new ArrayList<>();
+                    for (int i = 0; i < mBangmartFloors.size(); i++) {
+                        mBangmartRoads.addAll(mBangmartFloors.get(i).getmBangmartRoads());
+                    }
+                    gridAdapter.setDataList(mBangmartRoads);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SrvResult<MBangmartDetail>> call, Throwable throwable) {
+
+            }
+        });
     }
 
     private void registerMachine() {
@@ -124,7 +160,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             error = "读卡器串口打开失败。\n";
         }
 
+        // TODO 测试数据
         error = "";
+
         if (!TextUtils.isEmpty(error)) {
             if (!promissionDialog.isShowing()) {
                 promissionDialog.show();
@@ -150,17 +188,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (response != null && response.body() != null && response.body().getStatus() == 1 && response.body().getData() != null && response.body().getData().isAuthorize()) {
                     LogCat.e("Status: " + response.body().getStatus());
                     SeekerSoftConstant.MachineNo = response.body().getData().getMachineNo();
+
+                    tv_desc.setText(SeekerSoftConstant.MachineNo);
+
                     // 成功授权显示逻辑
                     promissionDialog.dismiss();
                     // 成功授权取消加载进度
                     pb_loadingdata.setVisibility(View.GONE);
                     btn_try.setVisibility(View.VISIBLE);
 
+                    bangMartQueryRoad();
+
                 } else {
                     if (!promissionDialog.isShowing()) {
                         promissionDialog.show();
                     }
-                    tv_error.setText("错误：" + response.body().getMsg());
+                    tv_error.setText("错误：" + response != null ? response.body() != null ? response.body().getMsg() != null ? response.body().getMsg() : "response.body().getMsg() == null" : "response.body() == null" : "response == null");
                     pb_loadingdata.setVisibility(View.GONE);
                     btn_try.setVisibility(View.VISIBLE);
 
@@ -231,8 +274,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         }
-
-
     }
 
     @Override
@@ -244,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        CardReadSerialPort.SingleInit().setOnDataReceiveListener(null);
         System.exit(0);//直接结束程序
     }
 
@@ -258,13 +300,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-
-    }
 }

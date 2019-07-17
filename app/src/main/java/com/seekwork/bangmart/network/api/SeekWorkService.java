@@ -9,9 +9,7 @@ import com.seekwork.bangmart.network.entity.seekwork.MBangmartAuthPickUpResponse
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartDetail;
 import com.seekwork.bangmart.network.entity.seekwork.MDoDisableRoodRequest;
 import com.seekwork.bangmart.network.entity.seekwork.MMachineInfo;
-import com.seekwork.bangmart.network.entity.seekwork.MPickQueryByRFID;
 import com.seekwork.bangmart.network.entity.seekwork.MRecoverRoadStateRequest;
-import com.seekwork.bangmart.network.entity.seekwork.MReplenish;
 import com.seekwork.bangmart.network.entity.seekwork.MReplenishToRequest;
 
 import retrofit2.Call;
@@ -32,7 +30,7 @@ public interface SeekWorkService {
      * @param vendingMachineGuid 设备唯一码
      * @return
      */
-    @GET("/BangMart/GetMachineInfo")
+    @GET("/api/BangMart/GetMachineInfo")
     Call<SrvResult<MMachineInfo>> getMachineInfo(
             @Query("vendingMachineGuid") String vendingMachineGuid
     );
@@ -45,7 +43,7 @@ public interface SeekWorkService {
      * @param cardNo      卡号
      * @return
      */
-    @GET("ManageOperate/LoginValidate")
+    @GET("/api/ManageOperate/LoginValidate")
     Call<SrvResult<Boolean>> loginValidate(
             @Query("machineCode") String machineCode,
             @Query("cardNo") String cardNo
@@ -58,7 +56,7 @@ public interface SeekWorkService {
      * @param machineCode 设备编号
      * @return
      */
-    @GET("BangMart/QueryRoad")
+    @GET("/api/BangMart/QueryRoad")
     Call<SrvResult<MBangmartDetail>> queryRoad(
             @Query("machineCode") String machineCode
     );
@@ -74,7 +72,7 @@ public interface SeekWorkService {
             "Accept: application/json",
             "Content-type: application/json"
     })
-    @POST("BangMart/PickQuery")
+    @POST("/api/BangMart/PickQuery")
     Call<SrvResult<MBangmartAuthPickUpResponse>> PickQuery(
             @Body MBangmartAuthPickUpRequest mBangmartAuthPickUpRequest);
 
@@ -89,7 +87,7 @@ public interface SeekWorkService {
             "Accept: application/json",
             "Content-type: application/json"
     })
-    @POST("BangMart/GetPickUpRoads")
+    @POST("/api/BangMart/GetPickUpRoads")
     Call<SrvResult<MBangmarPickRoadDetailResponse>> GetPickUpRoads(
             @Body MBangmarPickRoadDetailRequest mBangmarPickRoadDetailRequest);
 
@@ -104,7 +102,7 @@ public interface SeekWorkService {
             "Accept: application/json",
             "Content-type: application/json"
     })
-    @POST("BangMart/DoPickSuccess")
+    @POST("/api/BangMart/DoPickSuccess")
     Call<SrvResult<Boolean>> DoPickSuccess(
             @Body MBangmarPickSuccessRequest mBangmarPickSuccessRequest);
 
@@ -119,7 +117,7 @@ public interface SeekWorkService {
             "Accept: application/json",
             "Content-type: application/json"
     })
-    @POST("ManageOperate/DoDisableRoads")
+    @POST("/api/ManageOperate/DoDisableRoads")
     Call<SrvResult<Boolean>> DoDisableRoads(
             @Body MDoDisableRoodRequest mDoDisableRoodRequest);
 
@@ -134,7 +132,7 @@ public interface SeekWorkService {
             "Accept: application/json",
             "Content-type: application/json"
     })
-    @POST("ManageOperate/RecoverRoadState")
+    @POST("/api/ManageOperate/RecoverRoadState")
     Call<SrvResult<Boolean>> RecoverRoadState(
             @Body MRecoverRoadStateRequest mRecoverRoadStateRequest);
 
@@ -148,67 +146,7 @@ public interface SeekWorkService {
             "Accept: application/json",
             "Content-type: application/json"
     })
-    @POST("ManageOperate/ReplenishTo")
+    @POST("/api/ManageOperate/ReplenishTo")
     Call<SrvResult<Boolean>> ReplenishTo(@Body MReplenishToRequest mReplenishToRequest);
 
-
-    // 刷卡取货
-    @GET("PickUp/PickQueryByRFID")
-    Call<SrvResult<MPickQueryByRFID>> pickQueryByRFID(
-            @Query("cardNo") String cardNo,
-            @Query("machineCode") String machineCode,
-            @Query("cabNo") String cabNo,
-            @Query("roadCode") String roadCode,
-            @Query("pickNum") int pickNum
-    );
-
-
-    // 刷卡取货成功提交确认
-    @GET("PickUp/PickSuccess")
-    Call<SrvResult<Boolean>> pickSuccess(
-            @Query("cardNo") String cardNo,
-            @Query("machineCode") String machineCode,
-            @Query("cabNo") String cabNo,
-            @Query("roadCode") String roadCode,
-            @Query("pickNum") int pickNum
-    );
-
-    // 此货道被谁借走
-    @GET("BorrowAndBack/GetLastBorrowName")
-    Call<SrvResult<String>> getLastBorrowName(
-            @Query("machineCode") String machineCode,
-            @Query("cabNo") String cabNo,
-            @Query("roadCode") String roadCode
-    );
-
-
-    // 借货 还货 请求
-    @GET("BorrowAndBack/AuthBorrowAndBack")
-    Call<SrvResult<Boolean>> authBorrowAndBack(
-            @Query("cardNo") String cardNo,
-            @Query("machineCode") String machineCode,
-            @Query("cabNo") String cabNo,
-            @Query("roadCode") String roadCode,
-            @Query("BorrowBackType") int BorrowBackType
-    );
-
-    // 借货成功确认
-    @GET("BorrowAndBack/BorrowComplete")
-    Call<SrvResult<Boolean>> borrowComplete(
-            @Query("cardNo") String cardNo,
-            @Query("machineCode") String machineCode,
-            @Query("cabNo") String cabNo,
-            @Query("roadCode") String roadCode,
-            @Query("successCount") int successCount
-    );
-
-    // 还货成功确认
-    @GET("BorrowAndBack/BackComplete")
-    Call<SrvResult<Boolean>> backComplete(
-            @Query("cardNo") String cardNo,
-            @Query("machineCode") String machineCode,
-            @Query("cabNo") String cabNo,
-            @Query("roadCode") String roadCode,
-            @Query("successCount") int successCount
-    );
 }

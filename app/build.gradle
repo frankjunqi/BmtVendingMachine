@@ -77,6 +77,9 @@ dependencies {
     implementation files('libs/serialbmt.jar')
     implementation files('libs/bangmart_nt_1_0.jar')
 
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-5'
     api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-5'
 
