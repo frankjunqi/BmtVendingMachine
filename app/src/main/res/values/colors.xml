@@ -11,4 +11,9 @@
     <color name="bg_no">#FFD0021B</color>
     <color name="bg_or">#FFF5A623</color>
 
+    <color name="title">#CC080606</color>
+    <color name="un_title">#ccb4b1b1</color>
+
+    <color name="btn_take_un_press">#5abc20</color>
+    <color name="btn_take_press">#43AF04</color>
 </resources>

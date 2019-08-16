@@ -2,7 +2,7 @@ package com.seekwork.bangmart.network.entity.seekwork;
 
 import java.io.Serializable;
 
-public class MBangmartRoad implements Serializable {
+public class MBangmartRoad implements Serializable, Cloneable {
 
 
     /**
@@ -161,5 +161,23 @@ public class MBangmartRoad implements Serializable {
      */
     private int Num;
 
+
+    public int getChooseNum() {
+        return ChooseNum;
+    }
+
+    public void setChooseNum(int chooseNum) {
+        ChooseNum = chooseNum;
+    }
+
+    /**
+     * 项目逻辑使用，不是接口返回。默认是0
+     */
+    private int ChooseNum = 0;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
 }

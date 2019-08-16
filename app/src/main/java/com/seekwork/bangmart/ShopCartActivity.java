@@ -32,7 +32,8 @@ public class ShopCartActivity extends AppCompatActivity {
         shopCartAdapter = new ShopCartAdapter(this, new ShopCartAdapter.DeleteCartInterface() {
             @Override
             public void deleteFromCart(MBangmartRoad mBangmartRoad) {
-
+                AddToBangmartRoadList.remove(mBangmartRoad);
+                shopCartAdapter.notifyDataSetChanged();
             }
         });
 

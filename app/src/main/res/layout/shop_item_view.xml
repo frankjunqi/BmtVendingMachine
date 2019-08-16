@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_main_choice_bg">
 
     <ImageView
         android:id="@+id/iv_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/default_iv_bg" />
 
 
@@ -16,6 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="4dp"
         android:src="@mipmap/icon_cart_delete" />
@@ -24,25 +31,42 @@
         android:id="@+id/ll_com"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/iv_delete_to_cart"
-        android:gravity="right"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+" />
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/cicle_corner_trans_green"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="#CC080606"
+            android:textSize="18sp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12"
-            android:textSize="12sp" />
+            android:id="@+id/tv_choose_num"
+            android:layout_width="40dp"
+            android:layout_height="26dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/shape_take_num"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="18sp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-" />
+        <TextView
+            android:id="@+id/tv_cut"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/cicle_corner_trans_green"
+            android:gravity="center"
+            android:text="一"
+            android:textColor="#CC080606"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -50,15 +74,14 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/ll_com"
         android:layout_toRightOf="@id/iv_pic"
         android:ellipsize="end"
-        android:gravity="center"
+        android:gravity="left"
         android:lines="1"
-        android:paddingLeft="8dp"
-        android:paddingTop="4dp"
+        android:paddingLeft="3dp"
         android:paddingRight="8dp"
-        android:paddingBottom="4dp"
         android:text="商品名称商品名称商品名称商品名称商品名称商品名称"
         android:textSize="16sp" />
 

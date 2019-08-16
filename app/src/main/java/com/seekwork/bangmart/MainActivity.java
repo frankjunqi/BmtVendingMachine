@@ -95,8 +95,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         gridAdapter = new GridAdapter(this, new GridAdapter.AddCartInterface() {
             @Override
             public void addToCart(MBangmartRoad mBangmartRoad) {
-                // TODO 判断库存，是否可以再添加商品
-                AddToBangmartRoadList.add(mBangmartRoad);
+                //TODO clone 对象。判断库存，是否可以再添加商品
+                MBangmartRoad opM = null;
+                try {
+                    opM = (MBangmartRoad) mBangmartRoad.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+
+                boolean isExist = false;
+                int position = -1;
+                for (int i = 0; i < AddToBangmartRoadList.size(); i++) {
+                    if (opM.getRoadID() == AddToBangmartRoadList.get(i).getRoadID()) {
+                        isExist = true;
+                        position = i;
+                    }
+                }
+
+                if (!isExist) {
+                    // 不存在，加入购物车列表
+                    opM.setChooseNum(opM.getChooseNum() + 1);
+                    AddToBangmartRoadList.add(opM);
+                } else {
+                    // 存在，判断库存，进行choosenum设置
+                    if (AddToBangmartRoadList.get(position).getChooseNum() == AddToBangmartRoadList.get(position).getQty()) {
+                        // TODO  不可以加了，库存满了
+                    } else {
+                        AddToBangmartRoadList.get(position).setChooseNum(AddToBangmartRoadList.get(position).getChooseNum() + 1);
+                    }
+                }
+
                 tv_cart_desc.setText("选择了" + AddToBangmartRoadList.size() + "个商品.");
             }
         });
@@ -126,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bundle.putSerializable(SeekerSoftConstant.ADDCARTLIST, AddToBangmartRoadList);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                AddToBangmartRoadList.clear();
             }
         });
 
@@ -149,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
     }
+
 
     /**
      * 获取货柜数据
@@ -318,6 +348,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         }
+        if (tv_cart_desc != null) {
+            tv_cart_desc.setText("选择了" + AddToBangmartRoadList.size() + "个商品.");
+        }
+
     }
 
     @Override
