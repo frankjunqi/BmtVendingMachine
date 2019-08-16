@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -21,8 +21,8 @@ import com.seekwork.bangmart.adpter.GridAdapter;
 import com.seekwork.bangmart.network.api.Host;
 import com.seekwork.bangmart.network.api.SeekWorkService;
 import com.seekwork.bangmart.network.api.SrvResult;
+import com.seekwork.bangmart.network.entity.seekwork.MBangmartArea;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartDetail;
-import com.seekwork.bangmart.network.entity.seekwork.MBangmartFloor;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartRoad;
 import com.seekwork.bangmart.network.entity.seekwork.MMachineInfo;
 import com.seekwork.bangmart.network.gsonfactory.GsonConverterFactory;
@@ -41,18 +41,23 @@ import retrofit2.Retrofit;
 // 首页
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private RelativeLayout customView;
-
+    private Context mContext;
     private TextView tv_error;
-
     private MaterialDialog promissionDialog;
-
     private ProgressBar pb_loadingdata;
     private Button btn_try;
 
+    private LinearLayout customView;
+    private LinearLayout ll_btns;
+    private Button btn_cart;
     private TextView tv_desc;
+    private TextView tv_cart_desc;
+
     private GridView gv_data;
     private GridAdapter gridAdapter;
+
+    private List<MBangmartArea> mBangmartAreaList;
+    private ArrayList<MBangmartRoad> AddToBangmartRoadList = new ArrayList<>();
 
     private CountDownTimer timer = new CountDownTimer(10000, 1000) {
 
@@ -75,15 +80,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mContext = this;
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // dialog tip
-        customView = (RelativeLayout) inflater.inflate(R.layout.activity_main, null);
+        customView = (LinearLayout) inflater.inflate(R.layout.activity_main, null);
         setContentView(customView);
 
         tv_desc = customView.findViewById(R.id.tv_desc);
+        tv_cart_desc = customView.findViewById(R.id.tv_cart_desc);
+        btn_cart = customView.findViewById(R.id.btn_cart);
         gv_data = customView.findViewById(R.id.gv_data);
-        gridAdapter = new GridAdapter(this);
+        ll_btns = customView.findViewById(R.id.ll_btns);
+
+        gridAdapter = new GridAdapter(this, new GridAdapter.AddCartInterface() {
+            @Override
+            public void addToCart(MBangmartRoad mBangmartRoad) {
+                // TODO 判断库存，是否可以再添加商品
+                AddToBangmartRoadList.add(mBangmartRoad);
+                tv_cart_desc.setText("选择了" + AddToBangmartRoadList.size() + "个商品.");
+            }
+        });
         gv_data.setAdapter(gridAdapter);
 
 
@@ -98,6 +114,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 loadRegisterMachine();
+            }
+        });
+
+
+        btn_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, ShopCartActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(SeekerSoftConstant.ADDCARTLIST, AddToBangmartRoadList);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
@@ -135,12 +163,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<SrvResult<MBangmartDetail>> call, Response<SrvResult<MBangmartDetail>> response) {
                 if (response != null && response.body() != null && response.body().getData() != null) {
-                    List<MBangmartFloor> mBangmartFloors = response.body().getData().getmBangmartAreas().get(0).getmBangmartFloors();
-                    List<MBangmartRoad> mBangmartRoads = new ArrayList<>();
-                    for (int i = 0; i < mBangmartFloors.size(); i++) {
-                        mBangmartRoads.addAll(mBangmartFloors.get(i).getmBangmartRoads());
+                    mBangmartAreaList = response.body().getData().getmBangmartAreas();
+
+                    //  默认处理第一个货柜的数据
+                    gridAdapter.setDataList(mBangmartAreaList.get(0).getAllBangmartRoads());
+
+                    // 处理柜子数量
+                    int count = mBangmartAreaList.size();
+                    ll_btns.setWeightSum(count);
+
+                    for (int i = 0; i < count; i++) {
+                        final int k = i;
+                        Button btn = new Button(mContext);
+                        btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+                        btn.setText(String.valueOf(mBangmartAreaList.get(i).getArea()));
+                        btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                gridAdapter.setDataList(mBangmartAreaList.get(k).getAllBangmartRoads());
+                            }
+                        });
+                        ll_btns.addView(btn);
                     }
-                    gridAdapter.setDataList(mBangmartRoads);
                 }
             }
 
@@ -279,13 +323,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStop() {
         super.onStop();
-        CardReadSerialPort.SingleInit().setOnDataReceiveListener(null);
+        if (CardReadSerialPort.SingleInit() != null) {
+            CardReadSerialPort.SingleInit().setOnDataReceiveListener(null);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        CardReadSerialPort.SingleInit().setOnDataReceiveListener(null);
+        if (CardReadSerialPort.SingleInit() != null) {
+            CardReadSerialPort.SingleInit().setOnDataReceiveListener(null);
+        }
         System.exit(0);//直接结束程序
     }
 
@@ -295,7 +343,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int exitFlag = intent.getIntExtra(SeekerSoftConstant.EXITAPP, 0);
         if (exitFlag == 1) {
             // 退出程序
-            CardReadSerialPort.SingleInit().closeSerialPort();
+            if (CardReadSerialPort.SingleInit() != null) {
+                CardReadSerialPort.SingleInit().closeSerialPort();
+            }
             this.finish();
         }
     }

@@ -16,16 +16,16 @@ import com.seekwork.bangmart.util.DensityUtil;
 
 import java.util.List;
 
-public class GridAdapter extends BaseAdapter {
+public class ShopCartAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<MBangmartRoad> mBangmartRoads;
     private LayoutInflater inflater;
-    private AddCartInterface addCartInterface;
+    private DeleteCartInterface deleteCartInterface;
 
-    public GridAdapter(Context mContext, AddCartInterface addCartInterface) {
+    public ShopCartAdapter(Context mContext, DeleteCartInterface deleteCartInterface) {
         this.mContext = mContext;
-        this.addCartInterface = addCartInterface;
+        this.deleteCartInterface = deleteCartInterface;
         inflater = LayoutInflater.from(mContext);
     }
 
@@ -57,10 +57,9 @@ public class GridAdapter extends BaseAdapter {
         final ViewHolder holder;
         if (view == null) {
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.gird_item_view, null);
+            view = inflater.inflate(R.layout.shop_item_view, null);
             // Locate the TextViews in item_road_my_road.xml
             holder.iv_pic = (ImageView) view.findViewById(R.id.iv_pic);
-            holder.iv_add_to_cart = (ImageView) view.findViewById(R.id.iv_add_to_cart);
             holder.tv_name = (TextView) view.findViewById(R.id.tv_name);
             view.setTag(holder);
         } else {
@@ -72,29 +71,20 @@ public class GridAdapter extends BaseAdapter {
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.iv_pic.getLayoutParams();
 
-        layoutParams.width = ((DensityUtil.getWidth(mContext)) - 40) / 2;
+        layoutParams.width = ((DensityUtil.getWidth(mContext)) - 40) / 5;
         layoutParams.height = layoutParams.width;
         holder.iv_pic.setLayoutParams(layoutParams);
         Glide.with(mContext).load(mBangmartRoads.get(i).getPicName()).placeholder(R.drawable.default_iv_bg).into(holder.iv_pic);
 
-        holder.iv_add_to_cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (addCartInterface != null) {
-                    addCartInterface.addToCart(mBangmartRoads.get(i));
-                }
-            }
-        });
         return view;
     }
 
-    public interface AddCartInterface {
-        public void addToCart(MBangmartRoad mBangmartRoad);
+    public interface DeleteCartInterface {
+        void deleteFromCart(MBangmartRoad mBangmartRoad);
     }
 
     public class ViewHolder {
         public TextView tv_name;
         public ImageView iv_pic;
-        public ImageView iv_add_to_cart;
     }
 }

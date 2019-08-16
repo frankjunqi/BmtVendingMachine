@@ -1,6 +1,7 @@
 package com.seekwork.bangmart.network.entity.seekwork;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MBangmartArea implements Serializable {
@@ -24,5 +25,20 @@ public class MBangmartArea implements Serializable {
     }
 
     private List<MBangmartFloor> mBangmartFloors;
+
+
+    private List<MBangmartRoad> allBangmartRoads;
+
+    public List<MBangmartRoad> getAllBangmartRoads() {
+        if (allBangmartRoads == null) {
+            allBangmartRoads = new ArrayList<>();
+        } else {
+            return allBangmartRoads;
+        }
+        for (int i = 0; i < mBangmartFloors.size(); i++) {
+            allBangmartRoads.addAll(mBangmartFloors.get(i).getmBangmartRoads());
+        }
+        return allBangmartRoads;
+    }
 
 }
