@@ -4,6 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <com.seekwork.bangmart.view.SingleCountDownView
+        android:id="@+id/singleCountDownView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingStart="15dp"
+        android:paddingLeft="15dp"
+        android:paddingEnd="15dp"
+        android:paddingRight="15dp"
+        android:textColor="@android:color/black"
+        android:textSize="32sp" />
 
     <Button
         android:id="@+id/btn_sure"
@@ -20,9 +31,9 @@
     <ListView
         android:id="@+id/lv_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@id/btn_sure"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/singleCountDownView"
         android:background="@android:color/transparent"
         android:cacheColorHint="#00000000"
         android:divider="@null"

@@ -25,6 +25,15 @@ public class MBangmartAuthPickUpResponse implements Serializable {
         return ExceptionMsg;
     }
 
+
+    public String getExceptionMsgStr() {
+        String str = "";
+        for (int i = 0; ExceptionMsg != null && i < ExceptionMsg.size(); i++) {
+            str = str + ExceptionMsg.get(i) + "\n";
+        }
+        return str;
+    }
+
     public void setExceptionMsg(List<String> exceptionMsg) {
         ExceptionMsg = exceptionMsg;
     }
