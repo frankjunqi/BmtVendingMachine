@@ -4,17 +4,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.seekwork.bangmart.view.SingleCountDownView
-        android:id="@+id/singleCountDownView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:paddingStart="15dp"
-        android:paddingLeft="15dp"
-        android:paddingEnd="15dp"
-        android:paddingRight="15dp"
-        android:textColor="@android:color/black"
-        android:textSize="32sp" />
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/action_bg"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:src="@mipmap/icon_back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="购物车"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+
+        <com.seekwork.bangmart.view.SingleCountDownView
+            android:id="@+id/singleCountDownView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+
 
     <Button
         android:id="@+id/btn_sure"
@@ -33,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/btn_sure"
-        android:layout_below="@id/singleCountDownView"
+        android:layout_below="@id/actionbar"
         android:background="@android:color/transparent"
         android:cacheColorHint="#00000000"
         android:divider="@null"

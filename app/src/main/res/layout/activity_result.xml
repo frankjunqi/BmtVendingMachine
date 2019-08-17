@@ -4,16 +4,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.seekwork.bangmart.view.SingleCountDownView
-        android:id="@+id/singleCountDownViewPop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="15dp"
-        android:paddingLeft="15dp"
-        android:paddingEnd="15dp"
-        android:paddingRight="15dp"
-        android:textColor="@android:color/black"
-        android:textSize="32sp" />
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/action_bg"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:src="@mipmap/icon_back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="出货"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+
+        <com.seekwork.bangmart.view.SingleCountDownView
+            android:id="@+id/singleCountDownViewPop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+
 
     <ImageView
         android:layout_width="160dp"
@@ -46,7 +75,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="当前，以开放、跨界、协同、自控为主要特征的新一代人工智能技术引领着新一轮科技革命蓄势待发，为国家治理和经济社会发展注入了新动能。在人类全面走向智能时代的浪潮中，人工智能与各领域的融合日益深入，并对传统管理模式和手段提出了新挑战。立足人工智能的风口，主动顺应人工智能高速发展浪潮，给政府“植入”人工智能这个“芯片”，加快构建“人工智能+政务”治理新范式，已经成为开启智慧治理新征程的时代选择。当前，以开放、跨界、协同、自控为主要特征的新一代人工智能技术引领着新一轮科技革命蓄势待发，为国家治理和经济社会发展注入了新动能。在人类全面走向智能时代的浪潮中，人工智能与各领域的融合日益深入，并对传统管理模式和手段提出了新挑战。立足人工智能的风口，主动顺应人工智能高速发展浪潮，给政府“植入”人工智能这个“芯片”，加快构建“人工智能+政务”治理新范式，已经成为开启智慧治理新征程的时代选择。"
             android:textSize="22sp" />
     </ScrollView>
 

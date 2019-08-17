@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout customView;
     private LinearLayout ll_btns;
     private Button btn_cart;
-    private TextView tv_desc;
+    private TextView tv_title;
     private TextView tv_cart_desc;
 
     private GridView gv_data;
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         customView = (LinearLayout) inflater.inflate(R.layout.activity_main, null);
         setContentView(customView);
 
-        tv_desc = customView.findViewById(R.id.tv_desc);
+        tv_title = customView.findViewById(R.id.tv_title);
         tv_cart_desc = customView.findViewById(R.id.tv_cart_desc);
         btn_cart = customView.findViewById(R.id.btn_cart);
         gv_data = customView.findViewById(R.id.gv_data);
@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     LogCat.e("Status: " + response.body().getStatus());
                     SeekerSoftConstant.MachineNo = response.body().getData().getMachineNo();
 
-                    tv_desc.setText(SeekerSoftConstant.MachineNo);
+                    tv_title.setText(SeekerSoftConstant.MachineNo);
 
                     // 成功授权显示逻辑
                     promissionDialog.dismiss();

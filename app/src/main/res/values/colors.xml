@@ -16,4 +16,7 @@
 
     <color name="btn_take_un_press">#5abc20</color>
     <color name="btn_take_press">#43AF04</color>
+
+    <color name="action_bg">#ff1296db</color>
+
 </resources>

@@ -52,6 +52,7 @@ import retrofit2.Retrofit;
 public class ShopCartActivity extends AppCompatActivity {
 
     private SingleCountDownView singleCountDownView;
+    private ImageView iv_back;
     private ListView lv_data;
     private ArrayList<MBangmartRoad> AddToBangmartRoadList;
     private ShopCartAdapter shopCartAdapter;
@@ -62,6 +63,7 @@ public class ShopCartActivity extends AppCompatActivity {
     private RelativeLayout rl_tip;
     private ImageView iv_tip_result;
     private TextView tv_tips_result;
+    private ImageView iv_back_pop;
 
     private LinearLayout ll_take;
     private LinearLayout ll_progress;
@@ -74,6 +76,15 @@ public class ShopCartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shop);
         lv_data = findViewById(R.id.lv_data);
         btn_sure = findViewById(R.id.btn_sure);
+        iv_back = findViewById(R.id.iv_back);
+
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShopCartActivity.this.finish();
+            }
+        });
+
         Bundle bundle = getIntent().getExtras();
         AddToBangmartRoadList = (ArrayList<MBangmartRoad>) bundle.getSerializable(SeekerSoftConstant.ADDCARTLIST);
 
@@ -90,8 +101,8 @@ public class ShopCartActivity extends AppCompatActivity {
 
         // 单个倒计时使用
         singleCountDownView = findViewById(R.id.singleCountDownView);
-        singleCountDownView.setTextColor(Color.parseColor("#ff000000"));
-        singleCountDownView.setTime(60).setTimeColorHex("#ff000000").setTimeSuffixText("s");
+        singleCountDownView.setTextColor(Color.parseColor("#ffffffff"));
+        singleCountDownView.setTime(60).setTimeColorHex("#ffffffff").setTimeSuffixText("s");
 
         // 单个倒计时结束事件监听
         singleCountDownView.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
@@ -161,6 +172,21 @@ public class ShopCartActivity extends AppCompatActivity {
         rl_tip = customView.findViewById(R.id.rl_tip);
         iv_tip_result = customView.findViewById(R.id.iv_tip_result);
         tv_tips_result = customView.findViewById(R.id.tv_tips_result);
+        iv_back_pop = customView.findViewById(R.id.iv_back);
+
+        iv_back_pop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 停止pop倒计时
+                if (singleCountDownViewPop != null) {
+                    singleCountDownViewPop.stopCountDown();
+                }
+                // 开启主界面倒计时
+                if (singleCountDownView != null) {
+                    singleCountDownView.startCountDown();
+                }
+            }
+        });
 
         ll_take = customView.findViewById(R.id.ll_take);
         ll_progress = customView.findViewById(R.id.ll_progress);
@@ -211,9 +237,9 @@ public class ShopCartActivity extends AppCompatActivity {
 
         // pop take 单个倒计时使用
         singleCountDownViewPop = customView.findViewById(R.id.singleCountDownViewPop);
-        singleCountDownViewPop.setTextColor(Color.parseColor("#ff000000"));
+        singleCountDownViewPop.setTextColor(Color.parseColor("#ffffffff"));
         singleCountDownViewPop.setTime(60);
-        singleCountDownViewPop.setTimeColorHex("#ff000000");
+        singleCountDownViewPop.setTimeColorHex("#ffffffff");
         singleCountDownViewPop.setTimeSuffixText("s");
 
         // pop take 单个倒计时结束事件监听
