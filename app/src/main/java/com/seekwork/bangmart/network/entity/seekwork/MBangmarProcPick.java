@@ -5,6 +5,22 @@ import java.util.List;
 
 public class MBangmarProcPick implements Serializable {
 
+    public int getProductID() {
+        return ProductID;
+    }
+
+    public void setProductID(int productID) {
+        ProductID = productID;
+    }
+
+    public List<MBangmarProcPickRoad> getmBangmarProcPickRoads() {
+        return mBangmarProcPickRoads;
+    }
+
+    public void setmBangmarProcPickRoads(List<MBangmarProcPickRoad> mBangmarProcPickRoads) {
+        this.mBangmarProcPickRoads = mBangmarProcPickRoads;
+    }
+
     /**
      * 商品ID
      */

@@ -19,4 +19,9 @@ public class SeekerSoftConstant {
     public static final String ADDCARTLIST = "addcartlist";
 
 
+    public static final String OUTCART = "OUTCART";
+    public static final String CardNo = "CardNo";
+    public static final String OrderID = "OrderID";
+
+
 }

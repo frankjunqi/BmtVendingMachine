@@ -2,6 +2,7 @@ package com.seekwork.bangmart;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -246,7 +247,7 @@ public class ShopCartActivity extends AppCompatActivity {
     /**
      * TODO 2.购物车授权验证
      */
-    private void PickQuery(String CardNo) {
+    private void PickQuery(final String CardNo) {
         if (TextUtils.isEmpty(CardNo)) {
             return;
         }
@@ -275,7 +276,7 @@ public class ShopCartActivity extends AppCompatActivity {
                         // TODO 校验成功 拿到 orderid
                         ll_take.setVisibility(View.VISIBLE);
                         ll_progress.setVisibility(View.VISIBLE);
-                        GetPickUpRoads(response.body().getData().getOrderID());
+                        GetPickUpRoads(response.body().getData().getOrderID(), CardNo);
                     } else {
                         // 不成功
                         ll_take.setVisibility(View.INVISIBLE);
@@ -306,7 +307,7 @@ public class ShopCartActivity extends AppCompatActivity {
     /**
      * TODO 3.获取购物货道
      */
-    private void GetPickUpRoads(int orderId) {
+    private void GetPickUpRoads(final int orderId, final String CardNo) {
 
         final MBangmarPickRoadDetailRequest request = new MBangmarPickRoadDetailRequest();
         request.setMachineCode(SeekerSoftConstant.MachineNo);
@@ -331,6 +332,14 @@ public class ShopCartActivity extends AppCompatActivity {
             public void onResponse(Call<SrvResult<MBangmarPickRoadDetailResponse>> call, Response<SrvResult<MBangmarPickRoadDetailResponse>> response) {
                 if (response != null && response.body() != null && response.body().getData() != null) {
                     // TODO 出货
+                    Intent intent = new Intent(ShopCartActivity.this, ResultActivity.class);
+                    MBangmarPickRoadDetailResponse outResponse = response.body().getData();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(SeekerSoftConstant.OUTCART, outResponse);
+                    bundle.putSerializable(SeekerSoftConstant.CardNo, CardNo);
+                    bundle.putInt(SeekerSoftConstant.OrderID, orderId);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 } else {
                     // 异常
                     ll_take.setVisibility(View.INVISIBLE);
@@ -349,13 +358,6 @@ public class ShopCartActivity extends AppCompatActivity {
                 tv_tips_result.setText("网络异常，请联系管理员.");
             }
         });
-    }
-
-    /**
-     * TODO 4. 成功出货
-     */
-    private void DoPickSuccess() {
-
     }
 
     @Override

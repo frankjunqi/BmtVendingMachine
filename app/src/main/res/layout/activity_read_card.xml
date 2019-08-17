@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="正在校验权限中..."
-            android:textSize="26sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
 
@@ -53,7 +53,8 @@
         <ImageView
             android:layout_width="160dp"
             android:layout_height="140dp"
-            android:background="@mipmap/take_out" />
+            android:background="@mipmap/take_out"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/tv_com_tip"
@@ -61,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="正在获取货道中..."
-            android:textSize="26sp" />
+            android:textSize="20sp" />
 
         <ProgressBar
             android:id="@+id/pb_loadingdata"
@@ -81,8 +82,8 @@
 
         <ImageView
             android:id="@+id/iv_tip_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
             android:background="@mipmap/icon_report_fill" />
@@ -96,7 +97,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="40dp"
             android:gravity="center"
-            android:textSize="28sp" />
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

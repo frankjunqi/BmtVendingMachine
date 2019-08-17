@@ -5,6 +5,14 @@ import java.util.List;
 
 public class MBangmarPickRoadDetailResponse implements Serializable {
 
+    public List<MBangmarProcPick> getmBangmarProcPicks() {
+        return mBangmarProcPicks;
+    }
+
+    public void setmBangmarProcPicks(List<MBangmarProcPick> mBangmarProcPicks) {
+        this.mBangmarProcPicks = mBangmarProcPicks;
+    }
+
     /**
      * 出货商品列表
      */
