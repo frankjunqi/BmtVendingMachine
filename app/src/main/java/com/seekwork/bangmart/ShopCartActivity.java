@@ -28,6 +28,8 @@ import com.seekwork.bangmart.network.api.SrvResult;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarNeedGood;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarPickRoadDetailRequest;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarPickRoadDetailResponse;
+import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPick;
+import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPickRoad;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartAuthPickUpRequest;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartAuthPickUpResponse;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartProductDetail;
@@ -372,6 +374,56 @@ public class ShopCartActivity extends AppCompatActivity {
                     ll_progress.setVisibility(View.INVISIBLE);
                     rl_tip.setVisibility(View.VISIBLE);
                     tv_tips_result.setText(response.body().getMsg());
+
+                    // TODO 測試
+                    Intent intent = new Intent(ShopCartActivity.this, ResultActivity.class);
+                    MBangmarPickRoadDetailResponse outResponse = response.body().getData();
+
+                    if (response == null || response.body() == null || response.body().getData() == null) {
+                        outResponse = new MBangmarPickRoadDetailResponse();
+
+                        List<MBangmarProcPick> mBangmarProcPicks = new ArrayList<>();
+
+                        MBangmarProcPick pick = new MBangmarProcPick();
+                        pick.setProductID(22);
+
+                        // TODO 分组最多3个，需要计算小车的偏移量
+                        ArrayList<MBangmarProcPickRoad> arrayList = new ArrayList<MBangmarProcPickRoad>();
+                        MBangmarProcPickRoad road = new MBangmarProcPickRoad();
+                        road.setOutNum(2);
+                        road.setArea(0);
+                        road.setFloor(1);
+                        road.setColumn(0);
+                        arrayList.add(road);
+
+                        MBangmarProcPickRoad road1 = new MBangmarProcPickRoad();
+                        road1.setOutNum(2);
+                        road1.setArea(0);
+                        road1.setFloor(1);
+                        road1.setColumn(1);
+                        arrayList.add(road1);
+
+                        MBangmarProcPickRoad road2 = new MBangmarProcPickRoad();
+                        road2.setOutNum(2);
+                        road2.setArea(1);
+                        road2.setFloor(0);
+                        road2.setColumn(0);
+                        arrayList.add(road2);
+
+                        pick.setmBangmarProcPickRoads(arrayList);
+
+                        mBangmarProcPicks.add(pick);
+
+                        outResponse.setmBangmarProcPicks(mBangmarProcPicks);
+                    }
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(SeekerSoftConstant.OUTCART, outResponse);
+                    bundle.putSerializable(SeekerSoftConstant.CardNo, CardNo);
+                    bundle.putInt(SeekerSoftConstant.OrderID, orderId);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+
                 }
             }
 

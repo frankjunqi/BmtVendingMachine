@@ -3,11 +3,13 @@ package com.seekwork.bangmart;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +19,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bangmart.nt.machine.HeartBeatListener;
+import com.bangmart.nt.machine.MacMetaData;
+import com.bangmart.nt.machine.Machine;
+import com.bangmart.nt.machine.StateChangeListener;
+import com.bangmart.nt.machine.StorageMap;
+import com.bangmart.nt.serial.SerialListener;
+import com.bangmart.nt.sys.ContextInfo;
+import com.bangmart.nt.sys.Tools;
+import com.bangmart.nt.treatment.FaultState;
 import com.seekwork.bangmart.adpter.GridAdapter;
 import com.seekwork.bangmart.network.api.Host;
 import com.seekwork.bangmart.network.api.SeekWorkService;
@@ -43,6 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Context mContext;
     private TextView tv_error;
+
+    private String mac_error_str;
+    private TextView tv_mac_error;
+
     private MaterialDialog promissionDialog;
     private ProgressBar pb_loadingdata;
     private Button btn_try;
@@ -87,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(customView);
 
         tv_title = customView.findViewById(R.id.tv_title);
+        tv_title.setOnClickListener(this);
         tv_cart_desc = customView.findViewById(R.id.tv_cart_desc);
         btn_cart = customView.findViewById(R.id.btn_cart);
         gv_data = customView.findViewById(R.id.gv_data);
@@ -134,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View customView = inflater.inflate(R.layout.pop_auth_layout, null);
         pb_loadingdata = customView.findViewById(R.id.pb_loadingdata);
         tv_error = customView.findViewById(R.id.tv_error);
+        tv_mac_error = customView.findViewById(R.id.tv_mac_error);
+        tv_mac_error.setMovementMethod(ScrollingMovementMethod.getInstance());
 
         TextView tv_machine = customView.findViewById(R.id.tv_machine);
         tv_machine.setText("设备号：" + SeekerSoftConstant.DEVICEID);
@@ -144,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 loadRegisterMachine();
             }
         });
-
 
         btn_cart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,9 +177,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         promissionDialog = new MaterialDialog.Builder(this).customView(customView, false).build();
         promissionDialog.setCancelable(false);
-
-        // 授权弹框
-        registerMachine();
+        // initBangMartMachine();
+        registerMachine(true);
     }
 
     private void loadRegisterMachine() {
@@ -171,14 +187,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pb_loadingdata.setVisibility(View.VISIBLE);
         btn_try.setVisibility(View.GONE);
         // 请求接口
-        registerMachine();
+        registerMachine(true);
     }
 
     @Override
     public void onClick(View v) {
-
+        if (v.getId() == R.id.tv_title) {
+            Intent intent = new Intent(this, NTActivity.class);
+            startActivity(intent);
+        }
     }
-
 
     /**
      * 获取货柜数据
@@ -225,19 +243,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void registerMachine() {
-
-        // 初始化串口设备
+    private void registerMachine(boolean isOk) {
+        // 读卡器初始化串口设备
         CardReadSerialPort cardReadSerialPort = CardReadSerialPort.SingleInit();
         String error = "";
         if (cardReadSerialPort == null) {
             error = "读卡器串口打开失败。\n";
         }
 
-        // TODO 测试数据
-        error = "";
-
-        if (!TextUtils.isEmpty(error)) {
+        if (!TextUtils.isEmpty(error) || !isOk) {
             if (!promissionDialog.isShowing()) {
                 promissionDialog.show();
             }
@@ -384,4 +398,183 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 初始化BangMart
+     */
+
+    // 是否需要货架检测
+    private boolean needToGetMacProperty = true;
+    private StorageMap storageMap;
+
+    private void initBangMartMachine() {
+        ContextInfo.init(getApplicationContext());
+        SeekerSoftConstant.machine = Machine.create(SeekerSoftConstant.MACHINE, getString(R.string.bmt_com2));
+        SeekerSoftConstant.machine.setSerialChannelListener(new SerialListener() {
+            @Override
+            public void onAvailable() {
+                appendUILogAsync("打开串口成功！");
+                // 授权弹框
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        registerMachine(true);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onUnavailable() {
+                appendUILogAsync("串口出现异常，现在不可用。");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        registerMachine(false);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onReceivedUnknownData(String errDesc, byte[] data) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(errDesc).append(" : ").append(Tools.bytesToHexString(data));
+                appendUILogAsync(sb.toString());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        registerMachine(false);
+                    }
+                });
+
+            }
+        });
+        SeekerSoftConstant.machine.setHeartBeatListener(new HeartBeatListener() {
+            @Override
+            public void online(final byte[] data) {
+                if (needToGetMacProperty) {
+                    needToGetMacProperty = false;
+                    final MacMetaData md = SeekerSoftConstant.machine.reloadMetaData();
+                    storageMap =SeekerSoftConstant. machine.getMetaData().loadStorageMap();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            appendUILogAsync(md.toString());
+                        }
+                    });
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        appendUILogAsync("心跳正常，回传数据: " + Tools.bytesToHexString(data));
+                    }
+                });
+            }
+
+            @Override
+            public void offline(long startTime, final String errMsg) {
+                final long duration = System.currentTimeMillis() - startTime;
+                needToGetMacProperty = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        appendUILogAsync("没有心跳:" + duration / 1000 + "s." + errMsg);
+                    }
+                });
+            }
+        });
+        SeekerSoftConstant.machine.setStateChangeListener(new StateChangeListener() {
+            @Override
+            public void onFatal(final FaultState state) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        appendUILogAsync("致命故障:" + Tools.intToHexStrForShow(state.getCode()) + " : " + state.getDesc());
+                    }
+                });
+            }
+
+            @Override
+            public void onError(final FaultState state) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        appendUILogAsync("故障:" + Tools.intToHexStrForShow(state.getCode()) + " : " + state.getDesc());
+                    }
+                });
+            }
+
+            @Override
+            public void onWarn(final FaultState state) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        appendUILogAsync("警告:" + Tools.intToHexStrForShow(state.getCode()) + " : " + state.getDesc());
+                    }
+                });
+            }
+
+            @Override
+            public void onRecover() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        appendUILogAsync("正常:");
+                    }
+                });
+            }
+
+            @Override
+            public void onChange(final int state) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String desc = "";
+                        switch (state) {
+                            case Machine.STATE_UNKONWN:
+                                desc = "未知";
+                                break;
+                            case Machine.STATE_STANDBY:
+                                desc = "待命";
+                                break;
+                            case Machine.STATE_ENERGY_SAVING:
+                                desc = "节能";
+                                break;
+                            case Machine.STATE_BORED_TIME:
+                                desc = "漫游";
+                                break;
+                            case Machine.STATE_BUSY:
+                                desc = "忙";
+                                break;
+                            case Machine.STATE_FAULT:
+                                desc = "故障";
+                                break;
+                            default:
+                        }
+                        appendUILogAsync(desc);
+                    }
+                });
+            }
+        });
+    }
+
+    public void appendUILogAsync(final String msg) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                appendUILog(msg);
+            }
+        });
+    }
+
+
+    private void appendUILog(String msg) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\r\n > ").append(msg);
+        tv_mac_error.append(sb.toString());
+        int offset = tv_mac_error.getLineCount() * tv_mac_error.getLineHeight();
+        if (offset > tv_mac_error.getHeight()) {
+            tv_mac_error.scrollTo(0, offset - tv_mac_error.getHeight());
+        }
+    }
 }

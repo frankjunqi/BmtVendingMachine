@@ -1,10 +1,16 @@
 package com.seekwork.bangmart.util;
 
+import com.bangmart.nt.machine.Machine;
+
 /**
  *
  */
 
 public class SeekerSoftConstant {
+
+    public final static String MACHINE = "BangMart";
+
+    public static Machine machine;
 
     // 正式包变成false
     public static final boolean DEBUG = true;

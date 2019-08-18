@@ -43,6 +43,7 @@ import com.bangmart.nt.treatment.FaultState;
 import com.seekwork.bangmart.data.DBHelper;
 import com.seekwork.bangmart.data.DataCache;
 import com.seekwork.bangmart.data.DataStat;
+import com.seekwork.bangmart.util.SeekerSoftConstant;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class NTActivity extends AppCompatActivity implements ILogcat {
         ContextInfo.init(getApplicationContext());
 
         /*********** 初始化设备              *************/
-        machine = Machine.create("IamTheOne.", getString(R.string.bmt_com3));
+        machine = Machine.create(SeekerSoftConstant.MACHINE, getString(R.string.bmt_com2));
 
         machine.setSerialChannelListener(new SerialListener() {
             @Override

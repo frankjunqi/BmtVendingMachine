@@ -32,4 +32,34 @@ public class MBangmarProcPickRoad implements Serializable {
      * 出货数量
      */
     private int OutNum;
+
+
+    public int getArea() {
+        return Area;
+    }
+
+    public void setArea(int area) {
+        Area = area;
+    }
+
+    public int getFloor() {
+        return Floor;
+    }
+
+    public void setFloor(int floor) {
+        Floor = floor;
+    }
+
+    public int getColumn() {
+        return Column;
+    }
+
+    public void setColumn(int column) {
+        Column = column;
+    }
+
+    private int Area = 0;
+    private int Floor =0;
+    private int Column = 0;
+
 }
