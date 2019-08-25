@@ -1,6 +1,7 @@
 package com.seekwork.bangmart.util;
 
 import com.bangmart.nt.machine.Machine;
+import com.bangmart.nt.machine.StorageMap;
 
 /**
  *
@@ -8,9 +9,13 @@ import com.bangmart.nt.machine.Machine;
 
 public class SeekerSoftConstant {
 
-    public final static String MACHINE = "BangMart";
+    public final static String MACHINE = "BangMartCo";
+    public final static long replyTimeout = 1000;
+    public final static long responseTimeout = 300000;
+
 
     public static Machine machine;
+    public static StorageMap storageMap;
 
     // 正式包变成false
     public static final boolean DEBUG = true;

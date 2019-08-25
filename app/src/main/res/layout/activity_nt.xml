@@ -744,7 +744,7 @@
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/btnCmdLoad"
             android:background="?attr/colorButtonNormal"
-            android:visibility="gone">
+            android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"

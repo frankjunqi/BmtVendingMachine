@@ -4,8 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bangmart.nt.command.Attention;
@@ -15,6 +13,7 @@ import com.bangmart.nt.command.CommandGroup;
 import com.bangmart.nt.command.ICallbackListener;
 import com.bangmart.nt.sys.ByteBuffer;
 import com.bangmart.nt.sys.Tools;
+import com.google.gson.Gson;
 import com.seekwork.bangmart.data.DBHelper;
 import com.seekwork.bangmart.data.DataCache;
 import com.seekwork.bangmart.data.DataStat;
@@ -71,8 +70,10 @@ public class ResultActivity extends AppCompatActivity {
         });
 
         Bundle bundle = getIntent().getExtras();
+
         CardNo = bundle.getString(SeekerSoftConstant.CardNo);
         orderId = bundle.getInt(SeekerSoftConstant.OrderID);
+
         MBangmarPickRoadDetailResponse response = (MBangmarPickRoadDetailResponse) bundle.getSerializable(SeekerSoftConstant.OUTCART);
         mBangmarProcPicks = response.getmBangmarProcPicks();
 
@@ -82,7 +83,10 @@ public class ResultActivity extends AppCompatActivity {
             mBangmarProcPickRoads = mBangmarProcPicks.get(0).getmBangmarProcPickRoads();
         }
 
+        //sellOutOne();
         sellOutMore();
+
+        // DoPickSuccess();
 
     }
 
@@ -99,20 +103,31 @@ public class ResultActivity extends AppCompatActivity {
         cmd.setOnReplyListener(new ICallbackListener() {
             @Override
             public boolean callback(Command cmd) {
-
                 Attention attention = cmd.getLastAttentionData();
-
                 //出货失败，需要补发一条命令。
                 byte[] attData = attention.getData();
                 switch (attData[0]) {
                     case CommandDef.ATT_SELLOUT_NOT_TAKEN_AWAY:
                         appendUILogAsync("上个用户没有把货取走，请先取走商品再继续出货");
                         break;
+                    case CommandDef.ATT_SELLOUT_PICK_UP_COMPLETE:
+                        appendUILogAsync("当前商品取货成功");
+                        break;
                     case CommandDef.ATT_SELLOUT_PICK_UP_FAILED:
                         appendUILogAsync("第" + attData[1] + "个商品取货失败。");
+                        //String nextLocation = TestSellOut.getNextLocation();
+                        String nextLocation = null;
                         ByteBuffer bb = new ByteBuffer(5);
-                        bb.append(CommandDef.ATT_SELLOUT_PICK_UP_NO_OPTION);
-                        cmd.sendAttention(bb.copy());
+
+                        if (nextLocation == null) {
+                            bb.append(CommandDef.ATT_SELLOUT_PICK_UP_NO_OPTION);
+                            byte[] attCode = cmd.sendAttention(bb.copy());
+                            appendUILogAsync("没有其他的货道可以出货了。取下一个或结束: " + Tools.bytesToHexString(attCode));
+                        } else {
+                            bb.append(CommandDef.ATT_SELLOUT_PICK_UP_RETRY).append(attData[1]).append(nextLocation);
+                            byte[] attCode = cmd.sendAttention(bb.copy());
+                            appendUILogAsync("重试: " + Tools.bytesToHexString(attCode));
+                        }
                         break;
                     case CommandDef.ATT_SELLOUT_WAIT_TO_GET_AWAY:
                         appendUILogAsync("取货口已打开，等待用户取走。");
@@ -127,6 +142,9 @@ public class ResultActivity extends AppCompatActivity {
 
 
     private void sellOutMore() {
+
+
+
         byte[] good;
         List<byte[]> params = new ArrayList<>();
 
@@ -160,7 +178,9 @@ public class ResultActivity extends AppCompatActivity {
                 cmdGrp.setCommandGroupInterval(10000);
                 cmdGrp.setCommandInterval(10000);
                 cmdGrp.moveFirst();
-                SeekerSoftConstant.machine.executeCommandGroup(cmdGrp);
+                if (SeekerSoftConstant.machine != null) {
+                    SeekerSoftConstant.machine.executeCommandGroup(cmdGrp);
+                }
                 break;
             case CommandGroup.STATE_BUSY:
                 dataStat.pause();
@@ -179,6 +199,12 @@ public class ResultActivity extends AppCompatActivity {
     private DataCache dataCache;
 
     private void init() {
+        /*********** 初始化数据缓存对象       *************/
+        dataCache = DataCache.getInstance();
+        dataCache.loadFromDB();
+
+        DBHelper.create(getApplicationContext());
+        dataStat = DataStat.getInstance();
 
         /*********** 初始化命令管理对象       *************/
         //初始化命令管理对象。命令的对列，执行生命周期都是由这个对象负责
@@ -249,18 +275,13 @@ public class ResultActivity extends AppCompatActivity {
                 } else {
                     dataStat.stop();
                 }
+                for (int i = 0; i < cmdGrp.getCommandCount(); i++) {
+                    cmdGrp.remove(i);
+                }
                 appendUILogAsync("任务清单执行完毕！");
                 return true;
             }
         });
-
-        /*********** 初始化数据缓存对象       *************/
-        dataCache = DataCache.getInstance();
-        dataCache.loadFromDB();
-
-        DBHelper.create(getApplicationContext());
-
-        dataStat = DataStat.getInstance();
 
     }
 
@@ -346,11 +367,14 @@ public class ResultActivity extends AppCompatActivity {
         }
         request.setmBangmarSuccessGoods(mBangmarSuccessGoods);
 
-
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekWorkService service = retrofit.create(SeekWorkService.class);
         Call<SrvResult<Boolean>> updateAction = service.DoPickSuccess(request);
         LogCat.e("url = " + updateAction.request().url().toString());
+        Gson gson = new Gson();
+        String json = gson.toJson(request);
+        LogCat.e("url = " + json);
+
         updateAction.enqueue(new Callback<SrvResult<Boolean>>() {
             @Override
             public void onResponse(Call<SrvResult<Boolean>> call, Response<SrvResult<Boolean>> response) {

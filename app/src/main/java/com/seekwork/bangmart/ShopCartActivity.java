@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.gson.Gson;
 import com.seekwork.bangmart.adpter.ShopCartAdapter;
 import com.seekwork.bangmart.network.api.Host;
 import com.seekwork.bangmart.network.api.SeekWorkService;
@@ -295,6 +296,9 @@ public class ShopCartActivity extends AppCompatActivity {
         SeekWorkService service = retrofit.create(SeekWorkService.class);
         Call<SrvResult<MBangmartAuthPickUpResponse>> updateAction = service.PickQuery(mBangmartAuthPickUpRequest);
         LogCat.e("url = " + updateAction.request().url().toString());
+        Gson gson = new Gson();
+        String json = gson.toJson(mBangmartAuthPickUpRequest);
+        LogCat.e("url = " + json);
         updateAction.enqueue(new Callback<SrvResult<MBangmartAuthPickUpResponse>>() {
             @Override
             public void onResponse(Call<SrvResult<MBangmartAuthPickUpResponse>> call, Response<SrvResult<MBangmartAuthPickUpResponse>> response) {
@@ -354,6 +358,9 @@ public class ShopCartActivity extends AppCompatActivity {
         SeekWorkService service = retrofit.create(SeekWorkService.class);
         Call<SrvResult<MBangmarPickRoadDetailResponse>> updateAction = service.GetPickUpRoads(request);
         LogCat.e("url = " + updateAction.request().url().toString());
+        Gson gson = new Gson();
+        String json = gson.toJson(request);
+        LogCat.e("url = " + json);
 
         updateAction.enqueue(new Callback<SrvResult<MBangmarPickRoadDetailResponse>>() {
             @Override

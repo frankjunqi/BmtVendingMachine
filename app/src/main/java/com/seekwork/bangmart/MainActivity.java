@@ -251,6 +251,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             error = "读卡器串口打开失败。\n";
         }
 
+        error = "";
+
         if (!TextUtils.isEmpty(error) || !isOk) {
             if (!promissionDialog.isShowing()) {
                 promissionDialog.show();
@@ -455,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (needToGetMacProperty) {
                     needToGetMacProperty = false;
                     final MacMetaData md = SeekerSoftConstant.machine.reloadMetaData();
-                    storageMap =SeekerSoftConstant. machine.getMetaData().loadStorageMap();
+                    storageMap = SeekerSoftConstant.machine.getMetaData().loadStorageMap();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
