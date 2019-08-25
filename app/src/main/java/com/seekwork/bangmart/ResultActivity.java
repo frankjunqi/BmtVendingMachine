@@ -86,8 +86,6 @@ public class ResultActivity extends AppCompatActivity {
         //sellOutOne();
         sellOutMore();
 
-        // DoPickSuccess();
-
     }
 
     private void sellOutOne() {
@@ -142,9 +140,6 @@ public class ResultActivity extends AppCompatActivity {
 
 
     private void sellOutMore() {
-
-
-
         byte[] good;
         List<byte[]> params = new ArrayList<>();
 

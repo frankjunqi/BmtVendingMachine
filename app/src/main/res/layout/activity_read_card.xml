@@ -62,35 +62,13 @@
             android:src="@mipmap/card"
             android:visibility="visible" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="正在校验权限中..."
-            android:textSize="20sp" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/ll_progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/actionbar"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="140dp"
-            android:background="@mipmap/take_out"
-            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/tv_com_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="正在获取货道中..."
+            android:layout_marginTop="10dp"
+            android:text="正在校验权限中..."
             android:textSize="20sp" />
 
         <ProgressBar
@@ -100,7 +78,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:visibility="visible" />
+
     </LinearLayout>
+
 
     <RelativeLayout
         android:id="@+id/rl_tip"

@@ -53,7 +53,7 @@ public class InitActivity extends AppCompatActivity {
         // 单个倒计时使用
         singleCountDownView = findViewById(R.id.singleCountDownView);
         singleCountDownView.setTextColor(Color.parseColor("#ff000000"));
-        singleCountDownView.setTime(180).setTimeColorHex("#ff000000").setTimeSuffixText("s");
+        singleCountDownView.setTime(10).setTimeColorHex("#ff000000").setTimeSuffixText("s");
         // 单个倒计时结束事件监听
         singleCountDownView.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
@@ -72,8 +72,11 @@ public class InitActivity extends AppCompatActivity {
                     Intent intent = new Intent(InitActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
-                    singleCountDownView.setTime(180);
-                    singleCountDownView.startCountDown();
+                    //singleCountDownView.setTime(180);
+                    //singleCountDownView.startCountDown();
+                    InitActivity.this.finish();
+                    Intent intent = new Intent(InitActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
             }
         });

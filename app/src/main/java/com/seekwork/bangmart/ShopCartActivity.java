@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,8 +30,6 @@ import com.seekwork.bangmart.network.api.SrvResult;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarNeedGood;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarPickRoadDetailRequest;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarPickRoadDetailResponse;
-import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPick;
-import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPickRoad;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartAuthPickUpRequest;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartAuthPickUpResponse;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartProductDetail;
@@ -64,12 +63,15 @@ public class ShopCartActivity extends AppCompatActivity {
     private MaterialDialog promissionDialog;
     private SingleCountDownView singleCountDownViewPop;
     private RelativeLayout rl_tip;
+
+    private TextView tv_com_tip;
+
     private ImageView iv_tip_result;
     private TextView tv_tips_result;
     private ImageView iv_back_pop;
 
     private LinearLayout ll_take;
-    private LinearLayout ll_progress;
+    private ProgressBar pb_loadingdata;
 
     private CardReadSerialPort.OnDataReceiveListener onDataReceiveListener;
 
@@ -133,7 +135,7 @@ public class ShopCartActivity extends AppCompatActivity {
                         // 初始化界面
                         rl_tip.setVisibility(View.GONE);
                         ll_take.setVisibility(View.GONE);
-                        ll_progress.setVisibility(View.VISIBLE);
+                        pb_loadingdata.setVisibility(View.VISIBLE);
 
                         // 有货道 ＋ 有库存 请求接口 判断是否有权限出货
 
@@ -147,7 +149,7 @@ public class ShopCartActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ll_take.setVisibility(View.VISIBLE);
-                ll_progress.setVisibility(View.INVISIBLE);
+                pb_loadingdata.setVisibility(View.INVISIBLE);
                 rl_tip.setVisibility(View.INVISIBLE);
 
                 // 开去串口读卡器
@@ -173,6 +175,7 @@ public class ShopCartActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.activity_read_card, null);
         rl_tip = customView.findViewById(R.id.rl_tip);
+        tv_com_tip = customView.findViewById(R.id.tv_com_tip);
         iv_tip_result = customView.findViewById(R.id.iv_tip_result);
         tv_tips_result = customView.findViewById(R.id.tv_tips_result);
         iv_back_pop = customView.findViewById(R.id.iv_back);
@@ -192,7 +195,7 @@ public class ShopCartActivity extends AppCompatActivity {
         });
 
         ll_take = customView.findViewById(R.id.ll_take);
-        ll_progress = customView.findViewById(R.id.ll_progress);
+        pb_loadingdata = customView.findViewById(R.id.pb_loadingdata);
 
         DisplayMetrics outMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
@@ -280,6 +283,7 @@ public class ShopCartActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(CardNo)) {
             return;
         }
+        tv_com_tip.setText("正在校验权限中...");
         MBangmartAuthPickUpRequest mBangmartAuthPickUpRequest = new MBangmartAuthPickUpRequest();
         mBangmartAuthPickUpRequest.setCardNo(CardNo);
         mBangmartAuthPickUpRequest.setMachineCode(SeekerSoftConstant.MachineNo);
@@ -307,19 +311,19 @@ public class ShopCartActivity extends AppCompatActivity {
                     if (isAuth) {
                         // TODO 校验成功 拿到 orderid
                         ll_take.setVisibility(View.VISIBLE);
-                        ll_progress.setVisibility(View.VISIBLE);
+                        pb_loadingdata.setVisibility(View.VISIBLE);
                         GetPickUpRoads(response.body().getData().getOrderID(), CardNo);
                     } else {
                         // 不成功
                         ll_take.setVisibility(View.INVISIBLE);
-                        ll_progress.setVisibility(View.INVISIBLE);
+                        pb_loadingdata.setVisibility(View.INVISIBLE);
                         rl_tip.setVisibility(View.VISIBLE);
                         tv_tips_result.setText(response.body().getData().getExceptionMsgStr());
                     }
                 } else {
                     // 显示提示信息
                     ll_take.setVisibility(View.INVISIBLE);
-                    ll_progress.setVisibility(View.INVISIBLE);
+                    pb_loadingdata.setVisibility(View.INVISIBLE);
                     rl_tip.setVisibility(View.VISIBLE);
                     tv_tips_result.setText(response.body().getMsg());
                 }
@@ -328,7 +332,7 @@ public class ShopCartActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<SrvResult<MBangmartAuthPickUpResponse>> call, Throwable throwable) {
                 ll_take.setVisibility(View.INVISIBLE);
-                ll_progress.setVisibility(View.INVISIBLE);
+                pb_loadingdata.setVisibility(View.INVISIBLE);
                 rl_tip.setVisibility(View.VISIBLE);
                 tv_tips_result.setText("网络异常，请联系管理员.");
             }
@@ -340,7 +344,7 @@ public class ShopCartActivity extends AppCompatActivity {
      * TODO 3.获取购物货道
      */
     private void GetPickUpRoads(final int orderId, final String CardNo) {
-
+        tv_com_tip.setText("正在获取货道中...");
         final MBangmarPickRoadDetailRequest request = new MBangmarPickRoadDetailRequest();
         request.setMachineCode(SeekerSoftConstant.MachineNo);
         request.setOrderID(orderId);
@@ -366,70 +370,32 @@ public class ShopCartActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SrvResult<MBangmarPickRoadDetailResponse>> call, Response<SrvResult<MBangmarPickRoadDetailResponse>> response) {
                 if (response != null && response.body() != null && response.body().getData() != null) {
+                    if (promissionDialog != null && promissionDialog.isShowing()) {
+                        promissionDialog.dismiss();
+                    }
+
                     // TODO 出货
                     Intent intent = new Intent(ShopCartActivity.this, ResultActivity.class);
                     MBangmarPickRoadDetailResponse outResponse = response.body().getData();
+
+                    Gson gson = new Gson();
+                    String json = gson.toJson(outResponse);
+                    LogCat.e("url = " + json);
+
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(SeekerSoftConstant.OUTCART, outResponse);
                     bundle.putSerializable(SeekerSoftConstant.CardNo, CardNo);
                     bundle.putInt(SeekerSoftConstant.OrderID, orderId);
                     intent.putExtras(bundle);
                     startActivity(intent);
+
+                    ShopCartActivity.this.finish();
                 } else {
                     // 异常
                     ll_take.setVisibility(View.INVISIBLE);
-                    ll_progress.setVisibility(View.INVISIBLE);
+                    pb_loadingdata.setVisibility(View.INVISIBLE);
                     rl_tip.setVisibility(View.VISIBLE);
                     tv_tips_result.setText(response.body().getMsg());
-
-                    // TODO 測試
-                    Intent intent = new Intent(ShopCartActivity.this, ResultActivity.class);
-                    MBangmarPickRoadDetailResponse outResponse = response.body().getData();
-
-                    if (response == null || response.body() == null || response.body().getData() == null) {
-                        outResponse = new MBangmarPickRoadDetailResponse();
-
-                        List<MBangmarProcPick> mBangmarProcPicks = new ArrayList<>();
-
-                        MBangmarProcPick pick = new MBangmarProcPick();
-                        pick.setProductID(22);
-
-                        // TODO 分组最多3个，需要计算小车的偏移量
-                        ArrayList<MBangmarProcPickRoad> arrayList = new ArrayList<MBangmarProcPickRoad>();
-                        MBangmarProcPickRoad road = new MBangmarProcPickRoad();
-                        road.setOutNum(2);
-                        road.setArea(0);
-                        road.setFloor(1);
-                        road.setColumn(0);
-                        arrayList.add(road);
-
-                        MBangmarProcPickRoad road1 = new MBangmarProcPickRoad();
-                        road1.setOutNum(2);
-                        road1.setArea(0);
-                        road1.setFloor(1);
-                        road1.setColumn(1);
-                        arrayList.add(road1);
-
-                        MBangmarProcPickRoad road2 = new MBangmarProcPickRoad();
-                        road2.setOutNum(2);
-                        road2.setArea(1);
-                        road2.setFloor(0);
-                        road2.setColumn(0);
-                        arrayList.add(road2);
-
-                        pick.setmBangmarProcPickRoads(arrayList);
-
-                        mBangmarProcPicks.add(pick);
-
-                        outResponse.setmBangmarProcPicks(mBangmarProcPicks);
-                    }
-
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(SeekerSoftConstant.OUTCART, outResponse);
-                    bundle.putSerializable(SeekerSoftConstant.CardNo, CardNo);
-                    bundle.putInt(SeekerSoftConstant.OrderID, orderId);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
 
                 }
             }
@@ -438,7 +404,7 @@ public class ShopCartActivity extends AppCompatActivity {
             public void onFailure(Call<SrvResult<MBangmarPickRoadDetailResponse>> call, Throwable throwable) {
                 // 异常
                 ll_take.setVisibility(View.INVISIBLE);
-                ll_progress.setVisibility(View.INVISIBLE);
+                pb_loadingdata.setVisibility(View.INVISIBLE);
                 rl_tip.setVisibility(View.VISIBLE);
                 tv_tips_result.setText("网络异常，请联系管理员.");
             }
