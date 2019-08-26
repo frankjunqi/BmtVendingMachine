@@ -11,6 +11,7 @@ import com.bangmart.nt.command.Command;
 import com.bangmart.nt.command.CommandDef;
 import com.bangmart.nt.command.CommandGroup;
 import com.bangmart.nt.command.ICallbackListener;
+import com.bangmart.nt.machine.Location;
 import com.bangmart.nt.sys.ByteBuffer;
 import com.bangmart.nt.sys.Tools;
 import com.google.gson.Gson;
@@ -25,6 +26,7 @@ import com.seekwork.bangmart.network.entity.seekwork.MBangmarPickSuccessRequest;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPick;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPickRoad;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarSuccessGood;
+import com.seekwork.bangmart.network.entity.seekwork.TakeOutProductBean;
 import com.seekwork.bangmart.network.gsonfactory.GsonConverterFactory;
 import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
@@ -51,6 +53,10 @@ public class ResultActivity extends AppCompatActivity {
     private List<MBangmarProcPick> mBangmarProcPicks;
     private List<MBangmarProcPickRoad> mBangmarProcPickRoads;
 
+    private CommandGroup cmdGrp;
+    private DataStat dataStat;
+    private DataCache dataCache;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +64,9 @@ public class ResultActivity extends AppCompatActivity {
         tv_tips_result = findViewById(R.id.tv_tips_result);
 
         singleCountDownViewPop = findViewById(R.id.singleCountDownViewPop);
-        singleCountDownViewPop.setTextColor(Color.parseColor("#ff000000"));
-        singleCountDownViewPop.setTime(6);
-        singleCountDownViewPop.setTimeColorHex("#ff000000");
+        singleCountDownViewPop.setTextColor(Color.parseColor("#ffffffff"));
+        singleCountDownViewPop.setTime(15);
+        singleCountDownViewPop.setTimeColorHex("#ffffffff");
         singleCountDownViewPop.setTimeSuffixText("s");
         singleCountDownViewPop.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
@@ -70,18 +76,49 @@ public class ResultActivity extends AppCompatActivity {
         });
 
         Bundle bundle = getIntent().getExtras();
-
         CardNo = bundle.getString(SeekerSoftConstant.CardNo);
         orderId = bundle.getInt(SeekerSoftConstant.OrderID);
-
         MBangmarPickRoadDetailResponse response = (MBangmarPickRoadDetailResponse) bundle.getSerializable(SeekerSoftConstant.OUTCART);
         mBangmarProcPicks = response.getmBangmarProcPicks();
 
-        init();
+        initCmdGrp();
 
-        if (mBangmarProcPicks.size() > 0) {
-            mBangmarProcPickRoads = mBangmarProcPicks.get(0).getmBangmarProcPickRoads();
+        // 出货数据列表
+        ArrayList<TakeOutProductBean> outList = new ArrayList<>();
+        // 商品数量
+        int productSize = mBangmarProcPicks.size();
+        for (int i = 0; i < productSize; i++) {
+            // 同一个商品 出货货道数量
+            int productRoads = mBangmarProcPicks.get(i).getmBangmarProcPickRoads().size();
+            for (int k = 0; k < productRoads; k++) {
+                int productID = mBangmarProcPicks.get(i).getProductID();
+                // 同一个商品 同一个货道 出货数量
+                int roadCount = mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getOutNum();
+                for (int j = 0; j < roadCount; j++) {
+                    TakeOutProductBean road = new TakeOutProductBean();
+                    road.setArea(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getArea());
+                    road.setFloor(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getFloor());
+                    road.setColumn(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn());
+                    road.setProductID(productID);
+                    // 本地货道扫描数据
+                    Location location = SeekerSoftConstant.storageMap.getLocation(
+                            mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getArea(),
+                            mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getFloor(),
+                            mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn());
+                    road.setX(location.x);
+                    road.setY(location.y);
+                    outList.add(road);
+                }
+            }
         }
+
+        // 获取小车的宽度
+
+
+        // 出货分组
+        ArrayList<ArrayList<TakeOutProductBean>> groupList = new ArrayList<>();
+
+        mBangmarProcPickRoads = mBangmarProcPicks.get(0).getmBangmarProcPickRoads();
 
         //sellOutOne();
         sellOutMore();
@@ -189,11 +226,7 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
-    private CommandGroup cmdGrp;
-    private DataStat dataStat;
-    private DataCache dataCache;
-
-    private void init() {
+    private void initCmdGrp() {
         /*********** 初始化数据缓存对象       *************/
         dataCache = DataCache.getInstance();
         dataCache.loadFromDB();
@@ -304,6 +337,8 @@ public class ResultActivity extends AppCompatActivity {
                             bb.append(CommandDef.ATT_SELLOUT_PICK_UP_NO_OPTION);
                             byte[] attCode = cmd.sendAttention(bb.copy());
                             appendUILogAsync("没有其他的货道可以出货了。取下一个或结束: " + Tools.bytesToHexString(attCode));
+                            // TODO 發送取貨數據
+                            DoPickSuccess();
                         } else {
                             bb.append(CommandDef.ATT_SELLOUT_PICK_UP_RETRY).append(attData[1]).append(nextLocation);
                             byte[] attCode = cmd.sendAttention(bb.copy());

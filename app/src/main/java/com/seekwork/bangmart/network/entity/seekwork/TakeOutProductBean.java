@@ -3,24 +3,27 @@ package com.seekwork.bangmart.network.entity.seekwork;
 import java.io.Serializable;
 
 /**
- * 商品出货详情
+ * 出货实体
  */
-public class MBangmarProcPickRoad implements Serializable {
+public class TakeOutProductBean implements Serializable {
 
-
-    /**
-     * 货道ID
-     */
-    private int RoadID;
-
-    /**
-     * 出货数量
-     */
-    private int OutNum;
+    private int productID;
 
     private int Area = 0;
     private int Floor = 0;
     private int Column = 0;
+
+    private int x;
+    private int y;
+
+
+    public int getProductID() {
+        return productID;
+    }
+
+    public void setProductID(int productID) {
+        this.productID = productID;
+    }
 
     public int getArea() {
         return Area;
@@ -46,19 +49,21 @@ public class MBangmarProcPickRoad implements Serializable {
         Column = column;
     }
 
-    public int getRoadID() {
-        return RoadID;
+    public int getX() {
+        return x;
     }
 
-    public void setRoadID(int roadID) {
-        RoadID = roadID;
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public int getOutNum() {
-        return OutNum;
+    public int getY() {
+        return y;
     }
 
-    public void setOutNum(int outNum) {
-        OutNum = outNum;
+    public void setY(int y) {
+        this.y = y;
     }
+
+
 }

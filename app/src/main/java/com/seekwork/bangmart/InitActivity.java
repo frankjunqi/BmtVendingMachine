@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -25,9 +26,11 @@ import com.bangmart.nt.sys.ByteBuffer;
 import com.bangmart.nt.sys.ContextInfo;
 import com.bangmart.nt.sys.Tools;
 import com.bangmart.nt.treatment.FaultState;
+import com.google.gson.Gson;
 import com.seekwork.bangmart.data.DBHelper;
 import com.seekwork.bangmart.data.DataCache;
 import com.seekwork.bangmart.data.DataStat;
+import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
 import com.seekwork.bangmart.view.SingleCountDownView;
 
@@ -449,6 +452,9 @@ public class InitActivity extends AppCompatActivity {
 
     private void loadStorageMap() {
         SeekerSoftConstant.storageMap = SeekerSoftConstant.machine.getMetaData().loadStorageMap();
+
+        LogCat.e("url = " + SeekerSoftConstant.storageMap.toString());
+
     }
 
 }

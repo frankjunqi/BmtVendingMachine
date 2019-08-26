@@ -13,6 +13,9 @@ public class SeekerSoftConstant {
     public final static long replyTimeout = 1000;
     public final static long responseTimeout = 300000;
 
+    // 小车的宽度
+    public final static int MACHINE_WIDTH = 280;
+
 
     public static Machine machine;
     public static StorageMap storageMap;
