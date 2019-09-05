@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#495cee</color>
+    <color name="colorPrimaryDark">#171e41</color>
+    <color name="colorAccent">#464969</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="yellow_light">#faf2bc</color>
+    <color name="green_light">#cefac7</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="grey21_transparent">#D0363636</color>
+
+    <color name="dim_grey">#FF696969</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="blue_light_press">#FF00AAEE</color>
+    <color name="blue_light_normal">#C000AAEE</color>
+    <!-- 灰色 -->
+    <color name="grey">#808080</color>
+</resources>

@@ -75,7 +75,7 @@ dependencies {
     })
     implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta1'
     implementation files('libs/serialbmt.jar')
-    implementation files('libs/bangmart_nt_1_0.jar')
+    implementation files('libs/bangmart_nt_2_3.jar')
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'

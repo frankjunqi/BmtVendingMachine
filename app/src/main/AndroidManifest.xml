@@ -30,13 +30,6 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".NTActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
-        <activity
             android:name=".InitActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">

@@ -183,8 +183,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.tv_title) {
-            Intent intent = new Intent(this, NTActivity.class);
-            startActivity(intent);
         }
     }
 

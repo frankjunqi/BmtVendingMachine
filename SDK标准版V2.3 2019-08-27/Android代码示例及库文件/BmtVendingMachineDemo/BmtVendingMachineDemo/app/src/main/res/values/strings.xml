@@ -1,0 +1,246 @@
+<resources>
+    <string name="app_name">BmtVendingMachineDemo</string>
+    <string name="title_activity_h0331">H0331Activity</string>
+    <string name="title_activity_nt">NTActivity</string>
+
+    <string name="addCmd">添加命令</string>
+    <string name="cmdReady">准备好了</string>
+
+    <string name="devInit">设备初始化</string>
+    <string name="LayoutInit">扫描货架结构</string>
+    <string name="prePickup">预出货准备</string>
+
+    <string name="replyTimeout">命令响应超时</string>
+    <string name="taskTimeout">任务执行超时</string>
+
+
+
+
+    <string name="run">执行</string>
+    <string name="pause">暂停</string>
+    <string name="resume">恢复</string>
+    <string name="auto">自动</string>
+    <string name="manu">手输</string>
+    <string name="out_goods_count_exception_tips">确保本设备支持单组出货超过3件的出货方式</string>
+
+    <string name="yichu_com1">dev/ttymxc1</string>
+    <string name="yichu_com2">dev/ttymxc2</string>
+    <string name="bmt_com1">/dev/ttyS0</string>
+    <string name="bmt_com2">/dev/ttyS1</string>
+    <string name="device_no_input_tips">请输入10个字符的设备编号</string>
+
+
+    <string name="version">R-2018-09-08</string>
+
+    <!-- start: bmt vendingmachine-->
+    <string name="scan_cargo_road">扫描货道</string>
+    <string name="release_fault">解除故障</string>
+    <string name="clear_lower_machine_fault">清除下位机故障</string>
+    <string name="enter_debug_interface">进入调试界面</string>
+    <string name="start_scan_all_cargo_road">开始扫描所有货道</string>
+    <string name="scanning_all_cargo_road">扫描所有货道中...</string>
+    <string name="scanning_all_cargo_road_from_server">服务端发起扫描所有货道中...</string>
+    <string name="getting_local_cargo_road_coordinate_list">获取本地货道坐标列表中...</string>
+    <string name="get_local_cargo_road_coordinate_list_success">获取本地货道坐标列表成功!</string>
+    <string name="get_local_cargo_road_coordinate_list_failed">获取本地货道坐标列表失败!请重新扫描或联系技术人员。</string>
+    <string name="getting_server_cargo_road_coordinate_list">获取服务端货道坐标列表中...</string>
+    <string name="getting_server_cargo_road_coordinate_list_success">获取服务端货道坐标列表成功!</string>
+    <string name="getting_server_cargo_road_coordinate_list_failed">获取服务端货道坐标列表失败!</string>
+    <string name="this_machine_is_not_support_cargo_road_scan">该机型不支持货道扫描</string>
+    <string name="updating_goods_data">更新商品数据中...</string>
+
+
+    <string name="read">读</string>
+    <string name="write">写</string>
+    <string name="exit_system">退出系统</string>
+    <string name="query">查询</string>
+    <string name="operating_relay">操作继电器</string>
+
+    <string name="random_walk">随机漫步</string>
+    <string name="random_walk_tips">随机漫步:</string>
+    <string name="start_random_walk">开始随机漫步</string>
+    <string name="end_random_walk">结束随机漫步</string>
+
+    <string name="device_no_tips">机器号:</string>
+    <string name="device_no">机器号</string>
+    <string name="reading_device_no">读取机器号中...</string>
+    <string name="read_device_no_success">读取机器号成功</string>
+    <string name="read_device_no_failed">读取机器号失败</string>
+    <string name="writing_device_no">写入机器号中...</string>
+    <string name="write_device_no_success">写入机器号成功</string>
+    <string name="write_device_no_failed">写入机器号失败</string>
+    <string name="write_device_no_can_not_be_empty">写入机器号不能为空,请先读取或填写机器号</string>
+    <string name="clearing_device_no">清空机器号中...</string>
+    <string name="clear_device_no_success">清空机器号成功</string>
+    <string name="clear_device_no_failed">清空机器号失败</string>
+
+    <string name="ali_camera_test_tips">ali摄像头:</string>
+
+    <string name="out_goods_port_height_tips">出货口高度:</string>
+    <string name="out_goods_port_height">出货口高度</string>
+    <string name="reading_out_goods_port_height">读取出货口高度中...</string>
+    <string name="read_out_goods_port_height_success">读取出货口高度成功</string>
+    <string name="read_out_goods_port_height_failed">读取出货口高度失败</string>
+    <string name="writing_out_goods_port_height">写入出货口高度中...</string>
+    <string name="write_out_goods_port_height_success">写入出货口高度成功</string>
+    <string name="write_out_goods_port_height_failed">写入出货口高度失败</string>
+    <string name="out_goods_port_height_can_not_be_empty">出货口高度失败不能为空,请先读取或填写出货口高度</string>
+    <string name="out_goods_port_height_can_not_be_less_than_zero">出货口高度不能小于0</string>
+
+    <string name="pickup_height_compensation_value_tips">取货高度补偿值:</string>
+    <string name="pickup_height_compensation_value">取货高度补偿值</string>
+    <string name="reading_pickup_height_compensation_value">读取取货高度补偿值中...</string>
+    <string name="read_pickup_height_compensation_value_success">读取取货高度补偿值成功</string>
+    <string name="read_pickup_height_compensation_value_failed">读取取货高度补偿值失败</string>
+    <string name="writing_pickup_height_compensation_value">写入取货高度补偿值中...</string>
+    <string name="write_pickup_height_compensation_value_success">写入取货高度补偿值成功</string>
+    <string name="write_pickup_height_compensation_value_failed">写入取货高度补偿值失败</string>
+    <string name="pickup_height_compensation_value_can_not_be_empty">取货高度补偿值不能为空,请先读取或填写取货高度补偿值</string>
+
+    <string name="x_axis_motor_starting_speed_tips">X轴电机启动速度(rpm):</string>
+    <string name="x_axis_motor_starting_speed">X轴电机启动速度(rpm)</string>
+    <string name="reading_x_axis_motor_starting_speed">读取X轴电机启动速度(rpm)中...</string>
+    <string name="read_x_axis_motor_starting_speed_success">读取X轴电机启动速度(rpm)成功</string>
+    <string name="read_x_axis_motor_starting_speed_failed">读取X轴电机启动速度(rpm)失败</string>
+    <string name="writing_x_axis_motor_starting_speed">写入X轴电机启动速度(rpm)中...</string>
+    <string name="write_x_axis_motor_starting_speed_success">写入X轴电机启动速度(rpm)成功</string>
+    <string name="write_x_axis_motor_starting_speed_failed">写入X轴电机启动速度(rpm)失败</string>
+    <string name="x_axis_motor_starting_speed_can_not_be_empty">X轴电机启动速度(rpm)不能为空,请先读取或填写X轴电机启动速度(rpm)</string>
+    <string name="x_axis_motor_starting_speed_can_not_be_less_than_zero">X轴电机启动速度(rpm)不能小于0</string>
+
+    <string name="x_axis_motor_maximum_speed_tips">X轴电机最高速度(rpm):</string>
+    <string name="x_axis_motor_maximum_speed">X轴电机最高速度(rpm)</string>
+    <string name="reading_x_axis_motor_maximum_speed">读取X轴电机最高速度(rpm)中...</string>
+    <string name="read_x_axis_motor_maximum_speed_success">读取X轴电机最高速度(rpm)成功</string>
+    <string name="read_x_axis_motor_maximum_speed_failed">读取X轴电机最高速度(rpm)失败</string>
+    <string name="writing_x_axis_motor_maximum_speed">写入X轴电机最高速度(rpm)中...</string>
+    <string name="write_x_axis_motor_maximum_speed_success">写入X轴电机最高速度(rpm)成功</string>
+    <string name="write_x_axis_motor_maximum_speed_failed">写入X轴电机最高速度(rpm)失败</string>
+    <string name="x_axis_motor_maximum_speed_can_not_be_empty">X轴电机最高速度(rpm)不能为空,请先读取或填写X轴电机最高速度(rpm)</string>
+    <string name="x_axis_motor_maximum_speed_can_not_be_less_than_zero">X轴电机最高速度(rpm)不能小于0</string>
+
+    <string name="x_axis_motor_acceleration_distance_tips">X轴电机加速距离(steps):</string>
+    <string name="x_axis_motor_acceleration_distance">X轴电机加速距离(steps)</string>
+    <string name="reading_x_axis_motor_acceleration_distance">读取X轴电机加速距离(steps)中...</string>
+    <string name="read_x_axis_motor_acceleration_distance_success">读取X轴电机加速距离(steps)成功</string>
+    <string name="read_x_axis_motor_acceleration_distance_failed">读取X轴电机加速距离(steps)失败</string>
+    <string name="writing_x_axis_motor_acceleration_distance">写入X轴电机加速距离(steps)中...</string>
+    <string name="write_x_axis_motor_acceleration_distance_success">写入X轴电机加速距离(steps)成功</string>
+    <string name="write_x_axis_motor_acceleration_distance_failed">写入X轴电机加速距离(steps)失败</string>
+    <string name="x_axis_motor_acceleration_distance_can_not_be_empty">X轴电机加速距离(steps)不能为空,请先读取或填写X轴电机加速距离(steps)</string>
+    <string name="x_axis_motor_acceleration_distance_can_not_be_less_than_zero">X轴电机加速距离(steps)不能小于0</string>
+
+    <string name="y_axis_motor_starting_speed_tips">Y轴电机启动速度(rpm):</string>
+    <string name="y_axis_motor_starting_speed">Y轴电机启动速度(rpm)</string>
+    <string name="reading_y_axis_motor_starting_speed">读取Y轴电机启动速度(rpm)中...</string>
+    <string name="read_y_axis_motor_starting_speed_success">读取Y轴电机启动速度(rpm)成功</string>
+    <string name="read_y_axis_motor_starting_speed_failed">读取Y轴电机启动速度(rpm)失败</string>
+    <string name="writing_y_axis_motor_starting_speed">写入Y轴电机启动速度(rpm)中...</string>
+    <string name="write_y_axis_motor_starting_speed_success">写入Y轴电机启动速度(rpm)成功</string>
+    <string name="write_y_axis_motor_starting_speed_failed">写入Y轴电机启动速度(rpm)失败</string>
+    <string name="y_axis_motor_starting_speed_can_not_be_empty">Y轴电机启动速度(rpm)不能为空,请先读取或填写Y轴电机启动速度(rpm)</string>
+    <string name="y_axis_motor_starting_speed_can_not_be_less_than_zero">Y轴电机启动速度(rpm)不能小于0</string>
+
+    <string name="y_axis_motor_maximum_speed_tips">Y轴电机最高速度(rpm):</string>
+    <string name="y_axis_motor_maximum_speed">Y轴电机最高速度(rpm)</string>
+    <string name="reading_y_axis_motor_maximum_speed">读取Y轴电机最高速度(rpm)中...</string>
+    <string name="read_y_axis_motor_maximum_speed_success">读取Y轴电机最高速度(rpm)成功</string>
+    <string name="read_y_axis_motor_maximum_speed_failed">读取Y轴电机最高速度(rpm)失败</string>
+    <string name="writing_y_axis_motor_maximum_speed">写入Y轴电机最高速度(rpm)中...</string>
+    <string name="write_y_axis_motor_maximum_speed_success">写入Y轴电机最高速度(rpm)成功</string>
+    <string name="write_y_axis_motor_maximum_speed_failed">写入Y轴电机最高速度(rpm)失败</string>
+    <string name="y_axis_motor_maximum_speed_can_not_be_empty">Y轴电机最高速度(rpm)不能为空,请先读取或填写Y轴电机最高速度(rpm)</string>
+    <string name="y_axis_motor_maximum_speed_can_not_be_less_than_zero">Y轴电机最高速度(rpm)不能小于0</string>
+
+    <string name="y_axis_motor_acceleration_distance_tips">Y轴电机加速距离(steps):</string>
+    <string name="y_axis_motor_acceleration_distance">Y轴电机加速距离(steps)</string>
+    <string name="reading_y_axis_motor_acceleration_distance">读取Y轴电机加速距离(steps)中...</string>
+    <string name="read_y_axis_motor_acceleration_distance_success">读取Y轴电机加速距离(steps)成功</string>
+    <string name="read_y_axis_motor_acceleration_distance_failed">读取Y轴电机加速距离(steps)失败</string>
+    <string name="writing_y_axis_motor_acceleration_distance">写入Y轴电机加速距离(steps)中...</string>
+    <string name="write_y_axis_motor_acceleration_distance_success">写入Y轴电机加速距离(steps)成功</string>
+    <string name="write_y_axis_motor_acceleration_distance_failed">写入Y轴电机加速距离(steps)失败</string>
+    <string name="y_axis_motor_acceleration_distance_can_not_be_empty">Y轴电机加速距离(steps)不能为空,请先读取或填写Y轴电机加速距离(steps)</string>
+    <string name="y_axis_motor_acceleration_distance_can_not_be_less_than_zero">Y轴电机加速距离(steps)不能小于0</string>
+
+
+    <string name="car_wheel_circumference_tips">小车轮子周长:</string>
+    <string name="car_wheel_circumference">小车轮子周长</string>
+    <string name="reading_car_wheel_circumference">读取小车轮子周长中...</string>
+    <string name="read_car_wheel_circumference_success">读取小车轮子周长成功</string>
+    <string name="read_car_wheel_circumference_failed">读取小车轮子周长失败</string>
+    <string name="writing_car_wheel_circumference">写入小车轮子周长中...</string>
+    <string name="write_car_wheel_circumference_success">写入小车轮子周长成功</string>
+    <string name="write_car_wheel_circumference_failed">写入小车轮子周长失败</string>
+    <string name="car_wheel_circumference_can_not_be_empty">小车轮子周长不能为空,请先读取或填写小车轮子周长</string>
+    <string name="car_wheel_circumference_can_not_be_less_than_zero">小车轮子周长不能小于0</string>
+
+    <string name="lifting_synchronous_wheel_circumference_tips">升降同步轮周长:</string>
+    <string name="lifting_synchronous_wheel_circumference">升降同步轮周长</string>
+    <string name="reading_lifting_synchronous_wheel_circumference">读取升降同步轮周长中...</string>
+    <string name="read_lifting_synchronous_wheel_circumference_success">读取升降同步轮周长成功</string>
+    <string name="read_lifting_synchronous_wheel_circumference_failed">读取升降同步轮周长失败</string>
+    <string name="writing_lifting_synchronous_wheel_circumference">写入升降同步轮周长中...</string>
+    <string name="write_lifting_synchronous_wheel_circumference_success">写入升降同步轮周长成功</string>
+    <string name="write_lifting_synchronous_wheel_circumference_failed">写入升降同步轮周长失败</string>
+    <string name="lifting_synchronous_wheel_circumference_can_not_be_empty">升降同步轮周长不能为空,请先读取或填写升降同步轮周长</string>
+    <string name="lifting_synchronous_wheel_circumference_can_not_be_less_than_zero">升降同步轮周长不能小于0</string>
+
+    <string name="slider_synchronization_wheel_circumference_tips">滑块同步轮周长:</string>
+    <string name="slider_synchronization_wheel_circumference">滑块同步轮周长</string>
+    <string name="reading_slider_synchronization_wheel_circumference">读取滑块同步轮周长中...</string>
+    <string name="read_slider_synchronization_wheel_circumference_success">读取滑块同步轮周长成功</string>
+    <string name="read_slider_synchronization_wheel_circumference_failed">读取滑块同步轮周长失败</string>
+    <string name="writing_slider_synchronization_wheel_circumference">写入滑块同步轮周长中...</string>
+    <string name="write_slider_synchronization_wheel_circumference_success">写入滑块同步轮周长成功</string>
+    <string name="write_slider_synchronization_wheel_circumference_failed">写入滑块同步轮周长失败</string>
+    <string name="slider_synchronization_wheel_circumference_can_not_be_empty">滑块同步轮周长不能为空,请先读取或填写滑块同步轮周长</string>
+    <string name="slider_synchronization_wheel_circumference_can_not_be_less_than_zero">滑块同步轮周长不能小于0</string>
+
+    <string name="temp_tips">温度:</string>
+    <string name="temp">温度</string>
+    <string name="actual_temp_tips">实际温度:</string>
+    <string name="actual_temp">实际温度</string>
+    <string name="setting_temp_tips">设置温度:</string>
+    <string name="setting_temp">设置温度</string>
+    <string name="unknown">--</string>
+    <string name="reading_temp">读取温度中...</string>
+    <string name="read_temp_success">读取温度成功</string>
+    <string name="read_temp_failed">读取温度失败</string>
+    <string name="writing_temp">写入温度中...</string>
+    <string name="write_temp_success">写入温度成功</string>
+    <string name="write_temp_failed">写入温度失败</string>
+    <string name="temp_can_not_be_empty">温度不能为空,请先读取或填写温度</string>
+    <string name="temp_area_index_can_not_be_empty">温度相关柜门号不能为空,请先填写温度相关柜门号</string>
+
+    <string name="get_sensor_state_tips">查询传感器状态:</string>
+    <string name="get_sensor_state">查询传感器状态</string>
+    <string name="getting_sensor_state">查询传感器状态中...</string>
+    <string name="get_sensor_state_success">查询传感器状态成功</string>
+    <string name="get_sensor_state_failed">查询传感器状态失败</string>
+
+
+    <!-- start: 继电器-->
+    <string name="old_relay_configuration">旧版继电器配置:\n电子锁[1]门控[2]小车[3]一体机[4]\n灯光[5]风机[6]压缩机[7]</string>
+    <string name="new_relay_configuration">新版继电器配置:\n电子锁[0]压缩机[1]门控[2]小车[3]\n一体机[4]灯光[5]风机[6]加热玻璃[7]</string>
+    <string name="common_area_index">柜门索引</string>
+    <string name="common_reset_time">恢复时间</string>
+    <string name="reserved">预留</string>
+    <string name="electronic_locks">电子锁</string>
+    <string name="gating">门控</string>
+    <string name="car">小车</string>
+    <string name="one_machine">一体机</string>
+    <string name="led">灯光</string>
+    <string name="fan">风机</string>
+    <string name="compressor">压缩机</string>
+    <string name="heated_glass">加热玻璃</string>
+
+    <string name="restart">重启</string>
+    <string name="open">开</string>
+    <string name="close">关</string>
+
+    <!-- end: 继电器-->
+
+
+    <!-- end: bmt vendingmachine-->
+</resources>

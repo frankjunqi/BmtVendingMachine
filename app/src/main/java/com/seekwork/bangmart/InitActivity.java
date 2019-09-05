@@ -6,30 +6,24 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bangmart.nt.channel.IChannelMonitor;
 import com.bangmart.nt.command.Attention;
 import com.bangmart.nt.command.Command;
 import com.bangmart.nt.command.CommandDef;
-import com.bangmart.nt.command.CommandGroup;
 import com.bangmart.nt.command.ICallbackListener;
 import com.bangmart.nt.machine.HeartBeatListener;
 import com.bangmart.nt.machine.MacMetaData;
 import com.bangmart.nt.machine.Machine;
 import com.bangmart.nt.machine.StateChangeListener;
-import com.bangmart.nt.serial.SerialListener;
 import com.bangmart.nt.sys.ByteBuffer;
-import com.bangmart.nt.sys.ContextInfo;
 import com.bangmart.nt.sys.Tools;
 import com.bangmart.nt.treatment.FaultState;
-import com.google.gson.Gson;
-import com.seekwork.bangmart.data.DBHelper;
-import com.seekwork.bangmart.data.DataCache;
-import com.seekwork.bangmart.data.DataStat;
+import com.seekwork.bangmart.util.BmtVendingMachineUtil;
 import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
 import com.seekwork.bangmart.view.SingleCountDownView;
@@ -39,8 +33,10 @@ public class InitActivity extends AppCompatActivity {
     private Button btn_ok;
     private SingleCountDownView singleCountDownView;
     private ProgressBar pb_loadingdata;
-
     private TextView tv_mac_error;
+
+    private Machine machine;
+
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
@@ -69,7 +65,7 @@ public class InitActivity extends AppCompatActivity {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SeekerSoftConstant.machine != null && SeekerSoftConstant.storageMap != null) {
+                if (machine != null && SeekerSoftConstant.storageMap != null) {
                     singleCountDownView.stopCountDown();
                     InitActivity.this.finish();
                     Intent intent = new Intent(InitActivity.this, MainActivity.class);
@@ -83,16 +79,11 @@ public class InitActivity extends AppCompatActivity {
                 }
             }
         });
-
         initBangMartMachine();
     }
 
     // 是否需要货架检测
     private boolean needToGetMacProperty = true;
-    private CommandGroup cmdGrp;
-    private DataStat dataStat;
-    private DataCache dataCache;
-
 
     @Override
     protected void onDestroy() {
@@ -109,17 +100,12 @@ public class InitActivity extends AppCompatActivity {
     private void initBangMartMachine() {
         appendUILogAsync("机器正在初始化中...");
 
-        ContextInfo.init(getApplicationContext());
-        SeekerSoftConstant.machine = Machine.create(SeekerSoftConstant.MACHINE, getString(R.string.bmt_com2));
-        SeekerSoftConstant.machine.setSerialChannelListener(new SerialListener() {
+        machine = BmtVendingMachineUtil.getInstance().getMachine();
+        machine.setChannelMonitor(new IChannelMonitor() {
             @Override
             public void onAvailable() {
                 appendUILogAsync("打开串口成功！");
-                // TODO 初始化基础数据
-                initCmdGroup();
                 initDevMachine();
-                //initScanLocation();
-                makeCmdOrder();
             }
 
             @Override
@@ -134,13 +120,13 @@ public class InitActivity extends AppCompatActivity {
                 appendUILogAsync(sb.toString());
             }
         });
-        SeekerSoftConstant.machine.setHeartBeatListener(new HeartBeatListener() {
+        machine.setHeartBeatListener(new HeartBeatListener() {
             @Override
             public void online(final byte[] data) {
                 if (needToGetMacProperty) {
                     needToGetMacProperty = false;
-                    final MacMetaData md = SeekerSoftConstant.machine.reloadMetaData();
-                    SeekerSoftConstant.storageMap = SeekerSoftConstant.machine.getMetaData().loadStorageMap();
+                    final MacMetaData md = machine.reloadMetaData();
+                    SeekerSoftConstant.storageMap = machine.getMetaData().loadStorageMap();
                     appendUILogAsync(md.toString());
                 }
                 appendUILogAsync("心跳正常，回传数据: " + Tools.bytesToHexString(data));
@@ -153,7 +139,7 @@ public class InitActivity extends AppCompatActivity {
                 appendUILogAsync("没有心跳:" + duration / 1000 + "s." + errMsg);
             }
         });
-        SeekerSoftConstant.machine.setStateChangeListener(new StateChangeListener() {
+        machine.setStateChangeListener(new StateChangeListener() {
             @Override
             public void onFatal(final FaultState state) {
                 appendUILogAsync("致命故障:" + Tools.intToHexStrForShow(state.getCode()) + " : " + state.getDesc());
@@ -209,122 +195,19 @@ public class InitActivity extends AppCompatActivity {
     }
 
     /**
-     * 初始化cmd group
-     */
-    private void initCmdGroup() {
-        /*********** 初始化数据缓存对象       *************/
-        dataCache = DataCache.getInstance();
-        dataCache.loadFromDB();
-
-        DBHelper.create(getApplicationContext());
-
-        dataStat = DataStat.getInstance();
-
-        /*********** 初始化命令管理对象       *************/
-        //初始化命令管理对象。命令的对列，执行生命周期都是由这个对象负责
-        cmdGrp = CommandGroup.getInstance();
-
-        //监听一个命令列表执行的开始
-        cmdGrp.setOnStartListener(new ICallbackListener() {
-            @Override
-            public boolean callback(Command cmd) {
-                if (dataStat.is(DataStat.STATE_UNKNOW)) {
-                    dataStat.startStat();
-                } else {
-                    dataStat.resume();
-                }
-                appendUILogAsync("开始执行当前的命令清单。第一条命令是：" + cmd.getName());
-                return true;
-            }
-        });
-        //监听一个命令执行的开始
-        cmdGrp.setOnSendListener(new ICallbackListener() {
-            @Override
-            public boolean callback(final Command cmd) {
-                dataStat.setBusy();
-                appendUILogAsync("执行命令：" + cmd.getName() + "   Code: " + Tools.bytesToHexString(cmd.getCode()));
-                return true;
-            }
-        });
-        //监听下位机命令响应
-        cmdGrp.setOnReplyListener(new ICallbackListener() {
-            @Override
-            public boolean callback(final Command cmd) {
-                dataStat.updateReplyTime(cmd.getReplyTime());
-                StringBuilder sb = new StringBuilder();
-                sb.append("收到消息->").append(Tools.bytesToHexString(cmd.getLastAttentionData().getCode()));
-                appendUILogAsync(sb.toString());
-                return true;
-            }
-        });
-        //监听下位机命令回复数据（可能一条命令有多个数据包）
-        cmdGrp.setOnResponseListener(new ICallbackListener() {
-            @Override
-            public boolean callback(Command cmd) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("收到数据->").append(Tools.bytesToHexString(cmd.getLastResponseData()));
-                appendUILogAsync(sb.toString());
-                return true;
-            }
-        });
-        //监听一个命令执行的结束
-        cmdGrp.setOnCompleteListener(new ICallbackListener() {
-            @Override
-            public boolean callback(Command cmd) {
-                final StringBuilder sb = new StringBuilder();
-                dataStat.increaseSuccessTaskCount();
-                dataStat.setIdle();
-
-                if (cmd != null && cmd.getResult() != null) {
-                    sb.append("任务执行结束, 接收到数据->").append(Tools.bytesToHexString(cmd.getResult().getCode()));
-                }
-
-                appendUILogAsync(sb.toString());
-                return true;
-            }
-        });
-
-        //监听一个命令列表的执行结束
-        cmdGrp.setOnEndListener(new ICallbackListener() {
-            @Override
-            public boolean callback(final Command cmd) {
-                if (cmdGrp.hasNext()) {
-                    dataStat.pause();
-                } else {
-                    dataStat.stop();
-                }
-                // TODO 命令执行完成
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < cmdGrp.getCommandCount(); i++) {
-                            cmdGrp.remove(i);
-                        }
-                        singleCountDownView.stopCountDown();
-                        btn_ok.setEnabled(true);
-                    }
-                });
-                appendUILogAsync("任务清单执行完毕！");
-                return true;
-            }
-        });
-
-
-    }
-
-    /**
      * 初始化机器
      */
     private void initDevMachine() {
-        SeekerSoftConstant.machine.setName(SeekerSoftConstant.MACHINE);
+        machine.setName(SeekerSoftConstant.MACHINE);
         long replyTimeout = SeekerSoftConstant.replyTimeout;
         long responseTimeout = SeekerSoftConstant.responseTimeout;
         Command cmd = CommandFactory.createCommand4DeviceInit(SeekerSoftConstant.MACHINE, replyTimeout, responseTimeout);
         cmd.setOnCompleteListener(new ICallbackListener() {
             @Override
             public boolean callback(Command cmd) {
-                final MacMetaData md = SeekerSoftConstant.machine.reloadMetaData();
-                loadStorageMap();
+                final MacMetaData md = machine.reloadMetaData();
+                SeekerSoftConstant.storageMap = machine.getMetaData().loadStorageMap();
+                LogCat.e("框架 = " + SeekerSoftConstant.storageMap.toString());
                 appendUILogAsync(md.toString());
                 return true;
             }
@@ -343,53 +226,17 @@ public class InitActivity extends AppCompatActivity {
         cmd.setOnCompleteListener(new ICallbackListener() {
             @Override
             public boolean callback(Command cmd) {
-                loadStorageMap();
+                SeekerSoftConstant.storageMap = machine.getMetaData().loadStorageMap();
+                LogCat.e("框架 = " + SeekerSoftConstant.storageMap.toString());
                 return true;
             }
         });
+
         appendSelloutToTaskList(cmd, "初始化扫描货道");
     }
 
-    /**
-     * 检查初始化，扫描货架命令执行
-     */
-    private void makeCmdOrder() {
-        switch (cmdGrp.getState()) {
-            case CommandGroup.STATE_IDLE:
-                if (cmdGrp.getCommandCount() == 0) {
-                    appendUILogAsync("没有可执行的命令！");
-                    return;
-                }
-                int roundCnt = Integer.parseInt("1");
-                if (roundCnt == 1) {
-                    cmdGrp.setExecType(CommandGroup.TYPE_ONLY_ONE);
-                } else {
-                    cmdGrp.setExecType(CommandGroup.TYPE_ROUND_LIMITED);
-                }
-                cmdGrp.setExecCount(roundCnt);
-                dataStat.updateTaskCount(cmdGrp.getCommandCount() * roundCnt);
-
-                cmdGrp.setBlockOnError(false ? CommandGroup.TYPE_BREAK_ON_ERROR : CommandGroup.TYPE_CONTINUE_ON_ERROR);
-                cmdGrp.setCommandGroupInterval(10000);
-                cmdGrp.setCommandInterval(10000);
-                cmdGrp.moveFirst();
-                if (SeekerSoftConstant.machine != null) {
-                    SeekerSoftConstant.machine.executeCommandGroup(cmdGrp);
-                }
-                break;
-            case CommandGroup.STATE_BUSY:
-                dataStat.pause();
-                cmdGrp.pause();
-                break;
-            case CommandGroup.STATE_PAUSE:
-                dataStat.resume();
-                cmdGrp.resume();
-                break;
-            default:
-        }
-    }
-
     private void appendSelloutToTaskList(Command cmd, String desc) {
+        cmd.setDesc(desc);
         cmd.setOnReplyListener(new ICallbackListener() {
             @Override
             public boolean callback(Command cmd) {
@@ -427,8 +274,7 @@ public class InitActivity extends AppCompatActivity {
                 return true;
             }
         });
-        int cmdIdx = cmdGrp.add(cmd);
-        cmdGrp.setCommandDesc(cmdIdx, desc);
+        machine.executeCommand(cmd);
     }
 
     public void appendUILogAsync(final String msg) {
@@ -448,13 +294,6 @@ public class InitActivity extends AppCompatActivity {
         if (offset > tv_mac_error.getHeight()) {
             tv_mac_error.scrollTo(0, offset - tv_mac_error.getHeight());
         }
-    }
-
-    private void loadStorageMap() {
-        SeekerSoftConstant.storageMap = SeekerSoftConstant.machine.getMetaData().loadStorageMap();
-
-        LogCat.e("url = " + SeekerSoftConstant.storageMap.toString());
-
     }
 
 }

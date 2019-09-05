@@ -9,15 +9,12 @@ import android.widget.TextView;
 import com.bangmart.nt.command.Attention;
 import com.bangmart.nt.command.Command;
 import com.bangmart.nt.command.CommandDef;
-import com.bangmart.nt.command.CommandGroup;
 import com.bangmart.nt.command.ICallbackListener;
 import com.bangmart.nt.machine.Location;
+import com.bangmart.nt.machine.Machine;
 import com.bangmart.nt.sys.ByteBuffer;
 import com.bangmart.nt.sys.Tools;
 import com.google.gson.Gson;
-import com.seekwork.bangmart.data.DBHelper;
-import com.seekwork.bangmart.data.DataCache;
-import com.seekwork.bangmart.data.DataStat;
 import com.seekwork.bangmart.network.api.Host;
 import com.seekwork.bangmart.network.api.SeekWorkService;
 import com.seekwork.bangmart.network.api.SrvResult;
@@ -28,6 +25,7 @@ import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPickRoad;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarSuccessGood;
 import com.seekwork.bangmart.network.entity.seekwork.TakeOutProductBean;
 import com.seekwork.bangmart.network.gsonfactory.GsonConverterFactory;
+import com.seekwork.bangmart.util.BmtVendingMachineUtil;
 import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
 import com.seekwork.bangmart.view.SingleCountDownView;
@@ -53,9 +51,7 @@ public class ResultActivity extends AppCompatActivity {
     private List<MBangmarProcPick> mBangmarProcPicks;
     private List<MBangmarProcPickRoad> mBangmarProcPickRoads;
 
-    private CommandGroup cmdGrp;
-    private DataStat dataStat;
-    private DataCache dataCache;
+    private Machine machine;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,8 +76,6 @@ public class ResultActivity extends AppCompatActivity {
         orderId = bundle.getInt(SeekerSoftConstant.OrderID);
         MBangmarPickRoadDetailResponse response = (MBangmarPickRoadDetailResponse) bundle.getSerializable(SeekerSoftConstant.OUTCART);
         mBangmarProcPicks = response.getmBangmarProcPicks();
-
-        initCmdGrp();
 
         // 出货数据列表
         ArrayList<TakeOutProductBean> outList = new ArrayList<>();
@@ -112,6 +106,7 @@ public class ResultActivity extends AppCompatActivity {
             }
         }
 
+        machine = BmtVendingMachineUtil.getInstance().getMachine();
         // 获取小车的宽度
 
 
@@ -120,6 +115,12 @@ public class ResultActivity extends AppCompatActivity {
 
         mBangmarProcPickRoads = mBangmarProcPicks.get(0).getmBangmarProcPickRoads();
 
+        // TODO TEST
+        MBangmarProcPickRoad test = new MBangmarProcPickRoad();
+        test.setArea(1);
+        test.setColumn(1);
+        test.setFloor(1);
+        mBangmarProcPickRoads.add(test);
         //sellOutOne();
         sellOutMore();
 
@@ -172,7 +173,7 @@ public class ResultActivity extends AppCompatActivity {
                 return true;
             }
         });
-        SeekerSoftConstant.machine.executeCommand(cmd);
+        BmtVendingMachineUtil.getInstance().getMachine().executeCommand(cmd);
     }
 
 
@@ -191,129 +192,10 @@ public class ResultActivity extends AppCompatActivity {
         Command cmd = CommandFactory.createCommand4SellOut(params, 0, 100000, 10000);
         appendSelloutToTaskList(cmd, "出货>" + params.size() + "件" + " 模式>" + 1);
 
-        switch (cmdGrp.getState()) {
-            case CommandGroup.STATE_IDLE:
-                if (cmdGrp.getCommandCount() == 0) {
-                    appendUILogAsync("没有可执行的命令！");
-                    return;
-                }
-                int roundCnt = Integer.parseInt("1");
-                if (roundCnt == 1) {
-                    cmdGrp.setExecType(CommandGroup.TYPE_ONLY_ONE);
-                } else {
-                    cmdGrp.setExecType(CommandGroup.TYPE_ROUND_LIMITED);
-                }
-                cmdGrp.setExecCount(roundCnt);
-                dataStat.updateTaskCount(cmdGrp.getCommandCount() * roundCnt);
-
-                cmdGrp.setBlockOnError(false ? CommandGroup.TYPE_BREAK_ON_ERROR : CommandGroup.TYPE_CONTINUE_ON_ERROR);
-                cmdGrp.setCommandGroupInterval(10000);
-                cmdGrp.setCommandInterval(10000);
-                cmdGrp.moveFirst();
-                if (SeekerSoftConstant.machine != null) {
-                    SeekerSoftConstant.machine.executeCommandGroup(cmdGrp);
-                }
-                break;
-            case CommandGroup.STATE_BUSY:
-                dataStat.pause();
-                cmdGrp.pause();
-                break;
-            case CommandGroup.STATE_PAUSE:
-                dataStat.resume();
-                cmdGrp.resume();
-                break;
-            default:
-        }
-    }
-
-    private void initCmdGrp() {
-        /*********** 初始化数据缓存对象       *************/
-        dataCache = DataCache.getInstance();
-        dataCache.loadFromDB();
-
-        DBHelper.create(getApplicationContext());
-        dataStat = DataStat.getInstance();
-
-        /*********** 初始化命令管理对象       *************/
-        //初始化命令管理对象。命令的对列，执行生命周期都是由这个对象负责
-        cmdGrp = CommandGroup.getInstance();
-
-        //监听一个命令列表执行的开始
-        cmdGrp.setOnStartListener(new ICallbackListener() {
-            @Override
-            public boolean callback(Command cmd) {
-                if (dataStat.is(DataStat.STATE_UNKNOW)) {
-                    dataStat.startStat();
-                } else {
-                    dataStat.resume();
-                }
-                appendUILogAsync("开始执行当前的命令清单。第一条命令是：" + cmd.getName());
-                return true;
-            }
-        });
-        //监听一个命令执行的开始
-        cmdGrp.setOnSendListener(new ICallbackListener() {
-            @Override
-            public boolean callback(final Command cmd) {
-                dataStat.setBusy();
-                appendUILogAsync("执行命令：" + cmd.getName() + "   Code: " + Tools.bytesToHexString(cmd.getCode()));
-                return true;
-            }
-        });
-        //监听下位机命令响应
-        cmdGrp.setOnReplyListener(new ICallbackListener() {
-            @Override
-            public boolean callback(final Command cmd) {
-                dataStat.updateReplyTime(cmd.getReplyTime());
-                StringBuilder sb = new StringBuilder();
-                sb.append("收到消息->").append(Tools.bytesToHexString(cmd.getLastAttentionData().getCode()));
-                appendUILogAsync(sb.toString());
-                return true;
-            }
-        });
-        //监听下位机命令回复数据（可能一条命令有多个数据包）
-        cmdGrp.setOnResponseListener(new ICallbackListener() {
-            @Override
-            public boolean callback(Command cmd) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("收到数据->").append(Tools.bytesToHexString(cmd.getLastResponseData()));
-                appendUILogAsync(sb.toString());
-                return true;
-            }
-        });
-        //监听一个命令执行的结束
-        cmdGrp.setOnCompleteListener(new ICallbackListener() {
-            @Override
-            public boolean callback(Command cmd) {
-                final StringBuilder sb = new StringBuilder();
-                dataStat.increaseSuccessTaskCount();
-                dataStat.setIdle();
-                sb.append("任务执行结束, 接收到数据->").append(Tools.bytesToHexString(cmd.getResult().getCode()));
-                appendUILogAsync(sb.toString());
-                return true;
-            }
-        });
-
-        //监听一个命令列表的执行结束
-        cmdGrp.setOnEndListener(new ICallbackListener() {
-            @Override
-            public boolean callback(Command cmd) {
-                if (cmdGrp.hasNext()) {
-                    dataStat.pause();
-                } else {
-                    dataStat.stop();
-                }
-                for (int i = 0; i < cmdGrp.getCommandCount(); i++) {
-                    cmdGrp.remove(i);
-                }
-                appendUILogAsync("任务清单执行完毕！");
-                return true;
-            }
-        });
-
     }
 
     private void appendSelloutToTaskList(Command cmd, String desc) {
+        cmd.setDesc(desc);
         cmd.setOnReplyListener(new ICallbackListener() {
             @Override
             public boolean callback(Command cmd) {
@@ -353,8 +235,7 @@ public class ResultActivity extends AppCompatActivity {
                 return true;
             }
         });
-        int cmdIdx = cmdGrp.add(cmd);
-        cmdGrp.setCommandDesc(cmdIdx, desc);
+        machine.executeCommand(cmd);
     }
 
     public void appendUILogAsync(final String msg) {

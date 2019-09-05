@@ -9,6 +9,8 @@ import android.text.format.Time;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.bangmart.nt.sys.Logger;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -19,8 +21,6 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.TreeSet;
-
-import com.bangmart.nt.sys.Logger;
 
 /**
  * Created by gongtao on 2017/12/28.
@@ -108,8 +108,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        Logger.error("", "出错了。应用要退出了。", ex);
-        Logger.flush();
+        Logger.sLogger4Machine.error("", "出错了。应用要退出了。", ex);
+        Logger.sLogger4Machine.flush();
 
         if (!handleException(ex) && mDefaultHandler != null) {
             //如果用户没有处理则让系统默认的异常处理器来处理
@@ -127,11 +127,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void printStackTrace(Throwable ex) {
-        if (ex == null) return;
+        if(ex == null) return ;
 
         StackTraceElement[] stes = ex.getStackTrace();
         for (StackTraceElement ste : stes) {
-            Logger.info("", ste.toString());
+            Logger.sLogger4Machine.info("", ste.toString());
         }
         printStackTrace(ex.getCause());
     }
@@ -146,7 +146,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     private boolean handleException(Throwable ex) {
         if (ex == null) {
-            Logger.info(TAG, "handleException --- ex==null");
+            Logger.sLogger4Machine.info(TAG, "handleException --- ex==null");
             return true;
         }
         final String msg = ex.getLocalizedMessage();
@@ -160,7 +160,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 Looper.prepare();
 
                 if (DEBUG) {
-                    Logger.info(TAG, "异常信息->" + msg);
+                    Logger.sLogger4Machine.info(TAG, "异常信息->" + msg);
                     Toast toast = Toast.makeText(mContext, "程序出错，即将退出:\r\n" + msg,
                             Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, 0, 0);
@@ -172,7 +172,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         //收集设备信息
         collectCrashDeviceInfo(mContext);
         //保存错误报告文件
-        Logger.error("", "", ex);
+        Logger.sLogger4Machine.error("", "", ex);
 //        saveCrashInfoToFile(ex);
         //发送错误报告到服务器
         //sendCrashReportsToServer(mContext);
@@ -240,7 +240,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 mDeviceCrashInfo.put(VERSION_CODE, "" + pi.versionCode);
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Logger.error(TAG, "Error while collect package error", e);
+            Logger.sLogger4Machine.error(TAG, "Error while collect package error", e);
         }
         //使用反射来收集设备信息.在Build类中包含各种设备信息,
         //例如: 系统版本号,设备生产商 等帮助调试程序的有用信息
@@ -250,9 +250,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             try {
                 field.setAccessible(true);
                 mDeviceCrashInfo.put(field.getName(), "" + field.get(null));
-                Logger.info(TAG, field.getName() + " : " + field.get(null));
+                Logger.sLogger4Machine.info(TAG, field.getName() + " : " + field.get(null));
             } catch (Exception e) {
-                Logger.error(TAG, "Error while collect crash error", e);
+                Logger.sLogger4Machine.error(TAG, "Error while collect crash error", e);
             }
         }
     }
@@ -290,7 +290,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             trace.close();
             return fileName;
         } catch (Exception e) {
-            Logger.error(TAG, "an error occured while writing report file...", e);
+            Logger.sLogger4Machine.error(TAG, "an error occured while writing report file...", e);
         }
         return null;
     }

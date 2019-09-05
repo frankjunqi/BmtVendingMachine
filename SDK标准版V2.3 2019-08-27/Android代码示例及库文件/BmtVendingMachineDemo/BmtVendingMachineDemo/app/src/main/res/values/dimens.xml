@@ -1,0 +1,45 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="margin">4dp</dimen>
+    <dimen name="margin_left">4dp</dimen>
+    <dimen name="margin_right">4dp</dimen>
+    <dimen name="margin_top">4dp</dimen>
+    <dimen name="margin_bottom">4dp</dimen>
+    <dimen name="margin2x">8dp</dimen>
+    <dimen name="margin_left2x">8dp</dimen>
+    <dimen name="margin_right2x">8dp</dimen>
+    <dimen name="margin_top2x">8dp</dimen>
+    <dimen name="margin_bottom2x">8dp</dimen>
+    <dimen name="margin4x">16dp</dimen>
+    <dimen name="margin_left4x">16dp</dimen>
+    <dimen name="margin_right4x">16dp</dimen>
+    <dimen name="margin_top4x">16dp</dimen>
+    <dimen name="margin_bottom4x">16dp</dimen>
+    <dimen name="padding">4dp</dimen>
+    <dimen name="padding_left">4dp</dimen>
+    <dimen name="padding_right">4dp</dimen>
+    <dimen name="padding_top">4dp</dimen>
+    <dimen name="padding_bottom">4dp</dimen>
+    <dimen name="padding2x">8dp</dimen>
+    <dimen name="padding4x">16dp</dimen>
+    <dimen name="padding_left2x">8dp</dimen>
+    <dimen name="padding_right2x">8dp</dimen>
+    <dimen name="padding_top2x">8dp</dimen>
+    <dimen name="padding_bottom2x">8dp</dimen>
+    <dimen name="corner_radius">3dp</dimen>
+
+    <dimen name="prompt_large6_text_size">64sp</dimen>
+    <dimen name="prompt_large5_text_size">48sp</dimen>
+    <dimen name="prompt_large4_text_size">32sp</dimen>
+    <dimen name="prompt_large3_text_size">28sp</dimen>
+    <dimen name="prompt_large2_text_size">24sp</dimen>
+    <dimen name="prompt_large1_text_size">22sp</dimen>
+    <dimen name="prompt_large_text_size">20sp</dimen>
+    <dimen name="prompt_normal_text_size">18sp</dimen>
+    <dimen name="prompt_small_text_size">16sp</dimen>
+    <dimen name="prompt_small2_text_size">14sp</dimen>
+    <dimen name="prompt_small3_text_size">12sp</dimen>
+    <dimen name="prompt_tiny_text_size">10sp</dimen>
+    <dimen name="prompt_minima_text_size">8sp</dimen>
+</resources>

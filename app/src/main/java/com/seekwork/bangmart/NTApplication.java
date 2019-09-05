@@ -1,7 +1,10 @@
 package com.seekwork.bangmart;
 
 import android.app.Application;
+import android.os.Build;
 
+import com.bangmart.nt.sys.ContextInfo;
+import com.bangmart.nt.sys.LogToFile;
 import com.bangmart.nt.sys.Logger;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -15,14 +18,18 @@ public class NTApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        mSeekersoftApp = this;
 
         // 异常处理，不需要处理时注释掉这两句即可！
         CrashHandler crashHandler = CrashHandler.getInstance();
         // 注册crashHandler
         crashHandler.init(getApplicationContext());
-
         // 初始化bugly
         CrashReport.initCrashReport(getApplicationContext(), "ec127254a0", true);
+        CrashReport.setUserId(getApplicationContext(), Build.FINGERPRINT);
+
+        ContextInfo.init(this);
+        LogToFile.initialize(this);
     }
 
     public static Application getInstance() {
@@ -32,6 +39,6 @@ public class NTApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        Logger.flush();
+        Logger.sLogger4Machine.flush();
     }
 }

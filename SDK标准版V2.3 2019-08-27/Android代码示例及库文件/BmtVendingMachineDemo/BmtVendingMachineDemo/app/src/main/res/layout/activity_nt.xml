@@ -1,0 +1,1711 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+<RelativeLayout
+    android:layout_width="1080px"
+    android:layout_height="1780px"
+    android:background="@android:color/background_light"
+    tools:context="bangmart.nt.test.NTActivity">
+
+
+        <Button
+            android:id="@+id/btnCmdPanel"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/command_panel_open"
+            android:fontFamily="sans-serif"
+            android:textAlignment="center"
+            android:textSize="32px"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnCmdSave"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/btnCmdPanel"
+            android:background="@android:drawable/ic_menu_save"
+            android:fontFamily="sans-serif"
+            android:textAlignment="center"
+            android:textSize="32px"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnCmdLoad"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/btnCmdSave"
+            android:background="@android:drawable/ic_menu_set_as"
+            android:fontFamily="sans-serif"
+            android:textAlignment="center"
+            android:textSize="32px"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/logView"
+            android:layout_width="1080px"
+            android:layout_height="200px"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/darker_gray"
+            android:fadeScrollbars="false"
+            android:isScrollContainer="true"
+            android:scrollbars="vertical"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24px" />
+
+        <CheckBox
+            android:id="@+id/cbDebug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/diagramContainer"
+            android:text="打印后台输出" />
+
+        <ScrollView
+            android:id="@+id/taskListContainer"
+            android:layout_width="240px"
+            android:layout_height="430px"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/btnCmdPanel"
+            android:background="#FFBDF7BB"
+            android:fadingEdge="vertical"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+                <ListView
+                    android:id="@+id/taskList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fadingEdge="vertical"
+                    android:fadingEdgeLength="5dp" />
+
+        </ScrollView>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/layoutInfo"
+            android:layout_width="840px"
+            android:layout_height="280px"
+            android:layout_below="@+id/btnCmdLoad"
+            android:layout_toEndOf="@+id/btnCmdLoad"
+            android:background="#FFDDDFF7">
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="8dp"
+                    android:text="平均响应时间："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/txtCmdCnt"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="当前响应时间："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtReplyTime"
+                    android:layout_width="90px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView20"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="无故障时长："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="等待任务数："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="8dp"
+                    android:text="空闲时间："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/txtCmdCnt"
+                    app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="8dp"
+                    android:text="运行时间："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/txtCmdCnt"
+                    app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+                <TextView
+                    android:id="@+id/txtIdleTime"
+                    android:layout_width="160px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView21"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLongReplyTime" />
+
+                <TextView
+                    android:id="@+id/txtBusyTime"
+                    android:layout_width="160px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView22"
+                    app:layout_constraintTop_toBottomOf="@+id/txtIdleTime" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="8dp"
+                    android:text="最短响应时间："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/txtCmdCnt"
+                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="8dp"
+                    android:text="最长响应时间："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/txtCmdCnt"
+                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+                <TextView
+                    android:id="@+id/txtShortReplyTime"
+                    android:layout_width="90px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView11"
+                    app:layout_constraintTop_toBottomOf="@+id/txtAvgeReplyTime" />
+
+                <TextView
+                    android:id="@+id/txtAvgeReplyTime"
+                    android:layout_width="90px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView9"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtRightTime"
+                    android:layout_width="130px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView18"
+                    app:layout_constraintTop_toBottomOf="@+id/txtReplyTime" />
+
+                <TextView
+                    android:id="@+id/txtLongReplyTime"
+                    android:layout_width="90px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView16"
+                    app:layout_constraintTop_toBottomOf="@+id/txtShortReplyTime" />
+
+                <TextView
+                    android:id="@+id/textView23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="成功任务数："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+                <TextView
+                    android:id="@+id/textView24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="失败任务数："
+                    android:textSize="25px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="当前任务执行时长"
+                    android:textSize="25px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView26"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginTop="8dp"
+                    android:text="无故障最高记录"
+                    android:textSize="25px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtTaskTime" />
+
+                <TextView
+                    android:id="@+id/txtCmdCnt"
+                    android:layout_width="90px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView19"
+                    app:layout_constraintTop_toBottomOf="@+id/txtRightTime" />
+
+                <TextView
+                    android:id="@+id/txtSuccessCmdCnt"
+                    android:layout_width="90px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView23"
+                    app:layout_constraintTop_toBottomOf="@+id/txtCmdCnt" />
+
+                <TextView
+                    android:id="@+id/txtTaskTime"
+                    android:layout_width="150px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal"
+                    android:text="0"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="48px"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView25" />
+
+                <TextView
+                    android:id="@+id/txtRecord"
+                    android:layout_width="150px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="48px"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView26" />
+
+                <TextView
+                    android:id="@+id/txtFailCmdCnt"
+                    android:layout_width="90px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="25px"
+                    app:layout_constraintStart_toEndOf="@+id/textView24"
+                    app:layout_constraintTop_toBottomOf="@+id/txtSuccessCmdCnt" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/titleBar"
+            android:layout_width="840px"
+            android:layout_height="80px"
+            android:layout_toEndOf="@+id/btnCmdLoad"
+            android:background="#FFD7D7D7">
+
+                <Button
+                    android:id="@+id/btnRun"
+                    style="@android:style/Widget.Button"
+                    android:layout_width="70px"
+                    android:layout_height="70px"
+                    android:layout_alignBaseline="@+id/btnSaveData"
+                    android:layout_alignBottom="@+id/btnSaveData"
+                    android:layout_marginTop="4dp"
+                    android:layout_toEndOf="@+id/btnSaveData"
+                    android:background="@drawable/run"
+                    android:textAlignment="center"
+                    android:textSize="28px"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/btnFinish"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btnFinish"
+                    style="@android:style/Widget.Button"
+                    android:layout_width="70px"
+                    android:layout_height="70px"
+                    android:layout_alignBottom="@+id/cbBlockOnError"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:drawable/ic_delete"
+                    android:textAlignment="center"
+                    android:textSize="28px"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btnSaveData"
+                    style="@android:style/Widget.Button"
+                    android:layout_width="60px"
+                    android:layout_height="60px"
+                    android:layout_alignBaseline="@+id/edtRoundCount"
+                    android:layout_alignBottom="@+id/edtRoundCount"
+                    android:layout_marginTop="7dp"
+                    android:layout_toEndOf="@+id/cbBlockOnError"
+                    android:background="@android:drawable/ic_menu_save"
+                    android:textAlignment="center"
+                    android:textSize="28px"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/btnRun"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/btnCmdPanel"
+                    android:layout_alignBottom="@+id/btnCmdPanel"
+                    android:layout_marginTop="16dp"
+                    android:layout_toEndOf="@+id/edtGroupTimeout"
+                    android:text="命令间隔"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toEndOf="@+id/edtGroupTimeout"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/edtCmdTimeout"
+                    android:layout_width="80px"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textView"
+                    android:layout_alignBottom="@+id/textView"
+                    android:layout_marginTop="4dp"
+                    android:layout_toEndOf="@+id/textView8"
+                    android:ems="10"
+                    android:gravity="center_horizontal"
+                    android:inputType="number"
+                    android:text="100"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toEndOf="@+id/textView8"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/edtRoundCount"
+                    android:layout_width="50px"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textView7"
+                    android:layout_alignBottom="@+id/textView7"
+                    android:layout_marginTop="4dp"
+                    android:layout_toEndOf="@+id/textView7"
+                    android:ems="10"
+                    android:gravity="center_horizontal"
+                    android:inputType="number"
+                    android:text="1"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toEndOf="@+id/textView7"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/edtGroupTimeout"
+                    android:layout_width="80px"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textView"
+                    android:layout_alignBottom="@+id/textView"
+                    android:layout_marginTop="4dp"
+                    android:layout_toEndOf="@+id/textView"
+                    android:ems="10"
+                    android:gravity="center_horizontal"
+                    android:inputType="number"
+                    android:text="100"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toEndOf="@+id/textView"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/edtCmdTimeout"
+                    android:layout_alignBottom="@+id/edtCmdTimeout"
+                    android:layout_marginTop="16dp"
+                    android:layout_toEndOf="@+id/edtCmdTimeout"
+                    android:text="次数"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toEndOf="@+id/edtCmdTimeout"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/cbRound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/edtRoundCount"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@+id/edtRoundCount"
+                    android:text="循环"
+                    android:textColor="#FF7A7A7A"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toEndOf="@+id/edtRoundCount"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/btnCmdLoad"
+                    android:layout_alignBottom="@+id/btnCmdLoad"
+                    android:layout_marginTop="16dp"
+                    android:layout_toEndOf="@+id/btnCmdLoad"
+                    android:text="组间隔"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/cbBlockOnError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/cbRound"
+                    android:layout_alignBottom="@+id/cbRound"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@+id/cbRound"
+                    android:checked="true"
+                    android:text="出错阻塞"
+                    android:textColor="#FF7A7A7A"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toEndOf="@+id/cbRound"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="840px"
+            android:layout_height="150px"
+            android:layout_below="@+id/layoutInfo"
+            android:layout_toEndOf="@+id/taskListContainer"
+            android:background="#FFD1F9ED">
+
+                <TextView
+                    android:id="@+id/txtMacSteDesc"
+                    android:layout_width="60px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="20px"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/textView35"
+                    app:layout_constraintTop_toBottomOf="@+id/txtCmdSte"
+                    tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/txtHeartbeat"
+                    android:layout_width="740px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="20px"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/textView13"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/txtCmdSte"
+                    android:layout_width="430px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="20px"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/textView17"
+                    app:layout_constraintTop_toBottomOf="@+id/txtHeartbeat"
+                    tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/txtSysInfo"
+                    android:layout_width="310px"
+                    android:layout_height="120px"
+                    android:layout_marginStart="2dp"
+                    android:background="@color/green_light"
+                    android:textSize="14px"
+                    app:layout_constraintStart_toEndOf="@+id/txtCmdSte"
+                    app:layout_constraintTop_toBottomOf="@+id/txtHeartbeat"
+                    tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/txtMacSte"
+                    android:layout_width="370px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textSize="20px"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/txtMacSteDesc"
+                    app:layout_constraintTop_toBottomOf="@+id/txtCmdSte"
+                    tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
+                    android:text="设备心跳"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:text="上次出错"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+                <TextView
+                    android:id="@+id/textView35"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:text="设备状态"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtCmdSte" />
+
+                <Button
+                    android:id="@+id/btnUpgrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60px"
+                    android:text="升级固件"
+                    android:textSize="20px"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <EditText
+                    android:id="@+id/edtFileName"
+                    android:layout_width="340px"
+                    android:layout_height="65px"
+                    android:layout_marginStart="2dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text=".bin"
+                    android:textSize="20px"
+                    app:layout_constraintStart_toEndOf="@+id/btnUpgrade"
+                    app:layout_constraintTop_toBottomOf="@+id/txtMacSte" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/resultPanel"
+            android:layout_width="1080px"
+            android:layout_height="170px"
+            android:layout_below="@+id/constraintLayout"
+            android:background="#FFF6F3D6">
+
+                <TextView
+                    android:id="@+id/txtResult"
+                    android:layout_width="1070px"
+                    android:layout_height="90px"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:text="此处显示命令执行结果"
+                    android:textSize="24px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints" />
+
+                <Button
+                    android:id="@+id/btnTestR2Z"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80px"
+                    android:layout_marginStart="2dp"
+                    android:text="检测偏移量"
+                    android:textSize="24px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtResult" />
+
+                <Button
+                    android:id="@+id/more_btn"
+                    android:layout_width="150px"
+                    android:layout_height="80px"
+                    android:text="更多"
+                    android:textSize="24px"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtResult" />
+
+                <Button
+                    android:id="@+id/btnTestCnnt"
+                    android:layout_width="150px"
+                    android:layout_height="80px"
+                    android:text="检测串口"
+                    android:textSize="24px"
+                    app:layout_constraintEnd_toStartOf="@+id/more_btn"
+                    app:layout_constraintTop_toBottomOf="@+id/txtResult" />
+
+                <Button
+                    android:id="@+id/btnOpenDoor"
+                    android:layout_width="100px"
+                    android:layout_height="80px"
+                    android:text="开门"
+                    android:textSize="24px"
+                    app:layout_constraintEnd_toStartOf="@+id/btnTestCnnt"
+                    app:layout_constraintTop_toBottomOf="@+id/txtResult" />
+
+                <Button
+                    android:id="@+id/btnRebootIPS"
+                    android:layout_width="140px"
+                    android:layout_height="80px"
+                    android:text="重启IPS"
+                    android:textSize="24px"
+                    app:layout_constraintEnd_toStartOf="@+id/btnOpenDoor"
+                    app:layout_constraintTop_toBottomOf="@+id/txtResult" />
+
+                <Button
+                    android:id="@+id/btnRebootAndroid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80px"
+                    android:text="重启Android"
+                    android:textSize="24px"
+                    app:layout_constraintEnd_toStartOf="@+id/btnRebootIPS"
+                    app:layout_constraintTop_toBottomOf="@+id/txtResult" />
+
+                <Button
+                    android:id="@+id/btnEnergySaving"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80px"
+                    android:text="节能"
+                    android:textSize="24px"
+                    app:layout_constraintEnd_toStartOf="@+id/btnRebootAndroid"
+                    app:layout_constraintTop_toBottomOf="@+id/txtResult" />
+
+                <TextView
+                    android:id="@+id/txtDeviation"
+                    android:layout_width="280px"
+                    android:layout_height="48px"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:textAlignment="textStart"
+                    android:textSize="26px"
+                    app:layout_constraintStart_toEndOf="@+id/btnTestR2Z"
+                    app:layout_constraintTop_toBottomOf="@+id/txtResult" />
+        </android.support.constraint.ConstraintLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/diagramContainer"
+            android:layout_width="1080px"
+            android:layout_height="900px"
+            android:layout_below="@+id/resultPanel">
+
+                <LinearLayout
+                    android:id="@+id/diagramLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"></LinearLayout>
+        </HorizontalScrollView>
+
+        <ScrollView
+            android:id="@+id/commandListContainer"
+            android:layout_width="900px"
+            android:layout_height="1580px"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/btnCmdLoad"
+            android:background="?attr/colorButtonNormal"
+            android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                        <android.support.constraint.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="160px"
+                            android:background="#FFDBFAD9">
+
+                                <TextView
+                                    android:id="@+id/textView33"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignTop="@+id/btnDevInit"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="12dp"
+                                    android:layout_toEndOf="@+id/btnDevInit"
+                                    android:text="@string/replyTimeout"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/btnAny"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+                                <EditText
+                                    android:id="@+id/edtAnyReplyTimeout"
+                                    android:layout_width="100px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView0"
+                                    android:layout_alignBottom="@+id/textView0"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_toEndOf="@+id/textView2"
+                                    android:ems="10"
+                                    android:gravity="left"
+                                    android:inputType="number"
+                                    android:labelFor="@id/textView0"
+                                    android:text="1000"
+                                    android:textAlignment="center"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView33"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+                                <TextView
+                                    android:id="@+id/textView34"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView0"
+                                    android:layout_alignBottom="@+id/textView0"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_toEndOf="@+id/textView0"
+                                    android:text="@string/taskTimeout"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/btnAny"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView33" />
+
+                                <EditText
+                                    android:id="@+id/edtAnyResponseTimeout"
+                                    android:layout_width="140px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView1"
+                                    android:layout_alignBottom="@+id/textView1"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="34dp"
+                                    android:layout_toEndOf="@+id/textView1"
+                                    android:ems="10"
+                                    android:gravity="left"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView1"
+                                    android:text="300000"
+                                    android:textAlignment="center"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView34"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+                                <Button
+                                    android:id="@+id/btnAny"
+                                    style="@android:style/Widget.Button.Toggle"
+                                    android:layout_width="200px"
+                                    android:layout_height="160px"
+                                    android:text="任意命令"
+                                    android:textSize="24px"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView32"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:text="命令代码"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/btnAny"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtCmdCode"
+                                    android:layout_width="500px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="textPersonName"
+                                    android:text="F0 "
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView32"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <Button
+                                    android:id="@+id/btnAnyExec"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="4dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="立即执行"
+                                    android:textSize="24px"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+                        </android.support.constraint.ConstraintLayout>
+
+                        <android.support.constraint.ConstraintLayout
+                            android:id="@+id/deviceInitPanel"
+                            android:layout_width="match_parent"
+                            android:layout_height="160px"
+                            android:background="#FFC7CDEE">
+
+                                <Button
+                                    android:id="@+id/btnDevInit"
+                                    style="@android:style/Widget.Button.Toggle"
+                                    android:layout_width="200px"
+                                    android:layout_height="160px"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:text="@string/devInit"
+                                    android:textAlignment="center"
+                                    android:textSize="24px"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/btnDevInit"
+                                    android:layout_marginBottom="12dp"
+                                    android:layout_marginStart="36dp"
+                                    android:layout_toStartOf="@+id/textView1"
+                                    android:text="设备编号"
+                                    android:textSize="28px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/btnDevInit" />
+
+                                <TextView
+                                    android:id="@+id/textView1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView0"
+                                    android:layout_alignBottom="@+id/textView0"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="12dp"
+                                    android:layout_toEndOf="@+id/textView0"
+                                    android:text="@string/taskTimeout"
+                                    android:textSize="28px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtDIReplyTimeout"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView0"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignTop="@+id/btnDevInit"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="12dp"
+                                    android:layout_toEndOf="@+id/btnDevInit"
+                                    android:text="@string/replyTimeout"
+                                    android:textSize="28px"
+                                    app:layout_constraintStart_toEndOf="@+id/btnDevInit"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtMacName"
+                                    android:layout_width="406px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView2"
+                                    android:layout_alignBottom="@+id/textView2"
+                                    android:layout_marginBottom="4dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_toEndOf="@+id/textView2"
+                                    android:ems="10"
+                                    android:hint="10个字符的设备编号"
+                                    android:inputType="text"
+                                    android:labelFor="@+id/textView2"
+                                    android:singleLine="true"
+                                    android:text="IamTheOne!"
+                                    android:textColor="@android:color/holo_red_dark"
+                                    android:textSize="24px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/textView2" />
+
+                                <EditText
+                                    android:id="@+id/edtDIResponseTimeout"
+                                    android:layout_width="140px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView1"
+                                    android:layout_alignBottom="@+id/textView1"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_toEndOf="@+id/textView1"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView1"
+                                    android:text="300000"
+                                    android:textAlignment="center"
+                                    android:textSize="24px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView1"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtDIReplyTimeout"
+                                    android:layout_width="100px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView0"
+                                    android:layout_alignBottom="@+id/textView0"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_toEndOf="@+id/textView2"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:labelFor="@id/textView0"
+                                    android:text="1000"
+                                    android:textAlignment="center"
+                                    android:textSize="24px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView0"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                        </android.support.constraint.ConstraintLayout>
+
+                        <android.support.constraint.ConstraintLayout
+                            android:id="@+id/LocationScanPanel"
+                            android:layout_width="match_parent"
+                            android:layout_height="160px"
+                            android:background="#FFDBFAD9">
+
+                                <Button
+                                    android:id="@+id/btnLocationScan"
+                                    style="@android:style/Widget.Button.Toggle"
+                                    android:layout_width="200px"
+                                    android:layout_height="160px"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:text="@string/LayoutInit"
+                                    android:textAlignment="center"
+                                    android:textSize="24px"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/btnLocationScan"
+                                    android:layout_alignBottom="@+id/btnLocationScan"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="30dp"
+                                    android:layout_toEndOf="@+id/btnLocationScan"
+                                    android:text="@string/replyTimeout"
+                                    android:textSize="28px"
+                                    app:layout_constraintStart_toEndOf="@+id/btnLocationScan"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtLSReplyTimeout"
+                                    android:layout_width="100px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView3"
+                                    android:layout_alignBottom="@+id/textView3"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="24dp"
+                                    android:layout_toEndOf="@+id/textView3"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView3"
+                                    android:text="1000"
+                                    android:textAlignment="center"
+                                    android:textSize="24px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView3"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/edtLSReplyTimeout"
+                                    android:layout_alignBottom="@+id/edtLSReplyTimeout"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="30dp"
+                                    android:layout_toEndOf="@+id/edtLSReplyTimeout"
+                                    android:text="@string/taskTimeout"
+                                    android:textSize="28px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtLSReplyTimeout"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtLSResponseTimeout"
+                                    android:layout_width="140px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView4"
+                                    android:layout_alignBottom="@+id/textView4"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="24dp"
+                                    android:layout_toEndOf="@+id/textView4"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView4"
+                                    android:text="300000"
+                                    android:textAlignment="center"
+                                    android:textSize="24px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView4"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                        </android.support.constraint.ConstraintLayout>
+
+                        <android.support.constraint.ConstraintLayout
+                            android:id="@+id/prePickupPanel"
+                            android:layout_width="match_parent"
+                            android:layout_height="160px"
+                            android:background="#FFC7CDEE">
+
+                                <Button
+                                    android:id="@+id/btnPrePickup"
+                                    style="@android:style/Widget.Button.Toggle"
+                                    android:layout_width="200px"
+                                    android:layout_height="160px"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:text="@string/prePickup"
+                                    android:textAlignment="center"
+                                    android:textSize="24px"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView5"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignTop="@+id/btnPrePickup"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="12dp"
+                                    android:layout_toEndOf="@+id/btnPrePickup"
+                                    android:text="@string/replyTimeout"
+                                    android:textSize="28px"
+                                    app:layout_constraintStart_toEndOf="@+id/btnPrePickup"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtPPReplyTimeout"
+                                    android:layout_width="100px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView5"
+                                    android:layout_alignBottom="@+id/textView5"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_toEndOf="@+id/textView5"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView5"
+                                    android:text="1000"
+                                    android:textSize="24px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView5"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView6"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/edtPPReplyTimeout"
+                                    android:layout_alignBottom="@+id/edtPPReplyTimeout"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="12dp"
+                                    android:layout_toEndOf="@+id/edtPPReplyTimeout"
+                                    android:text="@string/taskTimeout"
+                                    android:textSize="28px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtPPReplyTimeout"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtPPResponseTimeout"
+                                    android:layout_width="140px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView6"
+                                    android:layout_alignBottom="@+id/textView6"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="6dp"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView6"
+                                    android:text="10000"
+                                    android:textSize="24px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView6"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView12"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/cbPPAuto"
+                                    android:layout_alignBottom="@+id/cbPPAuto"
+                                    android:layout_marginBottom="12dp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_toEndOf="@+id/btnPrePickup"
+                                    android:text="Area"
+                                    android:textSize="28px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/btnPrePickup" />
+
+
+                                <EditText
+                                    android:id="@+id/edtPPArea"
+                                    android:layout_width="60px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView12"
+                                    android:layout_alignBottom="@+id/textView12"
+                                    android:layout_marginBottom="4dp"
+                                    android:layout_toEndOf="@+id/textView12"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView12"
+                                    android:text="0"
+                                    android:textSize="24px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/textView12" />
+
+                                <TextView
+                                    android:id="@+id/textView14"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/edtPPArea"
+                                    android:layout_alignBottom="@+id/edtPPArea"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginBottom="12dp"
+                                    android:text="Floor"
+                                    android:textSize="28px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/edtPPArea" />
+
+                                <EditText
+                                    android:id="@+id/edtPPFloor"
+                                    android:layout_width="60px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView14"
+                                    android:layout_alignBottom="@+id/textView14"
+                                    android:layout_marginBottom="4dp"
+                                    android:layout_toEndOf="@+id/textView14"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView14"
+                                    android:text="0"
+                                    android:textAlignment="center"
+                                    android:textSize="24px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/textView14" />
+
+                                <TextView
+                                    android:id="@+id/textView15"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/edtPPFloor"
+                                    android:layout_alignBottom="@+id/edtPPFloor"
+                                    android:layout_marginBottom="12dp"
+                                    android:layout_toStartOf="@+id/edtPPLocation"
+                                    android:text="Location"
+                                    android:textSize="28px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/edtPPFloor" />
+
+
+                                <EditText
+                                    android:id="@+id/edtPPLocation"
+                                    android:layout_width="80px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView15"
+                                    android:layout_alignBottom="@+id/textView15"
+                                    android:layout_alignEnd="@+id/textView6"
+                                    android:layout_marginBottom="4dp"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView3"
+                                    android:text="00"
+                                    android:textSize="24px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/textView15" />
+
+                                <CheckBox
+                                    android:id="@+id/cbPPAuto"
+                                    android:layout_width="160px"
+                                    android:layout_height="48px"
+                                    android:layout_marginBottom="8dp"
+                                    android:layout_marginStart="8dp"
+                                    android:checked="false"
+                                    android:text="@string/auto"
+                                    android:textColor="#FF7A7A7A"
+                                    android:textSize="28px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/edtPPLocation" />
+
+
+                        </android.support.constraint.ConstraintLayout>
+
+                        <android.support.constraint.ConstraintLayout
+                            android:id="@+id/selloutPanel"
+                            android:layout_width="match_parent"
+                            android:layout_height="160px"
+                            android:background="#FFDBFAD9">
+
+                                <CheckBox
+                                    android:id="@+id/cbAllLocation"
+                                    android:layout_width="200px"
+                                    android:layout_height="48px"
+                                    android:layout_marginBottom="4dp"
+                                    android:layout_marginStart="8dp"
+                                    android:checked="false"
+                                    android:text="全货道测试"
+                                    android:textColor="#FF7A7A7A"
+                                    android:textSize="20px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/btnSellOut" />
+
+                                <CheckBox
+                                    android:id="@+id/cbSOAuto"
+                                    android:layout_width="160px"
+                                    android:layout_height="48px"
+                                    android:layout_marginBottom="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:checked="true"
+                                    android:text="连续出货"
+                                    android:textColor="#FF7A7A7A"
+                                    android:textSize="20px"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView27"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/edtPPReplyTimeout"
+                                    android:layout_alignBottom="@+id/edtPPReplyTimeout"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="18dp"
+                                    android:layout_toEndOf="@+id/edtPPReplyTimeout"
+                                    android:text="任务超时"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/btnSellOut"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+                                <TextView
+                                    android:id="@+id/textView10"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignTop="@+id/btnPrePickup"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_toEndOf="@+id/btnPrePickup"
+                                    android:text="命令超时"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/btnSellOut"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView31"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignTop="@+id/btnPrePickup"
+                                    android:layout_marginStart="20dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_toEndOf="@+id/btnPrePickup"
+                                    android:text="出货商品数"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOArea2"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtSOReplyTimeout"
+                                    android:layout_width="90px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView5"
+                                    android:layout_alignBottom="@+id/textView5"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_toEndOf="@+id/textView5"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView5"
+                                    android:text="1000"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView10"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtSOGoodCount"
+                                    android:layout_width="90px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView5"
+                                    android:layout_alignBottom="@+id/textView5"
+                                    android:layout_marginStart="20dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_toEndOf="@+id/textView5"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView5"
+                                    android:text="3"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOArea2"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtSOResponseTimeout"
+                                    android:layout_width="90px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBaseline="@+id/textView5"
+                                    android:layout_alignBottom="@+id/textView5"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_toEndOf="@+id/textView5"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:labelFor="@+id/textView5"
+                                    android:text="240000"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView27"
+                                    app:layout_constraintTop_toBottomOf="@+id/edtSOReplyTimeout" />
+
+                                <Button
+                                    android:id="@+id/btnSellOut"
+                                    style="@android:style/Widget.Button.Toggle"
+                                    android:layout_width="200px"
+                                    android:layout_height="160px"
+                                    android:text="出货"
+                                    android:textSize="28px"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView28"
+                                    android:layout_width="90px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="10dp"
+                                    android:gravity="right"
+                                    android:text="Area"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOReplyTimeout"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/textView29"
+                                    android:layout_width="90px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="18dp"
+                                    android:gravity="right"
+                                    android:text="Floor"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOReplyTimeout"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView28" />
+
+                                <TextView
+                                    android:id="@+id/textView30"
+                                    android:layout_width="90px"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="18dp"
+                                    android:gravity="right"
+                                    android:text="Location"
+                                    android:textSize="20px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOReplyTimeout"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView29" />
+
+                                <EditText
+                                    android:id="@+id/edtSOArea1"
+                                    android:layout_width="40px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:text="0"
+                                    android:textSize="18px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOArea0"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtSOLocation1"
+                                    android:layout_width="40px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:text="2"
+                                    android:textSize="18px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOLocation0"
+                                    app:layout_constraintTop_toBottomOf="@+id/edtSOFloor1" />
+
+                                <EditText
+                                    android:id="@+id/edtSOLocation0"
+                                    android:layout_width="40px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:text="0"
+                                    android:textSize="18px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView30"
+                                    app:layout_constraintTop_toBottomOf="@+id/edtSOFloor0" />
+
+                                <EditText
+                                    android:id="@+id/edtSOFloor0"
+                                    android:layout_width="40px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:text="0"
+                                    android:textSize="18px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView29"
+                                    app:layout_constraintTop_toBottomOf="@+id/edtSOArea0" />
+
+                                <EditText
+                                    android:id="@+id/edtSOFloor1"
+                                    android:layout_width="40px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:text="4"
+                                    android:textSize="18px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOLocation0"
+                                    app:layout_constraintTop_toBottomOf="@+id/edtSOArea1" />
+
+                                <EditText
+                                    android:id="@+id/edtSOLocation2"
+                                    android:layout_width="40px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:text="4"
+                                    android:textSize="18px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOLocation1"
+                                    app:layout_constraintTop_toBottomOf="@+id/edtSOFloor2" />
+
+                                <EditText
+                                    android:id="@+id/edtSOFloor2"
+                                    android:layout_width="40px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:text="2"
+                                    android:textSize="18px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOLocation1"
+                                    app:layout_constraintTop_toBottomOf="@+id/edtSOArea2" />
+
+                                <EditText
+                                    android:id="@+id/edtSOArea2"
+                                    android:layout_width="40px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:text="0"
+                                    android:textSize="18px"
+                                    app:layout_constraintStart_toEndOf="@+id/edtSOArea1"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edtSOArea0"
+                                    android:layout_width="40px"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:inputType="number"
+                                    android:text="0"
+                                    android:textSize="18px"
+                                    app:layout_constraintStart_toEndOf="@+id/textView28"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                        </android.support.constraint.ConstraintLayout>
+
+                        <android.support.constraint.ConstraintLayout
+                            android:id="@+id/testCmdPanel"
+                            android:layout_width="match_parent"
+                            android:layout_height="160px"
+                            android:background="#FFC7CDEE">
+
+
+                                <Button
+                                    android:id="@+id/btnTestSlider"
+                                    android:layout_width="176px"
+                                    android:layout_height="80px"
+                                    android:drawableBottom="@android:color/black"
+                                    android:text="供电滑块测试"
+                                    android:textSize="18px"
+                                    android:textStyle="bold"
+                                    android:typeface="serif"
+                                    app:layout_constraintStart_toEndOf="@+id/btnRamdonOut"
+                                    app:layout_constraintTop_toBottomOf="@+id/btnPowerSupply" />
+
+                                <CheckBox
+                                    android:id="@+id/cbExecImmd"
+                                    android:layout_width="150px"
+                                    android:layout_height="80px"
+                                    android:checked="true"
+                                    android:text="立即执行"
+                                    android:textColor="#FF7A7A7A"
+                                    android:textSize="20px"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/btnPowerSupply"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <Button
+                                    android:id="@+id/btnRamdonMove"
+                                    android:layout_width="176px"
+                                    android:layout_height="80px"
+                                    android:drawableBottom="@android:color/black"
+                                    android:text="随机移动"
+                                    android:textSize="18px"
+                                    android:textStyle="bold"
+                                    android:typeface="serif"
+                                    app:layout_constraintStart_toEndOf="@+id/btnOpenOuterDoor"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <Button
+                                    android:id="@+id/btnPowerSupply"
+                                    android:layout_width="176px"
+                                    android:layout_height="80px"
+                                    android:drawableBottom="@android:color/black"
+                                    android:text="货道供电"
+                                    android:textSize="18px"
+                                    android:textStyle="bold"
+                                    android:typeface="serif"
+                                    app:layout_constraintStart_toEndOf="@+id/btnRamdonMove"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <Button
+                                    android:id="@+id/btnRamdonOut"
+                                    android:layout_width="176px"
+                                    android:layout_height="80px"
+                                    android:drawableBottom="@android:color/black"
+                                    android:text="随机出货"
+                                    android:textSize="18px"
+                                    android:textStyle="bold"
+                                    android:typeface="serif"
+                                    app:layout_constraintStart_toEndOf="@+id/btnCloseOuterDoor"
+                                    app:layout_constraintTop_toBottomOf="@+id/btnRamdonMove" />
+
+                                <Button
+                                    android:id="@+id/btnOpenOuterDoor"
+                                    android:layout_width="176px"
+                                    android:layout_height="80px"
+                                    android:drawableBottom="@android:color/black"
+                                    android:text="打开外门"
+                                    android:textSize="18px"
+                                    android:textStyle="bold"
+                                    android:typeface="serif"
+                                    app:layout_constraintStart_toEndOf="@+id/btnOpenInnerDoor"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <Button
+                                    android:id="@+id/btnCloseOuterDoor"
+                                    android:layout_width="176px"
+                                    android:layout_height="80px"
+                                    android:drawableBottom="@android:color/black"
+                                    android:text="关闭外门"
+                                    android:textSize="18px"
+                                    android:textStyle="bold"
+                                    android:typeface="serif"
+                                    app:layout_constraintStart_toEndOf="@+id/btnCloseInnerDoor"
+                                    app:layout_constraintTop_toBottomOf="@+id/btnOpenOuterDoor" />
+
+                                <Button
+                                    android:id="@+id/btnOpenInnerDoor"
+                                    android:layout_width="176px"
+                                    android:layout_height="80px"
+                                    android:drawableBottom="@android:color/black"
+                                    android:text="打开内门"
+                                    android:textSize="18px"
+                                    android:textStyle="bold"
+                                    android:typeface="serif"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <Button
+                                    android:id="@+id/btnCloseInnerDoor"
+                                    android:layout_width="176px"
+                                    android:layout_height="80px"
+                                    android:drawableBottom="@android:color/black"
+                                    android:text="关闭内门"
+                                    android:textSize="18px"
+                                    android:textStyle="bold"
+                                    android:typeface="serif"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/btnOpenInnerDoor" />
+
+                                <EditText
+                                    android:id="@+id/edtSlidePos"
+                                    android:layout_width="100px"
+                                    android:layout_height="80px"
+                                    android:ems="10"
+                                    android:gravity="center_horizontal"
+                                    android:inputType="number"
+                                    android:text="200"
+                                    android:textSize="24px"
+                                    app:layout_constraintStart_toEndOf="@+id/btnTestSlider"
+                                    app:layout_constraintTop_toBottomOf="@+id/cbExecImmd" />
+                        </android.support.constraint.ConstraintLayout>
+
+                </LinearLayout>
+
+
+        </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
+
+                <ImageView
+                    android:id="@+id/back_image_view"
+                    android:layout_width="189px"
+                    android:layout_height="76px"
+                    android:layout_gravity="end|center_vertical"
+                    android:src="@drawable/back_selector"
+                    />
+        </LinearLayout>
+</RelativeLayout>
+</ScrollView>
