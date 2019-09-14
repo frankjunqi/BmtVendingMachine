@@ -27,7 +27,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="购物车"
-            android:textColor="@android:color/white"
+            android:textColor="#155398"
             android:textSize="20sp" />
 
 

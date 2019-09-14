@@ -1,7 +1,9 @@
 package com.seekwork.bangmart.util;
 
 import com.seekwork.bangmart.model.SerialLocationBean;
+import com.seekwork.bangmart.network.entity.seekwork.MBangmartRoad;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,6 +18,8 @@ public class SeekerSoftConstant {
 
     // 柜子的数据：包括 area follor column x y width
     public static List<List<List<SerialLocationBean>>> list;
+    public static HashMap<String, List<MBangmartRoad>> hashMap = new HashMap<>();
+    ;
 
     // 小车的宽度
     public static final int MACHINE_WIDTH = 300;

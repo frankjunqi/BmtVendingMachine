@@ -12,13 +12,13 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.seekwork.bangmart.adpter.GridAdapter;
 import com.seekwork.bangmart.network.api.Host;
 import com.seekwork.bangmart.network.api.SeekWorkService;
 import com.seekwork.bangmart.network.api.SrvResult;
@@ -30,6 +30,7 @@ import com.seekwork.bangmart.network.gsonfactory.GsonConverterFactory;
 import com.seekwork.bangmart.serialport.CardReadSerialPort;
 import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
+import com.seekwork.bangmart.util.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +43,13 @@ import retrofit2.Retrofit;
 // 首页
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Context mContext;
-    private TextView tv_error;
+    private ImageView iv_logo;
+    private ImageView iv_show_pic;
 
-    private String mac_error_str;
+    private LinearLayout ll_one, ll_two;
+    private LinearLayout ll_naobao, ll_wujin, ll_wenju, ll_riyong, ll_yinliao, ll_shipin;
+
+    private TextView tv_error;
     private TextView tv_mac_error;
 
     private MaterialDialog promissionDialog;
@@ -53,16 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_try;
 
     private LinearLayout customView;
-    private LinearLayout ll_btns;
-    private Button btn_cart;
-    private TextView tv_title;
-    private TextView tv_cart_desc;
-
-    private GridView gv_data;
-    private GridAdapter gridAdapter;
-
-    private List<MBangmartArea> mBangmartAreaList;
-    private ArrayList<MBangmartRoad> AddToBangmartRoadList = new ArrayList<>();
 
     private CountDownTimer timer = new CountDownTimer(10000, 1000) {
 
@@ -85,56 +79,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this;
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // dialog tip
         customView = (LinearLayout) inflater.inflate(R.layout.activity_main, null);
         setContentView(customView);
 
-        tv_title = customView.findViewById(R.id.tv_title);
-        tv_title.setOnClickListener(this);
-        tv_cart_desc = customView.findViewById(R.id.tv_cart_desc);
-        btn_cart = customView.findViewById(R.id.btn_cart);
-        gv_data = customView.findViewById(R.id.gv_data);
-        ll_btns = customView.findViewById(R.id.ll_btns);
+        iv_logo = customView.findViewById(R.id.iv_logo);
+        int logo_width = 605;
+        int logo_height = 68;
+        int imgLogoWidth = Variable.WIDTH / 7 * 4;
+        int imgLogoHeight = imgLogoWidth * logo_height / logo_width;
+        RelativeLayout.LayoutParams rl_logo = (RelativeLayout.LayoutParams) iv_logo.getLayoutParams();
+        rl_logo.width = imgLogoWidth;
+        rl_logo.height = imgLogoHeight;
+        iv_logo.setLayoutParams(rl_logo);
 
-        gridAdapter = new GridAdapter(this, new GridAdapter.AddCartInterface() {
-            @Override
-            public void addToCart(MBangmartRoad mBangmartRoad) {
-                //TODO clone 对象。判断库存，是否可以再添加商品
-                MBangmartRoad opM = null;
-                try {
-                    opM = (MBangmartRoad) mBangmartRoad.clone();
-                } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
-                }
+        iv_show_pic = customView.findViewById(R.id.iv_show_pic);
+        int width = 1080;
+        int height = 629;
+        int imgWidth = Variable.WIDTH;
+        int imgHeigth = imgWidth * height / width;
+        LinearLayout.LayoutParams rl = (LinearLayout.LayoutParams) iv_show_pic.getLayoutParams();
+        rl.width = imgWidth;
+        rl.height = imgHeigth;
+        iv_show_pic.setLayoutParams(rl);
 
-                boolean isExist = false;
-                int position = -1;
-                for (int i = 0; i < AddToBangmartRoadList.size(); i++) {
-                    if (opM.getRoadID() == AddToBangmartRoadList.get(i).getRoadID()) {
-                        isExist = true;
-                        position = i;
-                    }
-                }
 
-                if (!isExist) {
-                    // 不存在，加入购物车列表
-                    opM.setChooseNum(opM.getChooseNum() + 1);
-                    AddToBangmartRoadList.add(opM);
-                } else {
-                    // 存在，判断库存，进行choosenum设置
-                    if (AddToBangmartRoadList.get(position).getChooseNum() == AddToBangmartRoadList.get(position).getQty()) {
-                        // TODO  不可以加了，库存满了
-                    } else {
-                        AddToBangmartRoadList.get(position).setChooseNum(AddToBangmartRoadList.get(position).getChooseNum() + 1);
-                    }
-                }
+        ll_one = customView.findViewById(R.id.ll_one);
+        ll_two = customView.findViewById(R.id.ll_two);
+        int ll_width = Variable.WIDTH;
+        int ll_height = Variable.WIDTH / 3;
+        ll_one.getLayoutParams().height = ll_height;
+        ll_two.getLayoutParams().height = ll_height;
 
-                tv_cart_desc.setText("选择了" + AddToBangmartRoadList.size() + "个商品.");
-            }
-        });
-        gv_data.setAdapter(gridAdapter);
+
+        ll_naobao = customView.findViewById(R.id.ll_naobao);
+        ll_naobao.setOnClickListener(this);
+        ll_wujin = customView.findViewById(R.id.ll_wujin);
+        ll_wujin.setOnClickListener(this);
+        ll_wenju = customView.findViewById(R.id.ll_wenju);
+        ll_wenju.setOnClickListener(this);
+        ll_riyong = customView.findViewById(R.id.ll_riyong);
+        ll_riyong.setOnClickListener(this);
+        ll_yinliao = customView.findViewById(R.id.ll_yinliao);
+        ll_yinliao.setOnClickListener(this);
+        ll_shipin = customView.findViewById(R.id.ll_shipin);
+        ll_shipin.setOnClickListener(this);
 
 
         View customView = inflater.inflate(R.layout.pop_auth_layout, null);
@@ -153,21 +143,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        btn_cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, ShopCartActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(SeekerSoftConstant.ADDCARTLIST, AddToBangmartRoadList);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                AddToBangmartRoadList.clear();
-            }
-        });
-
         promissionDialog = new MaterialDialog.Builder(this).customView(customView, false).build();
         promissionDialog.setCancelable(false);
-        // initBangMartMachine();
         registerMachine(true);
     }
 
@@ -182,9 +159,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.tv_title) {
+        if (v.getId() == R.id.ll_naobao) {
+            Intent intent = new Intent(this, ProList2Activity.class);
+            startActivity(intent);
+        } else if (v.getId() == R.id.ll_wujin) {
+            Intent intent = new Intent(this, ProListActivity.class);
+            startActivity(intent);
+        } else if (v.getId() == R.id.ll_wujin) {
+
+        } else if (v.getId() == R.id.ll_riyong) {
+
+        } else if (v.getId() == R.id.ll_yinliao) {
+
+        } else if (v.getId() == R.id.ll_shipin) {
 
         }
+
     }
 
     /**
@@ -200,31 +190,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<SrvResult<MBangmartDetail>> call, Response<SrvResult<MBangmartDetail>> response) {
                 if (response != null && response.body() != null && response.body().getData() != null) {
-                    mBangmartAreaList = response.body().getData().getmBangmartAreas();
+                    List<MBangmartArea> mBangmartAreaList = response.body().getData().getmBangmartAreas();
 
-                    //  默认处理第一个货柜的数据
-                    gridAdapter.setDataList(mBangmartAreaList.get(0).getAllBangmartRoads());
+                    SeekerSoftConstant.hashMap.put("A", new ArrayList<MBangmartRoad>());
+                    SeekerSoftConstant.hashMap.put("B", new ArrayList<MBangmartRoad>());
+                    SeekerSoftConstant.hashMap.put("C", new ArrayList<MBangmartRoad>());
+                    SeekerSoftConstant.hashMap.put("D", new ArrayList<MBangmartRoad>());
+                    SeekerSoftConstant.hashMap.put("E", new ArrayList<MBangmartRoad>());
+                    SeekerSoftConstant.hashMap.put("F", new ArrayList<MBangmartRoad>());
 
-                    // 处理柜子数量
-                    int count = mBangmartAreaList.size();
-                    ll_btns.setWeightSum(count);
-
-                    for (int i = 0; i < count; i++) {
-                        final int k = i;
-                        Button btn = new Button(mContext);
-                        btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-                        btn.setText(String.valueOf(mBangmartAreaList.get(i).getArea()));
-                        btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                gridAdapter.setDataList(mBangmartAreaList.get(k).getAllBangmartRoads());
+                    int area = mBangmartAreaList.size();
+                    for (int i = 0; i < area; i++) {
+                        List<MBangmartRoad> rodeList = mBangmartAreaList.get(i).getAllBangmartRoads();
+                        for (int k = 0; k < rodeList.size(); k++) {
+                            if ("A".equals(rodeList.get(k).getDisplayType())) {
+                                SeekerSoftConstant.hashMap.get("A").add(rodeList.get(k));
+                            } else if ("B".equals(rodeList.get(k).getDisplayType())) {
+                                SeekerSoftConstant.hashMap.get("B").add(rodeList.get(k));
+                            } else if ("C".equals(rodeList.get(k).getDisplayType())) {
+                                SeekerSoftConstant.hashMap.get("C").add(rodeList.get(k));
+                            } else if ("D".equals(rodeList.get(k).getDisplayType())) {
+                                SeekerSoftConstant.hashMap.get("D").add(rodeList.get(k));
+                            } else if ("E".equals(rodeList.get(k).getDisplayType())) {
+                                SeekerSoftConstant.hashMap.get("E").add(rodeList.get(k));
+                            } else if ("F".equals(rodeList.get(k).getDisplayType())) {
+                                SeekerSoftConstant.hashMap.get("F").add(rodeList.get(k));
                             }
-                        });
-                        ll_btns.addView(btn);
+                        }
                     }
 
                     // TODO 接口返回数据，与扫描货道的数据进行对比
-                    mBangmartAreaList.get(0).getmBangmartFloors();
 
                     // TODO 如果数据出现不一样，需要提交接口，进行数据初始化失败的错误；
 
@@ -273,8 +268,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (response != null && response.body() != null && response.body().getStatus() == 1 && response.body().getData() != null && response.body().getData().isAuthorize()) {
                     LogCat.e("Status: " + response.body().getStatus());
                     SeekerSoftConstant.MachineNo = response.body().getData().getMachineNo();
-
-                    tv_title.setText(SeekerSoftConstant.MachineNo);
 
                     // 成功授权显示逻辑
                     promissionDialog.dismiss();
@@ -359,10 +352,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         }
-        if (tv_cart_desc != null) {
-            tv_cart_desc.setText("选择了" + AddToBangmartRoadList.size() + "个商品.");
-        }
-
     }
 
     @Override

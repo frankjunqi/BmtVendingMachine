@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -12,13 +11,10 @@ import com.bangmart.nt.command.Attention;
 import com.bangmart.nt.command.Command;
 import com.bangmart.nt.command.CommandDef;
 import com.bangmart.nt.command.ICallbackListener;
-import com.bangmart.nt.common.util.DataUtil;
-import com.bangmart.nt.machine.Location;
 import com.bangmart.nt.machine.Machine;
 import com.bangmart.nt.smartwarehouse.pickupcar.ReqOutGoods;
 import com.bangmart.nt.smartwarehouse.pickupcar.RspOutGoods;
 import com.bangmart.nt.sys.ByteBuffer;
-import com.bangmart.nt.sys.Logger;
 import com.bangmart.nt.sys.Tools;
 import com.bangmart.nt.vendingmachine.constant.BmtMsgConstant;
 import com.google.gson.Gson;
@@ -33,10 +29,8 @@ import com.seekwork.bangmart.network.entity.seekwork.MBangmarSuccessGood;
 import com.seekwork.bangmart.network.entity.seekwork.TakeOutProductBean;
 import com.seekwork.bangmart.network.gsonfactory.GsonConverterFactory;
 import com.seekwork.bangmart.util.BmtVendingMachineUtil;
-import com.seekwork.bangmart.util.JsonUtil;
 import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
-import com.seekwork.bangmart.util.StringUtil;
 import com.seekwork.bangmart.view.SingleCountDownView;
 
 import java.util.ArrayList;
@@ -66,9 +60,14 @@ public class ResultActivity extends AppCompatActivity {
     private String CardNo;
     private int orderId;
     private List<MBangmarProcPick> mBangmarProcPicks;
-    private List<MBangmarProcPickRoad> mBangmarProcPickRoads;
 
     private Machine machine;
+
+    // 出货分组
+    private ArrayList<ArrayList<TakeOutProductBean>> groupList = new ArrayList<>();
+    private int currentSellOut = 0;
+
+    private List<MBangmarSuccessGood> mBangmarSuccessGoods = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,10 +76,10 @@ public class ResultActivity extends AppCompatActivity {
         tv_tips_result = findViewById(R.id.tv_tips_result);
 
         singleCountDownViewPop = findViewById(R.id.singleCountDownViewPop);
-        singleCountDownViewPop.setTextColor(Color.parseColor("#ffffffff"));
+        singleCountDownViewPop.setTextColor(Color.parseColor("#155398"));
         singleCountDownViewPop.setTime(15);
-        singleCountDownViewPop.setTimeColorHex("#ffffffff");
-        singleCountDownViewPop.setTimeSuffixText("s");
+        singleCountDownViewPop.setTimeColorHex("#155398");
+        singleCountDownViewPop.setTimeSuffixText("S");
         singleCountDownViewPop.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
             public void onSingleCountDownEnd() {
@@ -107,32 +106,41 @@ public class ResultActivity extends AppCompatActivity {
                 int roadCount = mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getOutNum();
                 for (int j = 0; j < roadCount; j++) {
                     TakeOutProductBean road = new TakeOutProductBean();
+                    road.setRoadID(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getRoadID());
                     road.setArea(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getArea());
                     road.setFloor(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getFloor());
                     road.setColumn(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn());
                     road.setProductID(productID);
                     // TODO 本地货道扫描数据
-
+                    road.setWidth(SeekerSoftConstant.list.get(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getArea())
+                            .get(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getFloor())
+                            .get(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn()).getWidth()
+                    );
                     outList.add(road);
                 }
             }
         }
-
         machine = BmtVendingMachineUtil.getInstance().getMachine();
-        // 获取小车的宽度
 
 
-        // 出货分组
-        ArrayList<ArrayList<TakeOutProductBean>> groupList = new ArrayList<>();
+        int sumWidth = 0;
+        ArrayList<TakeOutProductBean> oneList = new ArrayList<>();
+        for (int i = 0; i < outList.size(); i++) {
+            sumWidth = sumWidth + outList.get(i).getWidth();
+            if (sumWidth <= SeekerSoftConstant.MACHINE_FACT_WIDTH && oneList.size() <= 3) {
+                oneList.add(outList.get(i));
+            } else {
+                groupList.add((ArrayList<TakeOutProductBean>) oneList.clone());
 
-        mBangmarProcPickRoads = mBangmarProcPicks.get(0).getmBangmarProcPickRoads();
+                oneList = new ArrayList<>();
+                sumWidth = 0;
+                sumWidth = sumWidth + outList.get(i).getWidth();
+                if (sumWidth <= SeekerSoftConstant.MACHINE_FACT_WIDTH) {
+                    oneList.add(outList.get(i));
+                }
+            }
+        }
 
-        // TODO TEST
-        MBangmarProcPickRoad test = new MBangmarProcPickRoad();
-        test.setArea(1);
-        test.setColumn(1);
-        test.setFloor(1);
-        mBangmarProcPickRoads.add(test);
         setllOut();
 
     }
@@ -142,13 +150,15 @@ public class ResultActivity extends AppCompatActivity {
         /**
          * 1.生成出货业务数据(一组出货最多出三个货道,如果单组出货超过一个货道,必须遵循智能出货规则,如果单组出货不超过一个则无需遵循智能出 货规则)
          */
+
+        ArrayList<TakeOutProductBean> outlist = groupList.get(currentSellOut);
+
         List<com.bangmart.nt.common.model.Location> locations = new ArrayList<>();
+        for (int i = 0; i < outlist.size(); i++) {
+            com.bangmart.nt.common.model.Location location = new com.bangmart.nt.common.model.Location(outlist.get(i).getArea(), outlist.get(i).getFloor(), outlist.get(i).getColumn());
+            locations.add(location);
+        }
 
-        com.bangmart.nt.common.model.Location location = new com.bangmart.nt.common.model.Location(1, 1, 1);
-        com.bangmart.nt.common.model.Location location1 = new com.bangmart.nt.common.model.Location(1, 2, 1);
-
-        locations.add(location);
-        locations.add(location1);
         final ReqOutGoods reqOutGoods = new ReqOutGoods(locations);
         final byte[] data = ReqOutGoods.valueOf(reqOutGoods);
         /**
@@ -178,6 +188,10 @@ public class ResultActivity extends AppCompatActivity {
                         log = "第" + attData[1] + "个商品取货成功。";
                         Log.i(TAG, log);
                         appendUILogAsync(log);
+                        MBangmarSuccessGood successGood = new MBangmarSuccessGood();
+                        successGood.setRoadID(groupList.get(currentSellOut).get(attData[1]).getRoadID());
+                        successGood.setPickNum(1);
+                        mBangmarSuccessGoods.add(successGood);
                         break;
                     case ATT_SELLOUT_PICK_UP_FAILED:
                         ByteBuffer bb = new ByteBuffer(5);
@@ -227,6 +241,15 @@ public class ResultActivity extends AppCompatActivity {
                     //TODO 根据出货结果,进行其它业务处理
                     String log = "complete = " + rspOutGoods.getFailedCountValue() + rspOutGoods.getEnErrorCodeDesc();
                     appendUILogAsync(log);
+
+                    if (currentSellOut == groupList.size() - 1) {
+                        appendUILogAsync("分组出货全部完成.");
+                        DoPickSuccess();
+                    } else {
+                        currentSellOut++;
+                        setllOut();
+                    }
+
                 }
                 return true;
             }
@@ -324,15 +347,6 @@ public class ResultActivity extends AppCompatActivity {
         request.setCardNo(CardNo);
         request.setOrderID(orderId);
         request.setMachineCode(SeekerSoftConstant.MachineNo);
-        List<MBangmarSuccessGood> mBangmarSuccessGoods = new ArrayList<>();
-        for (int i = 0; mBangmarProcPicks != null && i < mBangmarProcPicks.size(); i++) {
-            for (int k = 0; k < mBangmarProcPicks.get(i).getmBangmarProcPickRoads().size(); k++) {
-                MBangmarSuccessGood successGood = new MBangmarSuccessGood();
-                successGood.setRoadID(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getRoadID());
-                successGood.setPickNum(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getOutNum());
-                mBangmarSuccessGoods.add(successGood);
-            }
-        }
         request.setmBangmarSuccessGoods(mBangmarSuccessGoods);
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();

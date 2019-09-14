@@ -6,6 +6,11 @@ public class MBangmartRoad implements Serializable, Cloneable {
 
 
     /**
+     * 2,2,2
+     */
+    private String RoadCode;
+
+    /**
      * 货道ID
      */
     private int RoadID;
@@ -16,9 +21,43 @@ public class MBangmartRoad implements Serializable, Cloneable {
     private int ProductID;
 
     /**
+     * SKU
+     */
+    private String SKU;
+
+    /**
      * 商品名称
      */
     private String ProductName;
+
+    public String getRoadCode() {
+        return RoadCode;
+    }
+
+    public void setRoadCode(String roadCode) {
+        RoadCode = roadCode;
+    }
+
+    public String getSKU() {
+        return SKU;
+    }
+
+    public void setSKU(String SKU) {
+        this.SKU = SKU;
+    }
+
+    public String getDescribe() {
+        return Describe;
+    }
+
+    public void setDescribe(String describe) {
+        Describe = describe;
+    }
+
+    /**
+     * 描述
+     */
+    private String Describe;
 
     /**
      * 商品分类Code

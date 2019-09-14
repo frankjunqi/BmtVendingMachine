@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.seekwork.bangmart.R;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartRoad;
 import com.seekwork.bangmart.util.DensityUtil;
+import com.seekwork.bangmart.util.Variable;
 
 import java.util.List;
 
@@ -72,10 +73,18 @@ public class GridAdapter extends BaseAdapter {
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.iv_pic.getLayoutParams();
 
-        layoutParams.width = ((DensityUtil.getWidth(mContext)) - 40) / 2;
-        layoutParams.height = layoutParams.width;
+        layoutParams.width = (Variable.WIDTH - 160) / 3;
+        layoutParams.height = layoutParams.width / 3 * 4;
         holder.iv_pic.setLayoutParams(layoutParams);
         Glide.with(mContext).load(mBangmartRoads.get(i).getPicName()).placeholder(R.drawable.default_iv_bg).into(holder.iv_pic);
+        holder.iv_pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (addCartInterface != null) {
+                    addCartInterface.showDetail(mBangmartRoads.get(i));
+                }
+            }
+        });
 
         holder.iv_add_to_cart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +99,8 @@ public class GridAdapter extends BaseAdapter {
 
     public interface AddCartInterface {
         public void addToCart(MBangmartRoad mBangmartRoad);
+
+        public void showDetail(MBangmartRoad mBangmartRoad);
     }
 
     public class ViewHolder {

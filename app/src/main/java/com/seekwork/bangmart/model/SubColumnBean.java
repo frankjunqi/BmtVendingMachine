@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class SubColumnBean implements Serializable {
     private String id;
     private String name;
+    private int resId;
 
     public String getId() {
         return id;
@@ -22,4 +23,11 @@ public class SubColumnBean implements Serializable {
         this.name = name;
     }
 
+    public int getResId() {
+        return resId;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
+    }
 }

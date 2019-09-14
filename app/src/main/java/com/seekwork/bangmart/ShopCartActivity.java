@@ -106,8 +106,8 @@ public class ShopCartActivity extends AppCompatActivity {
 
         // 单个倒计时使用
         singleCountDownView = findViewById(R.id.singleCountDownView);
-        singleCountDownView.setTextColor(Color.parseColor("#ffffffff"));
-        singleCountDownView.setTime(60).setTimeColorHex("#ffffffff").setTimeSuffixText("s");
+        singleCountDownView.setTextColor(Color.parseColor("#155398"));
+        singleCountDownView.setTime(60).setTimeColorHex("#155398").setTimeSuffixText("S");
 
         // 单个倒计时结束事件监听
         singleCountDownView.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {

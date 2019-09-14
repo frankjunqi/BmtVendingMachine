@@ -18,6 +18,11 @@
     <color name="btn_take_un_press">#5abc20</color>
     <color name="btn_take_press">#43AF04</color>
 
-    <color name="action_bg">#ff1296db</color>
+    <color name="action_bg">#FFFFFF</color>
+    <color name="seletotr_bg">#DDD9D9</color>
+
+
+    <color name="main_color">#155398</color>
+    <color name="time_back">#3A3939</color>
 
 </resources>

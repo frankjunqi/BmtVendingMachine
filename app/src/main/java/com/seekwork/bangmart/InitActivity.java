@@ -24,6 +24,7 @@ import com.bangmart.nt.machine.StateChangeListener;
 import com.bangmart.nt.sys.ByteBuffer;
 import com.bangmart.nt.sys.Tools;
 import com.bangmart.nt.treatment.FaultState;
+import com.bangmart.nt.vendingmachine.model.LocationCoordinate;
 import com.bangmart.nt.vendingmachine.model.RspGetDeviceParameter;
 import com.bangmart.nt.vendingmachine.model.RspGetLocationCoordinateData;
 import com.seekwork.bangmart.model.SerialLocationBean;
@@ -60,7 +61,7 @@ public class InitActivity extends AppCompatActivity {
         // 单个倒计时使用
         singleCountDownView = findViewById(R.id.singleCountDownView);
         singleCountDownView.setTextColor(Color.parseColor("#ff000000"));
-        singleCountDownView.setTime(180).setTimeColorHex("#ff000000").setTimeSuffixText("s");
+        singleCountDownView.setTime(2).setTimeColorHex("#ff000000").setTimeSuffixText("s");
         // 单个倒计时结束事件监听
         singleCountDownView.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
@@ -411,7 +412,7 @@ public class InitActivity extends AppCompatActivity {
             arealist.add(floorList);
 
             for (int var6 = 0; var6 < var5; ++var6) {
-                SerialLocationBean var7 = (SerialLocationBean) rspData.getLocationCoordinates().get(var6);
+                LocationCoordinate var7 = (LocationCoordinate) rspData.getLocationCoordinates().get(var6);
                 byte var8;
                 if (var2 == var7.getAreaValue()) {
                     if (var3 == var7.getFloorValue()) {
@@ -429,8 +430,13 @@ public class InitActivity extends AppCompatActivity {
                     List<List<SerialLocationBean>> areaInlist = new ArrayList<>();
                     allList.add(areaInlist);
                 }
-
-                allList.get(var2).get(var3).add(var7);
+                SerialLocationBean serialLocationBean = new SerialLocationBean();
+                serialLocationBean.setArea(var7.getArea());
+                serialLocationBean.setFloor(var7.getFloor());
+                serialLocationBean.setLocation(var7.getLocation());
+                serialLocationBean.setPosX(var7.getPosX());
+                serialLocationBean.setPosY(var7.getPosY());
+                allList.get(var2).get(var3).add(serialLocationBean);
 
                 var2 = var7.getAreaValue();
                 var3 = var7.getFloorValue();

@@ -7,7 +7,6 @@ import android.widget.GridView;
 
 import com.seekwork.bangmart.R;
 import com.seekwork.bangmart.adpter.GridAdapter;
-import com.seekwork.bangmart.network.entity.seekwork.MBangmartArea;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartRoad;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
 import com.shizhefei.fragment.LazyFragment;
@@ -22,16 +21,28 @@ public class ItemFragment extends LazyFragment {
     private GridView gv_data;
     private GridAdapter gridAdapter;
 
-    private List<MBangmartArea> mBangmartAreaList;
     private ArrayList<MBangmartRoad> AddToBangmartRoadList = new ArrayList<>();
 
     // 点击的是哪个TAB项目
-    private int postion;
+    private List<MBangmartRoad> mBangmartRoads;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        postion = getArguments().getInt(SeekerSoftConstant.INTENT_INT_INDEX);
+        int postion = getArguments().getInt(SeekerSoftConstant.INTENT_INT_INDEX);
+        if (postion == 0) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("A");
+        } else if (postion == 1) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("B");
+        } else if (postion == 2) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("C");
+        } else if (postion == 3) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("D");
+        } else if (postion == 4) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("E");
+        } else if (postion == 5) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("F");
+        }
     }
 
     @SuppressLint("InflateParams")
@@ -74,7 +85,13 @@ public class ItemFragment extends LazyFragment {
                     }
                 }
             }
+
+            @Override
+            public void showDetail(MBangmartRoad mBangmartRoad) {
+
+            }
         });
+        gridAdapter.setDataList(mBangmartRoads);
         gv_data.setAdapter(gridAdapter);
     }
 
