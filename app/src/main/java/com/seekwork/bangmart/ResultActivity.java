@@ -4,16 +4,23 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.bangmart.nt.command.Attention;
 import com.bangmart.nt.command.Command;
 import com.bangmart.nt.command.CommandDef;
 import com.bangmart.nt.command.ICallbackListener;
+import com.bangmart.nt.common.util.DataUtil;
 import com.bangmart.nt.machine.Location;
 import com.bangmart.nt.machine.Machine;
+import com.bangmart.nt.smartwarehouse.pickupcar.ReqOutGoods;
+import com.bangmart.nt.smartwarehouse.pickupcar.RspOutGoods;
 import com.bangmart.nt.sys.ByteBuffer;
+import com.bangmart.nt.sys.Logger;
 import com.bangmart.nt.sys.Tools;
+import com.bangmart.nt.vendingmachine.constant.BmtMsgConstant;
 import com.google.gson.Gson;
 import com.seekwork.bangmart.network.api.Host;
 import com.seekwork.bangmart.network.api.SeekWorkService;
@@ -26,8 +33,10 @@ import com.seekwork.bangmart.network.entity.seekwork.MBangmarSuccessGood;
 import com.seekwork.bangmart.network.entity.seekwork.TakeOutProductBean;
 import com.seekwork.bangmart.network.gsonfactory.GsonConverterFactory;
 import com.seekwork.bangmart.util.BmtVendingMachineUtil;
+import com.seekwork.bangmart.util.JsonUtil;
 import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
+import com.seekwork.bangmart.util.StringUtil;
 import com.seekwork.bangmart.view.SingleCountDownView;
 
 import java.util.ArrayList;
@@ -38,11 +47,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_NOT_TAKEN_AWAY;
+import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_COMPLETE;
+import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_FAILED;
+import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_NO_OPTION;
+import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_RETRY;
+import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_WAIT_TO_GET_AWAY;
+
 /**
  * 出货结果页面处理
  */
 public class ResultActivity extends AppCompatActivity {
 
+    private static final String TAG = "ResultActivity";
     private SingleCountDownView singleCountDownViewPop;
     private TextView tv_tips_result;
 
@@ -94,13 +111,8 @@ public class ResultActivity extends AppCompatActivity {
                     road.setFloor(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getFloor());
                     road.setColumn(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn());
                     road.setProductID(productID);
-                    // 本地货道扫描数据
-                    Location location = SeekerSoftConstant.storageMap.getLocation(
-                            mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getArea(),
-                            mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getFloor(),
-                            mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn());
-                    road.setX(location.x);
-                    road.setY(location.y);
+                    // TODO 本地货道扫描数据
+
                     outList.add(road);
                 }
             }
@@ -121,77 +133,122 @@ public class ResultActivity extends AppCompatActivity {
         test.setColumn(1);
         test.setFloor(1);
         mBangmarProcPickRoads.add(test);
-        //sellOutOne();
-        sellOutMore();
+        setllOut();
 
     }
 
-    private void sellOutOne() {
-        byte[] paramCode = new byte[6];
-        paramCode[0] = (byte) 0;
-        paramCode[1] = (byte) 1;
-        paramCode[2] = (byte) 0;
-        paramCode[3] = (byte) 0;// area
-        paramCode[4] = (byte) 0;// floor
-        paramCode[5] = (byte) 0;// location
+    private void setllOut() {
+        /********************************start: 出货（0x04）(异步)********************************/
+        /**
+         * 1.生成出货业务数据(一组出货最多出三个货道,如果单组出货超过一个货道,必须遵循智能出货规则,如果单组出货不超过一个则无需遵循智能出 货规则)
+         */
+        List<com.bangmart.nt.common.model.Location> locations = new ArrayList<>();
 
-        Command cmd = Command.create(CommandDef.ID_SELLOUT, paramCode, Command.TYPE_ASYNC);
+        com.bangmart.nt.common.model.Location location = new com.bangmart.nt.common.model.Location(1, 1, 1);
+        com.bangmart.nt.common.model.Location location1 = new com.bangmart.nt.common.model.Location(1, 2, 1);
+
+        locations.add(location);
+        locations.add(location1);
+        final ReqOutGoods reqOutGoods = new ReqOutGoods(locations);
+        final byte[] data = ReqOutGoods.valueOf(reqOutGoods);
+        /**
+         * 2.构造出货命令(异步)
+         */
+        Command cmd = Command.create(CommandDef.ID_SELLOUT, data, Command.TYPE_ASYNC);
+        cmd.setDesc("分组出货");
+        /**
+         * 3.监听相关回调
+         */
         cmd.setOnReplyListener(new ICallbackListener() {
             @Override
             public boolean callback(Command cmd) {
+                String log = null;
                 Attention attention = cmd.getLastAttentionData();
+                // TODO 出货商品
+                // SingleOutGoodsInfo singleOutGoodsInfo = null;
                 //出货失败，需要补发一条命令。
                 byte[] attData = attention.getData();
                 switch (attData[0]) {
-                    case CommandDef.ATT_SELLOUT_NOT_TAKEN_AWAY:
-                        appendUILogAsync("上个用户没有把货取走，请先取走商品再继续出货");
+                    case ATT_SELLOUT_NOT_TAKEN_AWAY:
+                        log = "上个用户没有把货取走，请先取走商品再继续出货";
+                        Log.i(TAG, log);
+                        appendUILogAsync(log);
                         break;
-                    case CommandDef.ATT_SELLOUT_PICK_UP_COMPLETE:
-                        appendUILogAsync("当前商品取货成功");
+                    case ATT_SELLOUT_PICK_UP_COMPLETE:
+                        log = "第" + attData[1] + "个商品取货成功。";
+                        Log.i(TAG, log);
+                        appendUILogAsync(log);
                         break;
-                    case CommandDef.ATT_SELLOUT_PICK_UP_FAILED:
-                        appendUILogAsync("第" + attData[1] + "个商品取货失败。");
-                        //String nextLocation = TestSellOut.getNextLocation();
-                        String nextLocation = null;
+                    case ATT_SELLOUT_PICK_UP_FAILED:
                         ByteBuffer bb = new ByteBuffer(5);
-
-                        if (nextLocation == null) {
-                            bb.append(CommandDef.ATT_SELLOUT_PICK_UP_NO_OPTION);
-                            byte[] attCode = cmd.sendAttention(bb.copy());
-                            appendUILogAsync("没有其他的货道可以出货了。取下一个或结束: " + Tools.bytesToHexString(attCode));
+                        log = "第" + attData[1] + "个商品取货失败。";
+                        Log.i(TAG, log);
+                        int outGoodsFailedIndex = attData[1] & BmtMsgConstant.BYTE_MASK;
+                        /*Location retryLocation = onOutGoods.getRetryLocation(outGoodsFailedIndex);
+                        if (null == retryLocation) {
+                            bb.append(ATT_SELLOUT_PICK_UP_NO_OPTION);
+                            byte[] retry = cmd.sendAttention(bb.copy());
+                            log = "无重试货道";
+                            Log.i(TAG, log);
                         } else {
-                            bb.append(CommandDef.ATT_SELLOUT_PICK_UP_RETRY).append(attData[1]).append(nextLocation);
-                            byte[] attCode = cmd.sendAttention(bb.copy());
-                            appendUILogAsync("重试: " + Tools.bytesToHexString(attCode));
-                        }
+                            String nextLocation = StringUtil.getLocation(retryLocation);
+                            if (false == TextUtils.isEmpty(nextLocation)) {
+                                Logger.sLogger4Machine.info(TAG, "重试位置:" + JsonUtil.toJson(retryLocation));
+                                Logger.sLogger4Machine.info(TAG, "重试位置:" + nextLocation);
+                                bb.append(ATT_SELLOUT_PICK_UP_RETRY).append(attData[1]).append(nextLocation);
+                                byte[] retry = cmd.sendAttention(bb.copy());
+                                if (null != retry) {
+                                    Logger.sLogger4Machine.info(TAG, "重试指令:" + DataUtil.bytesToHexString(retry));
+                                }
+                            } else {
+                                bb.append(ATT_SELLOUT_PICK_UP_NO_OPTION);
+                                byte[] retry = cmd.sendAttention(bb.copy());
+                                log = "无重试货道";
+                                Log.i(TAG, log);
+                            }
+                        }*/
+                        appendUILogAsync(log);
                         break;
-                    case CommandDef.ATT_SELLOUT_WAIT_TO_GET_AWAY:
-                        appendUILogAsync("取货口已打开，等待用户取走。");
+                    case ATT_SELLOUT_WAIT_TO_GET_AWAY:
+                        log = "取货口已打开，等待用户取走。";
+                        appendUILogAsync(log);
                         break;
                     default:
                 }
                 return true;
             }
         });
-        BmtVendingMachineUtil.getInstance().getMachine().executeCommand(cmd);
-    }
-
-
-    private void sellOutMore() {
-        byte[] good;
-        List<byte[]> params = new ArrayList<>();
-
-        for (byte location = 0; mBangmarProcPickRoads != null && location < mBangmarProcPickRoads.size(); location++) {
-            good = new byte[3];
-            good[0] = (byte) mBangmarProcPickRoads.get(location).getArea();
-            good[1] = (byte) mBangmarProcPickRoads.get(location).getFloor();
-            good[2] = (byte) mBangmarProcPickRoads.get(location).getColumn();
-            params.add(good);
-        }
-
-        Command cmd = CommandFactory.createCommand4SellOut(params, 0, 100000, 10000);
-        appendSelloutToTaskList(cmd, "出货>" + params.size() + "件" + " 模式>" + 1);
-
+        cmd.setOnCompleteListener(new ICallbackListener() {
+            @Override
+            public boolean callback(Command cmd) {
+                com.bangmart.nt.command.Response response = cmd.getResult();
+                if (null != response) {
+                    RspOutGoods rspOutGoods = RspOutGoods.valueOf(response.getData());
+                    //TODO 根据出货结果,进行其它业务处理
+                    String log = "complete = " + rspOutGoods.getFailedCountValue() + rspOutGoods.getEnErrorCodeDesc();
+                    appendUILogAsync(log);
+                }
+                return true;
+            }
+        });
+        cmd.setOnErrorListener(new ICallbackListener() {
+            @Override
+            public boolean callback(Command cmd) {
+                com.bangmart.nt.command.Response response = cmd.getResult();
+                if (null != response) {
+                    RspOutGoods rspOutGoods = RspOutGoods.valueOf(response.getData());
+                    //TODO 根据出货结果,进行其它业务处理
+                    String log = "error = " + rspOutGoods.getFailedCountValue() + rspOutGoods.getEnErrorCodeDesc();
+                    appendUILogAsync(log);
+                }
+                return true;
+            }
+        });
+        /**
+         * 4.执行出货命令
+         */
+        machine.executeCommand(cmd);
+        /********************************end: 出货（0x04）(异步)********************************/
     }
 
     private void appendSelloutToTaskList(Command cmd, String desc) {
@@ -203,31 +260,31 @@ public class ResultActivity extends AppCompatActivity {
                 //出货失败，需要补发一条命令。
                 byte[] attData = attention.getData();
                 switch (attData[0]) {
-                    case CommandDef.ATT_SELLOUT_NOT_TAKEN_AWAY:
+                    case ATT_SELLOUT_NOT_TAKEN_AWAY:
                         appendUILogAsync("上个用户没有把货取走，请先取走商品再继续出货");
                         break;
-                    case CommandDef.ATT_SELLOUT_PICK_UP_COMPLETE:
+                    case ATT_SELLOUT_PICK_UP_COMPLETE:
                         appendUILogAsync("当前商品取货成功");
                         break;
-                    case CommandDef.ATT_SELLOUT_PICK_UP_FAILED:
+                    case ATT_SELLOUT_PICK_UP_FAILED:
                         appendUILogAsync("第" + attData[1] + "个商品取货失败。");
                         //String nextLocation = TestSellOut.getNextLocation();
                         String nextLocation = null;
                         ByteBuffer bb = new ByteBuffer(5);
 
                         if (nextLocation == null) {
-                            bb.append(CommandDef.ATT_SELLOUT_PICK_UP_NO_OPTION);
+                            bb.append(ATT_SELLOUT_PICK_UP_NO_OPTION);
                             byte[] attCode = cmd.sendAttention(bb.copy());
                             appendUILogAsync("没有其他的货道可以出货了。取下一个或结束: " + Tools.bytesToHexString(attCode));
                             // TODO 發送取貨數據
                             DoPickSuccess();
                         } else {
-                            bb.append(CommandDef.ATT_SELLOUT_PICK_UP_RETRY).append(attData[1]).append(nextLocation);
+                            bb.append(ATT_SELLOUT_PICK_UP_RETRY).append(attData[1]).append(nextLocation);
                             byte[] attCode = cmd.sendAttention(bb.copy());
                             appendUILogAsync("重试: " + Tools.bytesToHexString(attCode));
                         }
                         break;
-                    case CommandDef.ATT_SELLOUT_WAIT_TO_GET_AWAY:
+                    case ATT_SELLOUT_WAIT_TO_GET_AWAY:
                         appendUILogAsync("取货口已打开，等待用户取走。");
                         break;
                     default:

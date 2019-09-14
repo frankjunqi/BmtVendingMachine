@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.tv_title) {
+
         }
     }
 
@@ -223,9 +224,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                     // TODO 接口返回数据，与扫描货道的数据进行对比
-                    SeekerSoftConstant.storageMap.getArea(0);
-                    SeekerSoftConstant.storageMap.getArea(1);
-                    SeekerSoftConstant.storageMap.getArea(2);
                     mBangmartAreaList.get(0).getmBangmartFloors();
 
                     // TODO 如果数据出现不一样，需要提交接口，进行数据初始化失败的错误；
