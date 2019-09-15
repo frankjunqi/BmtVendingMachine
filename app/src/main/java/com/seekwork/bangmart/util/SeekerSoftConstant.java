@@ -14,7 +14,7 @@ public class SeekerSoftConstant {
 
     public final static String MACHINE = "BangMartCo";
     public final static long replyTimeout = 1000;
-    public final static long responseTimeout = 300000;
+    public final static long responseTimeout = 3000;
 
     // 柜子的数据：包括 area follor column x y width
     public static List<List<List<SerialLocationBean>>> list;
@@ -46,6 +46,9 @@ public class SeekerSoftConstant {
     // 初始化系统的时间
     public static int INIT_SYS_TIME = 2;
 
+    // 商品列表页面到技术
+    public static int INIT_PRO_LIST_TIME = 100;
+
     // 正式包变成false
     public static final boolean DEBUG = true;
     // 设备号
@@ -60,5 +63,5 @@ public class SeekerSoftConstant {
     public static final String CardNo = "CardNo";
     public static final String OrderID = "OrderID";
     public static final String INTENT_INT_INDEX = "intent_int_index";
-
+    public static final String CHOOSE_POSITION = "CHOOSE_POSITION";
 }

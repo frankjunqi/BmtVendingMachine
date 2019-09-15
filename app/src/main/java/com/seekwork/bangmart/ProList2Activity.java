@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -17,20 +13,19 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.seekwork.bangmart.adpter.GridAdapter;
-import com.seekwork.bangmart.fragment.ItemFragment;
 import com.seekwork.bangmart.model.SubColumnBean;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartRoad;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
 import com.seekwork.bangmart.util.Variable;
 import com.seekwork.bangmart.view.SingleCountDownView;
 import com.shizhefei.view.indicator.Indicator;
-import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.ScrollIndicatorView;
 import com.shizhefei.view.indicator.slidebar.DrawableBar;
 import com.shizhefei.view.indicator.slidebar.ScrollBar;
@@ -39,7 +34,7 @@ import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.seekwork.bangmart.util.SeekerSoftConstant.INTENT_INT_INDEX;
+import static com.seekwork.bangmart.util.SeekerSoftConstant.INIT_PRO_LIST_TIME;
 
 
 /**
@@ -53,7 +48,8 @@ public class ProList2Activity extends AppCompatActivity {
     private List<MBangmartRoad> mBangmartRoads;
 
 
-    private ImageView iv_logo, iv_back;
+    private ImageView iv_logo;
+    private LinearLayout ll_back;
     private SingleCountDownView singleCountDownViewPop;
 
     private TextView tv_shopping;
@@ -70,6 +66,9 @@ public class ProList2Activity extends AppCompatActivity {
     private TextView tv_pro_name, tv_sku, tv_desc;
     private TextView tv_sure, tv_add, tv_choose_num, tv_cut;
 
+
+    private int currentChoosePositon = 0;
+
     private void showDetailPop() {
         View customView = inflater.inflate(R.layout.pop_detail_layout, null);
 
@@ -85,7 +84,7 @@ public class ProList2Activity extends AppCompatActivity {
 
         iv_pic = customView.findViewById(R.id.iv_pic);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) iv_pic.getLayoutParams();
-        layoutParams.width = (Variable.WIDTH - 160) / 3;
+        layoutParams.width = (Variable.WIDTH - 160) / 4;
         layoutParams.height = layoutParams.width / 3 * 4;
         iv_pic.setLayoutParams(layoutParams);
 
@@ -98,10 +97,9 @@ public class ProList2Activity extends AppCompatActivity {
         tv_cut = customView.findViewById(R.id.tv_cut);
 
         detailDialog = new MaterialDialog.Builder(this).customView(customView, false).build();
-
         WindowManager.LayoutParams wl = detailDialog.getWindow().getAttributes();
-        wl.width = Variable.WIDTH - 88;
-        wl.height = Variable.WIDTH - 88;
+        wl.width = Variable.WIDTH - 160;
+        wl.height = Variable.WIDTH - 80;
         detailDialog.getWindow().setAttributes(wl);
         detailDialog.setCancelable(false);
 
@@ -120,11 +118,12 @@ public class ProList2Activity extends AppCompatActivity {
         mContext = this;
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         setContentView(R.layout.pro_pager_new_layout);
+        currentChoosePositon = getIntent().getExtras().getInt(SeekerSoftConstant.CHOOSE_POSITION);
 
         showDetailPop();
 
-        iv_back = findViewById(R.id.iv_back);
-        iv_back.setOnClickListener(new View.OnClickListener() {
+        ll_back = findViewById(R.id.ll_back);
+        ll_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (singleCountDownViewPop != null) {
@@ -140,12 +139,15 @@ public class ProList2Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // 彈出框
-                Intent intent = new Intent(mContext, ShopCartActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(SeekerSoftConstant.ADDCARTLIST, AddToBangmartRoadList);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                AddToBangmartRoadList.clear();
+                if (AddToBangmartRoadList != null && AddToBangmartRoadList.size() > 0) {
+                    Intent intent = new Intent(mContext, ShopCartActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(SeekerSoftConstant.ADDCARTLIST, AddToBangmartRoadList);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    AddToBangmartRoadList.clear();
+                    ProList2Activity.this.finish();
+                }
             }
         });
 
@@ -162,9 +164,9 @@ public class ProList2Activity extends AppCompatActivity {
 
 
         singleCountDownViewPop = findViewById(R.id.singleCountDownView);
-        singleCountDownViewPop.setTextColor(Color.parseColor("#3A3939"));
-        singleCountDownViewPop.setTime(90);
-        singleCountDownViewPop.setTimeColorHex("#3A3939");
+        singleCountDownViewPop.setTextColor(Color.parseColor("#CC181717"));
+        singleCountDownViewPop.setTime(INIT_PRO_LIST_TIME);
+        singleCountDownViewPop.setTimeColorHex("#CC181717");
         singleCountDownViewPop.setTimeSuffixText("S");
         singleCountDownViewPop.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
@@ -197,7 +199,6 @@ public class ProList2Activity extends AppCompatActivity {
         onTransitionTextListener.setSize(17, 17);
         scrollIndicatorView.setOnTransitionListener(onTransitionTextListener);
         initTabColumn();
-
         scrollIndicatorView.setAdapter(new Indicator.IndicatorAdapter() {
             @Override
             public int getCount() {
@@ -221,30 +222,16 @@ public class ProList2Activity extends AppCompatActivity {
                 return convertView;
             }
         });
-
+        scrollIndicatorView.setCurrentItem(currentChoosePositon);
         scrollIndicatorView.setOnIndicatorItemClickListener(new Indicator.OnIndicatorItemClickListener() {
             @Override
             public boolean onItemClick(View clickItemView, int postion) {
-                if (postion == 0) {
-                    mBangmartRoads = SeekerSoftConstant.hashMap.get("A");
-                } else if (postion == 1) {
-                    mBangmartRoads = SeekerSoftConstant.hashMap.get("B");
-                } else if (postion == 2) {
-                    mBangmartRoads = SeekerSoftConstant.hashMap.get("C");
-                } else if (postion == 3) {
-                    mBangmartRoads = SeekerSoftConstant.hashMap.get("D");
-                } else if (postion == 4) {
-                    mBangmartRoads = SeekerSoftConstant.hashMap.get("E");
-                } else if (postion == 5) {
-                    mBangmartRoads = SeekerSoftConstant.hashMap.get("F");
-                }
-                gridAdapter.setDataList(mBangmartRoads);
+                chageAdapter(postion);
                 return false;
             }
         });
 
         gv_data = findViewById(R.id.gv_data);
-        mBangmartRoads = SeekerSoftConstant.hashMap.get("A");
         gridAdapter = new GridAdapter(this, new GridAdapter.AddCartInterface() {
             @Override
             public void addToCart(MBangmartRoad mBangmartRoad) {
@@ -277,7 +264,7 @@ public class ProList2Activity extends AppCompatActivity {
                         AddToBangmartRoadList.get(position).setChooseNum(AddToBangmartRoadList.get(position).getChooseNum() + 1);
                     }
                 }
-                tv_shopping.setText("去结算(" + AddToBangmartRoadList.size() + ")");
+                tv_shopping.setText("去购物车(" + AddToBangmartRoadList.size() + ")");
             }
 
             @Override
@@ -303,11 +290,11 @@ public class ProList2Activity extends AppCompatActivity {
                         // 存在，判断库存，进行choosenum设置
                         inRoad = AddToBangmartRoadList.get(position);
                     }
-                    tv_shopping.setText("去结算(" + AddToBangmartRoadList.size() + ")");
+                    tv_shopping.setText("去购物车(" + AddToBangmartRoadList.size() + ")");
 
                     Glide.with(mContext).load(inRoad.getPicName()).placeholder(R.drawable.default_iv_bg).into(iv_pic);
                     tv_pro_name.setText(inRoad.getProductName());
-                    tv_sku.setText(inRoad.getSKU());
+                    tv_sku.setText("SKU: " + inRoad.getSKU());
                     tv_desc.setText(inRoad.getDescribe());
                     tv_choose_num.setText(String.valueOf(inRoad.getChooseNum()));
 
@@ -355,15 +342,33 @@ public class ProList2Activity extends AppCompatActivity {
                 }
             }
         });
-        gridAdapter.setDataList(mBangmartRoads);
+
+        chageAdapter(currentChoosePositon);
         gv_data.setAdapter(gridAdapter);
+    }
+
+    private void chageAdapter(int postion) {
+        if (postion == 0) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("A");
+        } else if (postion == 1) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("B");
+        } else if (postion == 2) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("C");
+        } else if (postion == 3) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("D");
+        } else if (postion == 4) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("E");
+        } else if (postion == 5) {
+            mBangmartRoads = SeekerSoftConstant.hashMap.get("F");
+        }
+        gridAdapter.setDataList(mBangmartRoads);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (tv_shopping != null && AddToBangmartRoadList != null) {
-            tv_shopping.setText("去结算(" + AddToBangmartRoadList.size() + ")");
+            tv_shopping.setText("去购物车(" + AddToBangmartRoadList.size() + ")");
         }
     }
 
@@ -429,6 +434,5 @@ public class ProList2Activity extends AppCompatActivity {
             singleCountDownViewPop = null;
         }
     }
-
 
 }

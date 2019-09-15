@@ -34,9 +34,11 @@ import com.seekwork.bangmart.util.SeekerSoftConstant;
 import com.seekwork.bangmart.view.SingleCountDownView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static com.bangmart.nt.command.CommandDef.ID_GET_LOCATION_DATA;
 import static com.seekwork.bangmart.util.SeekerSoftConstant.INIT_SYS_TIME;
@@ -413,7 +415,50 @@ public class InitActivity extends AppCompatActivity {
         machine.executeCommand(cmd);
     }
 
-    public static void fenZu(List<SerialLocationBean> list, List<List<SerialLocationBean>> fenzuList) {//map是用来接收分好的组的
+    public static void fenZuArea(List<SerialLocationBean> list, List<List<SerialLocationBean>> fenzuList) {//map是用来接收分好的组的
+        if (null == list || null == fenzuList) {
+            return;
+        }
+        Map<String, List<SerialLocationBean>> map = new HashMap<>();
+        String key;
+        List<SerialLocationBean> listTmp;
+        for (SerialLocationBean val : list) {
+            key = String.valueOf(val.getArea());//按这个属性分组，map的Key
+            listTmp = map.get(key);
+            if (null == listTmp) {
+                listTmp = new ArrayList<SerialLocationBean>();
+                map.put(key, listTmp);
+            }
+            listTmp.add(val);
+        }
+
+        map = sortMapByKey(map);
+
+        for (Map.Entry<String, List<SerialLocationBean>> entry : map.entrySet()) {
+            fenzuList.add(entry.getValue());
+        }
+
+    }
+
+    public static Map<String, List<SerialLocationBean>> sortMapByKey(Map<String, List<SerialLocationBean>> map) {
+        if (map == null || map.isEmpty()) {
+            return null;
+        }
+        Map<String, List<SerialLocationBean>> sortMap = new TreeMap<String, List<SerialLocationBean>>(new MapKeyComparator());
+        sortMap.putAll(map);
+        return sortMap;
+    }
+
+    static class MapKeyComparator implements Comparator<String> {
+
+        @Override
+        public int compare(String str1, String str2) {
+
+            return str1.compareTo(str2);
+        }
+    }
+
+    public static void fenZuFloor(List<SerialLocationBean> list, List<List<SerialLocationBean>> fenzuList) {//map是用来接收分好的组的
         if (null == list || null == fenzuList) {
             return;
         }
@@ -430,6 +475,8 @@ public class InitActivity extends AppCompatActivity {
             listTmp.add(val);
         }
 
+        map = sortMapByKey(map);
+
         for (Map.Entry<String, List<SerialLocationBean>> entry : map.entrySet()) {
             fenzuList.add(entry.getValue());
         }
@@ -437,31 +484,26 @@ public class InitActivity extends AppCompatActivity {
     }
 
     private List<List<List<SerialLocationBean>>> handleLocationList(RspGetLocationCoordinateData rspData) {
-        List<List<SerialLocationBean>> arealist = new ArrayList<>();
+        List<SerialLocationBean> tempList = new ArrayList<>();
         int allSize = rspData.getLocationCountValue();
         List<LocationCoordinate> allLocatinList = rspData.getLocationCoordinates();
-        for (int i = 0; i < SeekerSoftConstant.AREA_COUNT; i++) {
-            List<SerialLocationBean> floorList = new ArrayList<>();
-            arealist.add(floorList);
-            for (int k = 0; k < allSize; k++) {
-                if (allLocatinList.get(k).getArea() == i) {
-                    SerialLocationBean serialLocationBean = new SerialLocationBean();
-                    serialLocationBean.setArea(allLocatinList.get(k).getArea());
-                    serialLocationBean.setFloor(allLocatinList.get(k).getFloor());
-                    serialLocationBean.setLocation(allLocatinList.get(k).getLocation());
-                    serialLocationBean.setPosX(allLocatinList.get(k).getPosX());
-                    serialLocationBean.setPosY(allLocatinList.get(k).getPosY());
-                    floorList.add(serialLocationBean);
-                }
-            }
+        for (int k = 0; k < allSize; k++) {
+            SerialLocationBean serialLocationBean = new SerialLocationBean();
+            serialLocationBean.setArea(allLocatinList.get(k).getArea());
+            serialLocationBean.setFloor(allLocatinList.get(k).getFloor());
+            serialLocationBean.setLocation(allLocatinList.get(k).getLocation());
+            serialLocationBean.setPosX(allLocatinList.get(k).getPosX());
+            serialLocationBean.setPosY(allLocatinList.get(k).getPosY());
+            tempList.add(serialLocationBean);
         }
 
         List<List<List<SerialLocationBean>>> allList = new ArrayList<>();
-
-        for (int i = 0; i < arealist.size(); i++) {
-            List<List<SerialLocationBean>> templist = new ArrayList<>();
-            fenZu(arealist.get(i), templist);
-            allList.add(templist);
+        List<List<SerialLocationBean>> areaList = new ArrayList<>();
+        fenZuArea(tempList, areaList);
+        for (int i = 0; i < areaList.size(); i++) {
+            List<List<SerialLocationBean>> floorList = new ArrayList<>();
+            fenZuFloor(areaList.get(i), floorList);
+            allList.add(floorList);
         }
 
         return allList;

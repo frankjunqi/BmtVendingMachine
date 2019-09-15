@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.seekwork.bangmart.R;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartRoad;
-import com.seekwork.bangmart.util.DensityUtil;
 import com.seekwork.bangmart.util.Variable;
 
 import java.util.List;
@@ -61,6 +60,7 @@ public class GridAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.gird_item_view, null);
             // Locate the TextViews in item_road_my_road.xml
             holder.iv_pic = (ImageView) view.findViewById(R.id.iv_pic);
+            holder.rl = (RelativeLayout) view.findViewById(R.id.rl);
             holder.iv_add_to_cart = (ImageView) view.findViewById(R.id.iv_add_to_cart);
             holder.tv_name = (TextView) view.findViewById(R.id.tv_name);
             holder.tv_sku = view.findViewById(R.id.tv_sku);
@@ -71,11 +71,9 @@ public class GridAdapter extends BaseAdapter {
 
         // set product name
         holder.tv_name.setText(mBangmartRoads.get(i).getProductName());
-
         holder.tv_sku.setText(mBangmartRoads.get(i).getSKU());
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.iv_pic.getLayoutParams();
-
         layoutParams.width = (Variable.WIDTH - 160) / 3;
         layoutParams.height = layoutParams.width / 3 * 4;
         holder.iv_pic.setLayoutParams(layoutParams);
@@ -107,6 +105,7 @@ public class GridAdapter extends BaseAdapter {
     }
 
     public class ViewHolder {
+        public RelativeLayout rl;
         public TextView tv_name;
         public ImageView iv_pic;
         public ImageView iv_add_to_cart;

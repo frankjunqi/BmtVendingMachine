@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -58,7 +57,7 @@ public class ShopCartActivity extends AppCompatActivity {
     private ListView lv_data;
     private ArrayList<MBangmartRoad> AddToBangmartRoadList;
     private ShopCartAdapter shopCartAdapter;
-    private Button btn_sure;
+    private TextView btn_sure;
 
     private MaterialDialog promissionDialog;
     private SingleCountDownView singleCountDownViewPop;
@@ -106,8 +105,8 @@ public class ShopCartActivity extends AppCompatActivity {
 
         // 单个倒计时使用
         singleCountDownView = findViewById(R.id.singleCountDownView);
-        singleCountDownView.setTextColor(Color.parseColor("#155398"));
-        singleCountDownView.setTime(60).setTimeColorHex("#155398").setTimeSuffixText("S");
+        singleCountDownView.setTextColor(Color.parseColor("#CC181717"));
+        singleCountDownView.setTime(60).setTimeColorHex("#CC181717").setTimeSuffixText("S");
 
         // 单个倒计时结束事件监听
         singleCountDownView.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
@@ -148,20 +147,21 @@ public class ShopCartActivity extends AppCompatActivity {
         btn_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ll_take.setVisibility(View.VISIBLE);
-                pb_loadingdata.setVisibility(View.INVISIBLE);
-                rl_tip.setVisibility(View.INVISIBLE);
+                if (AddToBangmartRoadList != null && AddToBangmartRoadList.size() > 0) {
+                    ll_take.setVisibility(View.VISIBLE);
+                    pb_loadingdata.setVisibility(View.INVISIBLE);
+                    rl_tip.setVisibility(View.INVISIBLE);
 
-                // 开去串口读卡器
-                if (CardReadSerialPort.SingleInit() != null) {
-                    CardReadSerialPort.SingleInit().setOnDataReceiveListener(onDataReceiveListener);
+                    // 开去串口读卡器
+                    if (CardReadSerialPort.SingleInit() != null) {
+                        CardReadSerialPort.SingleInit().setOnDataReceiveListener(onDataReceiveListener);
+                    }
+
+                    // 授权弹框
+                    promissionDialog.show();
+
+                    PickQuery("2032899024");
                 }
-
-                // 授权弹框
-                promissionDialog.show();
-
-                PickQuery("2032899024");
-
             }
         });
 

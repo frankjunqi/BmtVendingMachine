@@ -11,22 +11,29 @@
         android:background="@color/action_bg"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/iv_back"
+        <LinearLayout
+            android:id="@+id/ll_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/icon_back" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <com.seekwork.bangmart.view.SingleCountDownView
-            android:id="@+id/singleCountDownView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/iv_back"
-            android:textColor="@color/time_back"
-            android:textSize="18sp" />
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="21dp"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_back" />
+
+            <com.seekwork.bangmart.view.SingleCountDownView
+                android:id="@+id/singleCountDownView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/time_back"
+                android:textSize="@dimen/back_time" />
+        </LinearLayout>
+
 
         <ImageView
             android:id="@+id/iv_logo"
@@ -47,7 +54,7 @@
     <RelativeLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true">
 
         <TextView
@@ -57,11 +64,14 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:background="@drawable/shape_main_color_bg"
+            android:background="@drawable/selector_btn_goshop"
             android:drawableLeft="@mipmap/go_to_shop"
             android:drawablePadding="6dp"
-            android:padding="12dp"
-            android:text="去结算(0)"
+            android:paddingLeft="24dp"
+            android:paddingTop="10dp"
+            android:paddingRight="24dp"
+            android:paddingBottom="10dp"
+            android:text="去购物车(0)"
             android:textColor="@color/action_bg"
             android:textSize="18sp" />
 
@@ -74,11 +84,14 @@
         android:layout_above="@id/rl_bottom"
         android:layout_below="@id/vip_tpi"
         android:layout_gravity="center"
+        android:layout_margin="6dp"
         android:background="@android:color/transparent"
         android:cacheColorHint="#00000000"
         android:divider="@null"
         android:dividerHeight="0dp"
+        android:horizontalSpacing="6dp"
         android:listSelector="@android:color/transparent"
-        android:numColumns="3" />
+        android:numColumns="3"
+        android:verticalSpacing="6dp" />
 
 </RelativeLayout>

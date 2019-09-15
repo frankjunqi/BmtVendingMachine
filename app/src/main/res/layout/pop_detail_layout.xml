@@ -3,77 +3,99 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/iv_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:src="@mipmap/close" />
-
     <RelativeLayout
         android:id="@+id/rl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center">
+        android:layout_centerHorizontal="true"
+        android:background="@color/action_bg"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/iv_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_add_shop" />
+            android:layout_centerVertical="true" />
 
-
-        <TextView
-            android:id="@+id/tv_pro_name"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/iv_pic"
-            android:text="德利德利1盒36支" />
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/iv_pic">
 
-        <TextView
-            android:id="@+id/tv_sku"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_pro_name"
-            android:layout_toRightOf="@id/iv_pic"
-            android:text="SKU：CS12345678" />
+            <TextView
+                android:id="@+id/tv_pro_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="德利德利1盒36支"
+                android:textColor="@color/desc"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_sku"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_pro_name"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="4dp"
+                android:text="SKU：CS12345678"
+                android:textColor="@color/sku"
+                android:textSize="13sp" />
+        </RelativeLayout>
+
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="6dp"
+        android:src="@mipmap/close" />
 
     <RelativeLayout
         android:id="@+id/rl_middle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rl_top"
-        android:layout_marginTop="10dp">
+        android:background="@color/pop_detail_bg">
 
         <TextView
             android:id="@+id/tv_de"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="-------商品详情-------" />
+            android:layout_marginTop="10dp"
+            android:text="------------商品详情------------"
+            android:textColor="@color/title"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_desc"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_de"
-            android:text="产品名称：得力圆珠笔1盒36支" />
+            android:paddingLeft="24dp"
+            android:paddingTop="18dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="26dp"
+            android:text="产品名称：得力圆珠笔1盒36支"
+            android:textColor="@color/pop_desc"
+            android:textSize="15sp" />
 
     </RelativeLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_below="@id/rl_middle"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/shape_main_choice_bg">
+        android:background="@color/pop_detail_bg">
 
         <TextView
             android:id="@+id/tv_sure"
@@ -81,14 +103,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="18dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/shape_main_color_bg"
-            android:paddingLeft="16dp"
+            android:paddingLeft="20dp"
             android:paddingTop="4dp"
-            android:paddingRight="16dp"
+            android:paddingRight="20dp"
             android:paddingBottom="4dp"
-            android:text="确定"
-            android:textColor="@color/action_bg" />
+            android:text="确 定"
+            android:textColor="@color/action_bg"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -96,13 +119,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
             android:ellipsize="end"
             android:gravity="left"
             android:lines="1"
             android:paddingLeft="3dp"
             android:paddingRight="8dp"
-            android:text="商品数量"
-            android:textSize="16sp" />
+            android:text="领取数量"
+            android:textColor="@color/title"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:id="@+id/ll_com"
@@ -120,7 +145,7 @@
                 android:background="@drawable/cicle_corner_trans_green"
                 android:gravity="center"
                 android:text="一"
-                android:textColor="#CC080606"
+                android:textColor="@color/time_back"
                 android:textSize="18sp" />
 
             <TextView
@@ -133,7 +158,7 @@
                 android:background="@drawable/shape_take_num"
                 android:gravity="center"
                 android:text="1"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_add"
@@ -142,9 +167,8 @@
                 android:background="@drawable/cicle_corner_trans_green"
                 android:gravity="center"
                 android:text="+"
-                android:textColor="#CC080606"
+                android:textColor="@color/time_back"
                 android:textSize="18sp" />
-
 
         </LinearLayout>
 

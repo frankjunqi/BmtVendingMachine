@@ -12,8 +12,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/default_iv_bg" />
+        android:layout_marginBottom="4dp" />
 
 
     <ImageView
@@ -24,8 +23,9 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="4dp"
-        android:src="@mipmap/icon_cart_delete" />
+        android:background="@drawable/selector_btn_shopcart"
+        android:padding="10dp"
+        android:src="@mipmap/delete" />
 
     <LinearLayout
         android:id="@+id/ll_com"
@@ -83,6 +83,7 @@
         android:paddingLeft="3dp"
         android:paddingRight="8dp"
         android:text="商品名称商品名称商品名称商品名称商品名称商品名称"
+        android:textColor="@color/title"
         android:textSize="16sp" />
 
 </RelativeLayout>

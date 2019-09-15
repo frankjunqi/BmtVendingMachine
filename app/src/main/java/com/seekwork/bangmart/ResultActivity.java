@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bangmart.nt.command.Attention;
@@ -15,7 +17,6 @@ import com.bangmart.nt.machine.Machine;
 import com.bangmart.nt.smartwarehouse.pickupcar.ReqOutGoods;
 import com.bangmart.nt.smartwarehouse.pickupcar.RspOutGoods;
 import com.bangmart.nt.sys.ByteBuffer;
-import com.bangmart.nt.sys.Tools;
 import com.bangmart.nt.vendingmachine.constant.BmtMsgConstant;
 import com.google.gson.Gson;
 import com.seekwork.bangmart.network.api.Host;
@@ -24,7 +25,6 @@ import com.seekwork.bangmart.network.api.SrvResult;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarPickRoadDetailResponse;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarPickSuccessRequest;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPick;
-import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPickRoad;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarSuccessGood;
 import com.seekwork.bangmart.network.entity.seekwork.TakeOutProductBean;
 import com.seekwork.bangmart.network.gsonfactory.GsonConverterFactory;
@@ -44,8 +44,6 @@ import retrofit2.Retrofit;
 import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_NOT_TAKEN_AWAY;
 import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_COMPLETE;
 import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_FAILED;
-import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_NO_OPTION;
-import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_RETRY;
 import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_WAIT_TO_GET_AWAY;
 
 /**
@@ -68,17 +66,26 @@ public class ResultActivity extends AppCompatActivity {
     private int currentSellOut = 0;
 
     private List<MBangmarSuccessGood> mBangmarSuccessGoods = new ArrayList<>();
+    private List<MBangmarSuccessGood> mBangmarFailedGoods = new ArrayList<>();
+
+    private LinearLayout ll_outing, ll_success, ll_failed;
+    private TextView tv_success, tv_failed;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         tv_tips_result = findViewById(R.id.tv_tips_result);
+        ll_outing = findViewById(R.id.ll_outing);
+        ll_success = findViewById(R.id.ll_success);
+        ll_failed = findViewById(R.id.ll_failed);
+        tv_success = findViewById(R.id.tv_success);
+        tv_failed = findViewById(R.id.tv_failed);
 
         singleCountDownViewPop = findViewById(R.id.singleCountDownViewPop);
-        singleCountDownViewPop.setTextColor(Color.parseColor("#155398"));
+        singleCountDownViewPop.setTextColor(Color.parseColor("#CC181717"));
         singleCountDownViewPop.setTime(15);
-        singleCountDownViewPop.setTimeColorHex("#155398");
+        singleCountDownViewPop.setTimeColorHex("#CC181717");
         singleCountDownViewPop.setTimeSuffixText("S");
         singleCountDownViewPop.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
@@ -143,7 +150,7 @@ public class ResultActivity extends AppCompatActivity {
             sumWidth = sumWidth + outList.get(i).getWidth();
             if (sumWidth <= SeekerSoftConstant.MACHINE_FACT_WIDTH && oneList.size() <= 3) {
                 oneList.add(outList.get(i));
-                if (oneList.size() == outList.size()) {
+                if (i == outList.size() - 1) {
                     groupList.add(oneList);
 
                     oneList = new ArrayList<>();
@@ -157,7 +164,7 @@ public class ResultActivity extends AppCompatActivity {
                 sumWidth = sumWidth + outList.get(i).getWidth();
                 if (sumWidth <= SeekerSoftConstant.MACHINE_FACT_WIDTH && oneList.size() <= 3) {
                     oneList.add(outList.get(i));
-                    if (oneList.size() == outList.size()) {
+                    if (i == outList.size() - 1) {
                         groupList.add(oneList);
                         oneList = new ArrayList<>();
                         sumWidth = 0;
@@ -166,15 +173,14 @@ public class ResultActivity extends AppCompatActivity {
             }
         }
 
-        String log = "";
+        String log = "\n";
         for (int i = 0; i < groupList.size(); i++) {
-            log = log + groupList.get(i).size();
             int child = groupList.get(i).size();
             for (int k = 0; k < child; k++) {
-                log = log + "--" + groupList.get(i).get(k).getArea() + "-" + groupList.get(i).get(k).getFloor() + "-" + groupList.get(i).get(k).getColumn() + "-" + groupList.get(i).get(k).getWidth();
+                log = log + "--" + i + "--" + groupList.get(i).get(k).getArea() + "-" + groupList.get(i).get(k).getFloor() + "-" + groupList.get(i).get(k).getColumn() + "-" + groupList.get(i).get(k).getWidth() + "\n";
             }
         }
-        appendUILogAsync("GROUP=" + log);
+        appendUILogAsync("GROUPsize=" + groupList.size() + "\n detail = \n" + log);
 
         setllOut();
 
@@ -233,6 +239,10 @@ public class ResultActivity extends AppCompatActivity {
                         log = "第" + attData[1] + "个商品取货失败。";
                         Log.i(TAG, log);
                         appendUILogAsync(log);
+                        MBangmarSuccessGood failedGood = new MBangmarSuccessGood();
+                        failedGood.setRoadID(groupList.get(currentSellOut).get(attData[1]).getRoadID());
+                        failedGood.setPickNum(1);
+                        mBangmarFailedGoods.add(failedGood);
                         int outGoodsFailedIndex = attData[1] & BmtMsgConstant.BYTE_MASK;
                         /*Location retryLocation = onOutGoods.getRetryLocation(outGoodsFailedIndex);
                         if (null == retryLocation) {
@@ -279,6 +289,21 @@ public class ResultActivity extends AppCompatActivity {
 
                     if (currentSellOut == groupList.size() - 1) {
                         appendUILogAsync("分组出货全部完成.");
+
+                        ll_outing.setVisibility(View.GONE);
+
+                        String out = "您已经成功取货" + mBangmarSuccessGoods.size() + "件商品。"
+                                + "取货失败的商品有" + mBangmarFailedGoods.size() + "件商品。";
+                        tv_success.setText(out);
+                        tv_failed.setText(out);
+                        if (mBangmarFailedGoods.size() == 0) {
+                            ll_success.setVisibility(View.VISIBLE);
+                            ll_failed.setVisibility(View.GONE);
+                        } else {
+                            ll_success.setVisibility(View.GONE);
+                            ll_failed.setVisibility(View.VISIBLE);
+                        }
+
                         DoPickSuccess();
                     } else {
                         currentSellOut++;
@@ -301,6 +326,20 @@ public class ResultActivity extends AppCompatActivity {
 
                     if (currentSellOut == groupList.size() - 1) {
                         appendUILogAsync("分组出货全部完成.");
+
+                        ll_outing.setVisibility(View.GONE);
+                        String out = "您已经成功取货" + mBangmarSuccessGoods.size() + "件商品。"
+                                + "取货失败的商品有" + mBangmarFailedGoods.size() + "件商品。";
+                        tv_success.setText(out);
+                        tv_failed.setText(out);
+                        if (mBangmarFailedGoods.size() == 0) {
+                            ll_success.setVisibility(View.VISIBLE);
+                            ll_failed.setVisibility(View.GONE);
+                        } else {
+                            ll_success.setVisibility(View.GONE);
+                            ll_failed.setVisibility(View.VISIBLE);
+                        }
+
                         DoPickSuccess();
                     } else {
                         currentSellOut++;
@@ -316,50 +355,6 @@ public class ResultActivity extends AppCompatActivity {
          */
         machine.executeCommand(cmd);
         /********************************end: 出货（0x04）(异步)********************************/
-    }
-
-    private void appendSelloutToTaskList(Command cmd, String desc) {
-        cmd.setDesc(desc);
-        cmd.setOnReplyListener(new ICallbackListener() {
-            @Override
-            public boolean callback(Command cmd) {
-                Attention attention = cmd.getLastAttentionData();
-                //出货失败，需要补发一条命令。
-                byte[] attData = attention.getData();
-                switch (attData[0]) {
-                    case ATT_SELLOUT_NOT_TAKEN_AWAY:
-                        appendUILogAsync("上个用户没有把货取走，请先取走商品再继续出货");
-                        break;
-                    case ATT_SELLOUT_PICK_UP_COMPLETE:
-                        appendUILogAsync("当前商品取货成功");
-                        break;
-                    case ATT_SELLOUT_PICK_UP_FAILED:
-                        appendUILogAsync("第" + attData[1] + "个商品取货失败。");
-                        //String nextLocation = TestSellOut.getNextLocation();
-                        String nextLocation = null;
-                        ByteBuffer bb = new ByteBuffer(5);
-
-                        if (nextLocation == null) {
-                            bb.append(ATT_SELLOUT_PICK_UP_NO_OPTION);
-                            byte[] attCode = cmd.sendAttention(bb.copy());
-                            appendUILogAsync("没有其他的货道可以出货了。取下一个或结束: " + Tools.bytesToHexString(attCode));
-                            // TODO 發送取貨數據
-                            DoPickSuccess();
-                        } else {
-                            bb.append(ATT_SELLOUT_PICK_UP_RETRY).append(attData[1]).append(nextLocation);
-                            byte[] attCode = cmd.sendAttention(bb.copy());
-                            appendUILogAsync("重试: " + Tools.bytesToHexString(attCode));
-                        }
-                        break;
-                    case ATT_SELLOUT_WAIT_TO_GET_AWAY:
-                        appendUILogAsync("取货口已打开，等待用户取走。");
-                        break;
-                    default:
-                }
-                return true;
-            }
-        });
-        machine.executeCommand(cmd);
     }
 
     public void appendUILogAsync(final String msg) {

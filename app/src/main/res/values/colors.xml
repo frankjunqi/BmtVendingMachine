@@ -13,6 +13,13 @@
 
     <color name="title">#CC080606</color>
     <color name="desc">#CC181717</color>
+    <color name="sku">#CC797777</color>
+
+    <color name="pop_desc">#CC2E2C2C</color>
+    <color name="pop_detail_bg">#ECEAEA</color>
+
+
+
     <color name="un_title">#ccb4b1b1</color>
 
     <color name="btn_take_un_enable">#3368A2</color>
@@ -25,6 +32,7 @@
     <color name="main_page_meun">#CC131212</color>
 
     <color name="main_color">#155398</color>
+    <color name="main_press_color">#3368A2</color>
     <color name="time_back">#3A3939</color>
 
 </resources>
