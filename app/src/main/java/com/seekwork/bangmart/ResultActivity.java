@@ -45,6 +45,7 @@ import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_NOT_TAKEN_AWAY;
 import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_COMPLETE;
 import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_PICK_UP_FAILED;
 import static com.bangmart.nt.command.CommandDef.ATT_SELLOUT_WAIT_TO_GET_AWAY;
+import static com.seekwork.bangmart.util.SeekerSoftConstant.SHOPCART_LIST_TIME;
 
 /**
  * 出货结果页面处理
@@ -94,7 +95,7 @@ public class ResultActivity extends AppCompatActivity {
 
         singleCountDownViewPop = findViewById(R.id.singleCountDownViewPop);
         singleCountDownViewPop.setTextColor(Color.parseColor("#CC181717"));
-        singleCountDownViewPop.setTime(15);
+        singleCountDownViewPop.setTime(SHOPCART_LIST_TIME);
         singleCountDownViewPop.setTimeColorHex("#CC181717");
         singleCountDownViewPop.setTimeSuffixText("S");
         singleCountDownViewPop.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {

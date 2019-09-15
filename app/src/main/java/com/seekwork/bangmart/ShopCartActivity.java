@@ -49,6 +49,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.seekwork.bangmart.util.SeekerSoftConstant.INIT_PRO_LIST_TIME;
+
 /**
  * 购物车页面
  */
@@ -108,7 +110,7 @@ public class ShopCartActivity extends AppCompatActivity {
         // 单个倒计时使用
         singleCountDownView = findViewById(R.id.singleCountDownView);
         singleCountDownView.setTextColor(Color.parseColor("#CC181717"));
-        singleCountDownView.setTime(60).setTimeColorHex("#CC181717").setTimeSuffixText("S");
+        singleCountDownView.setTime(INIT_PRO_LIST_TIME).setTimeColorHex("#CC181717").setTimeSuffixText("S");
 
         // 单个倒计时结束事件监听
         singleCountDownView.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
