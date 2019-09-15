@@ -7,9 +7,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -99,9 +101,11 @@ public class ProList2Activity extends AppCompatActivity {
         detailDialog = new MaterialDialog.Builder(this).customView(customView, false).build();
         WindowManager.LayoutParams wl = detailDialog.getWindow().getAttributes();
         wl.width = Variable.WIDTH - 160;
-        wl.height = Variable.WIDTH - 80;
+        wl.height = Variable.WIDTH - 160;
+        wl.gravity = Gravity.CENTER;//设置dialog 在布局中的位置
         detailDialog.getWindow().setAttributes(wl);
         detailDialog.setCancelable(false);
+
 
         tv_sure.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,8 +149,6 @@ public class ProList2Activity extends AppCompatActivity {
                     bundle.putSerializable(SeekerSoftConstant.ADDCARTLIST, AddToBangmartRoadList);
                     intent.putExtras(bundle);
                     startActivity(intent);
-                    AddToBangmartRoadList.clear();
-                    ProList2Activity.this.finish();
                 }
             }
         });

@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -140,6 +142,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         promissionDialog = new MaterialDialog.Builder(this).customView(customView, false).build();
+
+
+        WindowManager.LayoutParams wl = promissionDialog.getWindow().getAttributes();
+        wl.gravity = Gravity.CENTER;//设置dialog 在布局中的位置
+        promissionDialog.getWindow().setAttributes(wl);
+
         promissionDialog.setCancelable(false);
         registerMachine(true);
     }

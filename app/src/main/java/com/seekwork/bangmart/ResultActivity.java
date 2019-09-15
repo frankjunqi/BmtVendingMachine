@@ -71,6 +71,8 @@ public class ResultActivity extends AppCompatActivity {
     private LinearLayout ll_outing, ll_success, ll_failed;
     private TextView tv_success, tv_failed;
 
+    private LinearLayout ll_back;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +83,14 @@ public class ResultActivity extends AppCompatActivity {
         ll_failed = findViewById(R.id.ll_failed);
         tv_success = findViewById(R.id.tv_success);
         tv_failed = findViewById(R.id.tv_failed);
+        ll_back = findViewById(R.id.ll_back);
+
+        ll_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ResultActivity.this.finish();
+            }
+        });
 
         singleCountDownViewPop = findViewById(R.id.singleCountDownViewPop);
         singleCountDownViewPop.setTextColor(Color.parseColor("#CC181717"));
@@ -290,19 +300,24 @@ public class ResultActivity extends AppCompatActivity {
                     if (currentSellOut == groupList.size() - 1) {
                         appendUILogAsync("分组出货全部完成.");
 
-                        ll_outing.setVisibility(View.GONE);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ll_outing.setVisibility(View.GONE);
 
-                        String out = "您已经成功取货" + mBangmarSuccessGoods.size() + "件商品。"
-                                + "取货失败的商品有" + mBangmarFailedGoods.size() + "件商品。";
-                        tv_success.setText(out);
-                        tv_failed.setText(out);
-                        if (mBangmarFailedGoods.size() == 0) {
-                            ll_success.setVisibility(View.VISIBLE);
-                            ll_failed.setVisibility(View.GONE);
-                        } else {
-                            ll_success.setVisibility(View.GONE);
-                            ll_failed.setVisibility(View.VISIBLE);
-                        }
+                                String out = "您已经成功取货" + mBangmarSuccessGoods.size() + "件商品。"
+                                        + "取货失败的商品有" + mBangmarFailedGoods.size() + "件商品。";
+                                tv_success.setText(out);
+                                tv_failed.setText(out);
+                                if (mBangmarFailedGoods.size() == 0) {
+                                    ll_success.setVisibility(View.VISIBLE);
+                                    ll_failed.setVisibility(View.GONE);
+                                } else {
+                                    ll_success.setVisibility(View.GONE);
+                                    ll_failed.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        });
 
                         DoPickSuccess();
                     } else {
@@ -327,18 +342,23 @@ public class ResultActivity extends AppCompatActivity {
                     if (currentSellOut == groupList.size() - 1) {
                         appendUILogAsync("分组出货全部完成.");
 
-                        ll_outing.setVisibility(View.GONE);
-                        String out = "您已经成功取货" + mBangmarSuccessGoods.size() + "件商品。"
-                                + "取货失败的商品有" + mBangmarFailedGoods.size() + "件商品。";
-                        tv_success.setText(out);
-                        tv_failed.setText(out);
-                        if (mBangmarFailedGoods.size() == 0) {
-                            ll_success.setVisibility(View.VISIBLE);
-                            ll_failed.setVisibility(View.GONE);
-                        } else {
-                            ll_success.setVisibility(View.GONE);
-                            ll_failed.setVisibility(View.VISIBLE);
-                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ll_outing.setVisibility(View.GONE);
+                                String out = "您已经成功取货" + mBangmarSuccessGoods.size() + "件商品。"
+                                        + "取货失败的商品有" + mBangmarFailedGoods.size() + "件商品。";
+                                tv_success.setText(out);
+                                tv_failed.setText(out);
+                                if (mBangmarFailedGoods.size() == 0) {
+                                    ll_success.setVisibility(View.VISIBLE);
+                                    ll_failed.setVisibility(View.GONE);
+                                } else {
+                                    ll_success.setVisibility(View.GONE);
+                                    ll_failed.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        });
 
                         DoPickSuccess();
                     } else {

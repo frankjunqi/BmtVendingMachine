@@ -23,7 +23,7 @@
             <ImageView
                 android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@mipmap/icon_back" />
 
             <com.seekwork.bangmart.view.SingleCountDownView
@@ -50,6 +50,7 @@
         android:id="@+id/ll_outing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -78,6 +79,7 @@
         android:id="@+id/ll_success"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -96,17 +98,20 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="24dp"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="24dp"
             android:gravity="center_horizontal"
             android:text="出货成功."
             android:textColor="@color/title"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_failed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -126,18 +131,21 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="24dp"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="24dp"
             android:gravity="center_horizontal"
             android:text="出货失败."
             android:textColor="@color/title"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_tips_result"

@@ -9,8 +9,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -53,7 +55,7 @@ import retrofit2.Retrofit;
 public class ShopCartActivity extends AppCompatActivity {
 
     private SingleCountDownView singleCountDownView;
-    private ImageView iv_back;
+    private LinearLayout ll_back;
     private ListView lv_data;
     private ArrayList<MBangmartRoad> AddToBangmartRoadList;
     private ShopCartAdapter shopCartAdapter;
@@ -80,9 +82,9 @@ public class ShopCartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shop);
         lv_data = findViewById(R.id.lv_data);
         btn_sure = findViewById(R.id.btn_sure);
-        iv_back = findViewById(R.id.iv_back);
+        ll_back = findViewById(R.id.ll_back);
 
-        iv_back.setOnClickListener(new View.OnClickListener() {
+        ll_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ShopCartActivity.this.finish();
@@ -209,6 +211,7 @@ public class ShopCartActivity extends AppCompatActivity {
         WindowManager.LayoutParams wlp = promissionDialog.getWindow().getAttributes();
         wlp.width = widthPixels - 88;
         wlp.height = heightPixels / 4 * 3;
+        wlp.gravity = Gravity.CENTER;//设置dialog 在布局中的位置
         promissionDialog.getWindow().setAttributes(wlp);
         promissionDialog.setCancelable(false);
 

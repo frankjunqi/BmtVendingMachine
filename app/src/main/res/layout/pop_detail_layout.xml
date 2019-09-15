@@ -59,42 +59,10 @@
         android:src="@mipmap/close" />
 
     <RelativeLayout
-        android:id="@+id/rl_middle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rl_top"
-        android:background="@color/pop_detail_bg">
-
-        <TextView
-            android:id="@+id/tv_de"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text="------------商品详情------------"
-            android:textColor="@color/title"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_de"
-            android:paddingLeft="24dp"
-            android:paddingTop="18dp"
-            android:paddingRight="12dp"
-            android:paddingBottom="26dp"
-            android:text="产品名称：得力圆珠笔1盒36支"
-            android:textColor="@color/pop_desc"
-            android:textSize="15sp" />
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
+        android:id="@+id/rl_end"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_below="@id/rl_middle"
+        android:layout_alignParentBottom="true"
         android:background="@color/pop_detail_bg">
 
         <TextView
@@ -135,6 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/tv_name"
+            android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -153,8 +122,8 @@
                 android:layout_width="40dp"
                 android:layout_height="26dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
                 android:background="@drawable/shape_take_num"
                 android:gravity="center"
                 android:text="1"
@@ -175,5 +144,37 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_middle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/rl_end"
+        android:layout_below="@id/rl_top"
+        android:background="@color/pop_detail_bg">
+
+        <TextView
+            android:id="@+id/tv_de"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="------------商品详情------------"
+            android:textColor="@color/title"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_de"
+            android:paddingLeft="24dp"
+            android:paddingTop="18dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="26dp"
+            android:text="产品名称：得力圆珠笔1盒36支"
+            android:textColor="@color/pop_desc"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
