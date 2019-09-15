@@ -29,13 +29,17 @@ import com.bangmart.nt.vendingmachine.model.RspGetDeviceParameter;
 import com.bangmart.nt.vendingmachine.model.RspGetLocationCoordinateData;
 import com.seekwork.bangmart.model.SerialLocationBean;
 import com.seekwork.bangmart.util.BmtVendingMachineUtil;
+import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
 import com.seekwork.bangmart.view.SingleCountDownView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.bangmart.nt.command.CommandDef.ID_GET_LOCATION_DATA;
+import static com.seekwork.bangmart.util.SeekerSoftConstant.INIT_SYS_TIME;
 
 public class InitActivity extends AppCompatActivity {
 
@@ -60,8 +64,8 @@ public class InitActivity extends AppCompatActivity {
 
         // 单个倒计时使用
         singleCountDownView = findViewById(R.id.singleCountDownView);
-        singleCountDownView.setTextColor(Color.parseColor("#ff000000"));
-        singleCountDownView.setTime(2).setTimeColorHex("#ff000000").setTimeSuffixText("s");
+        singleCountDownView.setTextColor(Color.parseColor("#CC181717"));
+        singleCountDownView.setTime(INIT_SYS_TIME).setTimeColorHex("#CC181717").setTimeSuffixText("S").setTimePrefixText("倒计时");
         // 单个倒计时结束事件监听
         singleCountDownView.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
@@ -80,8 +84,9 @@ public class InitActivity extends AppCompatActivity {
                     Intent intent = new Intent(InitActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
-                    //singleCountDownView.setTime(180);
-                    //singleCountDownView.startCountDown();
+                    singleCountDownView.setTime(INIT_SYS_TIME);
+                    singleCountDownView.startCountDown();
+                    // TODO 测试入口代码，需delete
                     InitActivity.this.finish();
                     Intent intent = new Intent(InitActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -117,6 +122,7 @@ public class InitActivity extends AppCompatActivity {
 
                 // 串口打开成功后，开始初始化机器
                 initDevMachine();
+
             }
 
             @Override
@@ -334,6 +340,20 @@ public class InitActivity extends AppCompatActivity {
                             } else {
                                 appendUILogAsync("解析货道坐标返回数据为空。");
                             }
+
+                            for (int i = 0; i < SeekerSoftConstant.list.size(); i++) {
+                                int floor = SeekerSoftConstant.list.get(i).size();
+                                for (int k = 0; k < floor; k++) {
+                                    int column = SeekerSoftConstant.list.get(i).get(k).size();
+                                    for (int l = 0; l < column; l++) {
+                                        LogCat.e("area = " + SeekerSoftConstant.list.get(i).get(k).get(l).getAreaValue() +
+                                                "floor = " + SeekerSoftConstant.list.get(i).get(k).get(l).getFloorValue() +
+                                                "column = " + SeekerSoftConstant.list.get(i).get(k).get(l).getLocationValue() +
+                                                "width = " + SeekerSoftConstant.list.get(i).get(k).get(l).getWidth());
+                                    }
+                                }
+                            }
+
                         }
                     } else {
                         appendUILogAsync("查询货道坐标列表（0x24）(异步) 命令执行 返回数据失败。");
@@ -393,58 +413,57 @@ public class InitActivity extends AppCompatActivity {
         machine.executeCommand(cmd);
     }
 
+    public static void fenZu(List<SerialLocationBean> list, List<List<SerialLocationBean>> fenzuList) {//map是用来接收分好的组的
+        if (null == list || null == fenzuList) {
+            return;
+        }
+        Map<String, List<SerialLocationBean>> map = new HashMap<>();
+        String key;
+        List<SerialLocationBean> listTmp;
+        for (SerialLocationBean val : list) {
+            key = String.valueOf(val.getFloor());//按这个属性分组，map的Key
+            listTmp = map.get(key);
+            if (null == listTmp) {
+                listTmp = new ArrayList<SerialLocationBean>();
+                map.put(key, listTmp);
+            }
+            listTmp.add(val);
+        }
+
+        for (Map.Entry<String, List<SerialLocationBean>> entry : map.entrySet()) {
+            fenzuList.add(entry.getValue());
+        }
+
+    }
 
     private List<List<List<SerialLocationBean>>> handleLocationList(RspGetLocationCoordinateData rspData) {
-        List<List<List<SerialLocationBean>>> allList = new ArrayList<>();
-
-        int var2 = rspData.getLocationCountValue();
-        if (var2 != 0) {
-            var2 = 0;
-            int var3 = 0;
-            int var4 = 0;
-            int var5 = rspData.getLocationCoordinates().size();
-
-            // 创建第一个货柜
-            List<List<SerialLocationBean>> arealist = new ArrayList<>();
-            allList.add(arealist);
-            // 创建第一个货柜 第一行货道
+        List<List<SerialLocationBean>> arealist = new ArrayList<>();
+        int allSize = rspData.getLocationCountValue();
+        List<LocationCoordinate> allLocatinList = rspData.getLocationCoordinates();
+        for (int i = 0; i < SeekerSoftConstant.AREA_COUNT; i++) {
             List<SerialLocationBean> floorList = new ArrayList<>();
             arealist.add(floorList);
-
-            for (int var6 = 0; var6 < var5; ++var6) {
-                LocationCoordinate var7 = (LocationCoordinate) rspData.getLocationCoordinates().get(var6);
-                byte var8;
-                if (var2 == var7.getAreaValue()) {
-                    if (var3 == var7.getFloorValue()) {
-                        ++var4;
-                    } else {
-                        List<SerialLocationBean> floorInList = new ArrayList<>();
-                        arealist.add(floorList);
-                        allList.get(var2).add(floorInList);
-                        var8 = 0;
-                        var4 = var8 + 1;
-                    }
-                } else {
-                    var8 = 0;
-                    var4 = var8 + 1;
-                    List<List<SerialLocationBean>> areaInlist = new ArrayList<>();
-                    allList.add(areaInlist);
-                }
-                SerialLocationBean serialLocationBean = new SerialLocationBean();
-                serialLocationBean.setArea(var7.getArea());
-                serialLocationBean.setFloor(var7.getFloor());
-                serialLocationBean.setLocation(var7.getLocation());
-                serialLocationBean.setPosX(var7.getPosX());
-                serialLocationBean.setPosY(var7.getPosY());
-                allList.get(var2).get(var3).add(serialLocationBean);
-
-                var2 = var7.getAreaValue();
-                var3 = var7.getFloorValue();
-                if (var6 == var5 - 1) {
-                    var4 = 0;
+            for (int k = 0; k < allSize; k++) {
+                if (allLocatinList.get(k).getArea() == i) {
+                    SerialLocationBean serialLocationBean = new SerialLocationBean();
+                    serialLocationBean.setArea(allLocatinList.get(k).getArea());
+                    serialLocationBean.setFloor(allLocatinList.get(k).getFloor());
+                    serialLocationBean.setLocation(allLocatinList.get(k).getLocation());
+                    serialLocationBean.setPosX(allLocatinList.get(k).getPosX());
+                    serialLocationBean.setPosY(allLocatinList.get(k).getPosY());
+                    floorList.add(serialLocationBean);
                 }
             }
         }
+
+        List<List<List<SerialLocationBean>>> allList = new ArrayList<>();
+
+        for (int i = 0; i < arealist.size(); i++) {
+            List<List<SerialLocationBean>> templist = new ArrayList<>();
+            fenZu(arealist.get(i), templist);
+            allList.add(templist);
+        }
+
         return allList;
     }
 

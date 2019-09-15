@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout ll_naobao, ll_wujin, ll_wenju, ll_riyong, ll_yinliao, ll_shipin;
 
     private TextView tv_error;
-    private TextView tv_mac_error;
 
     private MaterialDialog promissionDialog;
     private ProgressBar pb_loadingdata;
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onTick(long millisUntilFinished) {
             if (btn_try != null) {
-                btn_try.setText((millisUntilFinished / 1000) + "秒后重试");
+                btn_try.setText((millisUntilFinished / 1000) + "秒后自动重试");
             }
         }
 
@@ -130,8 +128,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View customView = inflater.inflate(R.layout.pop_auth_layout, null);
         pb_loadingdata = customView.findViewById(R.id.pb_loadingdata);
         tv_error = customView.findViewById(R.id.tv_error);
-        tv_mac_error = customView.findViewById(R.id.tv_mac_error);
-        tv_mac_error.setMovementMethod(ScrollingMovementMethod.getInstance());
 
         TextView tv_machine = customView.findViewById(R.id.tv_machine);
         tv_machine.setText("设备号：" + SeekerSoftConstant.DEVICEID);
@@ -241,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             error = "读卡器串口打开失败。\n";
         }
 
+        // TODO 演示不校验读卡器
         error = "";
 
         if (!TextUtils.isEmpty(error) || !isOk) {

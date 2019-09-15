@@ -63,6 +63,7 @@ public class GridAdapter extends BaseAdapter {
             holder.iv_pic = (ImageView) view.findViewById(R.id.iv_pic);
             holder.iv_add_to_cart = (ImageView) view.findViewById(R.id.iv_add_to_cart);
             holder.tv_name = (TextView) view.findViewById(R.id.tv_name);
+            holder.tv_sku = view.findViewById(R.id.tv_sku);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -70,6 +71,8 @@ public class GridAdapter extends BaseAdapter {
 
         // set product name
         holder.tv_name.setText(mBangmartRoads.get(i).getProductName());
+
+        holder.tv_sku.setText(mBangmartRoads.get(i).getSKU());
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.iv_pic.getLayoutParams();
 
@@ -107,5 +110,6 @@ public class GridAdapter extends BaseAdapter {
         public TextView tv_name;
         public ImageView iv_pic;
         public ImageView iv_add_to_cart;
+        public TextView tv_sku;
     }
 }

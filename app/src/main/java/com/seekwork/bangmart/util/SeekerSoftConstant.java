@@ -43,6 +43,9 @@ public class SeekerSoftConstant {
     // 货柜的整体高度
     public static int BOX_HEIGHT = 0;
 
+    // 初始化系统的时间
+    public static int INIT_SYS_TIME = 2;
+
     // 正式包变成false
     public static final boolean DEBUG = true;
     // 设备号

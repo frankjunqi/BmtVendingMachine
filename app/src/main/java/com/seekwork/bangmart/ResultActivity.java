@@ -112,10 +112,17 @@ public class ResultActivity extends AppCompatActivity {
                     road.setColumn(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn());
                     road.setProductID(productID);
                     // TODO 本地货道扫描数据
-                    road.setWidth(SeekerSoftConstant.list.get(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getArea())
-                            .get(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getFloor())
-                            .get(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn()).getWidth()
-                    );
+                    try {
+                        LogCat.e("area=" + mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getArea());
+                        LogCat.e("floor=" + mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getFloor());
+                        LogCat.e("column=" + mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn());
+                        road.setWidth(SeekerSoftConstant.list.get(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getArea())
+                                .get(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getFloor())
+                                .get(mBangmarProcPicks.get(i).getmBangmarProcPickRoads().get(k).getColumn()).getWidth()
+                        );
+                    } catch (Exception e) {
+                        road.setWidth(140);
+                    }
                     outList.add(road);
                 }
             }
@@ -123,23 +130,51 @@ public class ResultActivity extends AppCompatActivity {
         machine = BmtVendingMachineUtil.getInstance().getMachine();
 
 
+        String logY = "";
+        for (int i = 0; i < outList.size(); i++) {
+            logY = logY + "--" + outList.get(i).getArea() + "-" + outList.get(i).getFloor() + "-"
+                    + outList.get(i).getColumn() + "-" + outList.get(i).getWidth();
+        }
+        appendUILogAsync("LOGY=" + logY);
+
         int sumWidth = 0;
         ArrayList<TakeOutProductBean> oneList = new ArrayList<>();
         for (int i = 0; i < outList.size(); i++) {
             sumWidth = sumWidth + outList.get(i).getWidth();
             if (sumWidth <= SeekerSoftConstant.MACHINE_FACT_WIDTH && oneList.size() <= 3) {
                 oneList.add(outList.get(i));
+                if (oneList.size() == outList.size()) {
+                    groupList.add(oneList);
+
+                    oneList = new ArrayList<>();
+                    sumWidth = 0;
+                }
             } else {
-                groupList.add((ArrayList<TakeOutProductBean>) oneList.clone());
+                groupList.add(oneList);
 
                 oneList = new ArrayList<>();
                 sumWidth = 0;
                 sumWidth = sumWidth + outList.get(i).getWidth();
-                if (sumWidth <= SeekerSoftConstant.MACHINE_FACT_WIDTH) {
+                if (sumWidth <= SeekerSoftConstant.MACHINE_FACT_WIDTH && oneList.size() <= 3) {
                     oneList.add(outList.get(i));
+                    if (oneList.size() == outList.size()) {
+                        groupList.add(oneList);
+                        oneList = new ArrayList<>();
+                        sumWidth = 0;
+                    }
                 }
             }
         }
+
+        String log = "";
+        for (int i = 0; i < groupList.size(); i++) {
+            log = log + groupList.get(i).size();
+            int child = groupList.get(i).size();
+            for (int k = 0; k < child; k++) {
+                log = log + "--" + groupList.get(i).get(k).getArea() + "-" + groupList.get(i).get(k).getFloor() + "-" + groupList.get(i).get(k).getColumn() + "-" + groupList.get(i).get(k).getWidth();
+            }
+        }
+        appendUILogAsync("GROUP=" + log);
 
         setllOut();
 
@@ -197,6 +232,7 @@ public class ResultActivity extends AppCompatActivity {
                         ByteBuffer bb = new ByteBuffer(5);
                         log = "第" + attData[1] + "个商品取货失败。";
                         Log.i(TAG, log);
+                        appendUILogAsync(log);
                         int outGoodsFailedIndex = attData[1] & BmtMsgConstant.BYTE_MASK;
                         /*Location retryLocation = onOutGoods.getRetryLocation(outGoodsFailedIndex);
                         if (null == retryLocation) {
@@ -221,7 +257,6 @@ public class ResultActivity extends AppCompatActivity {
                                 Log.i(TAG, log);
                             }
                         }*/
-                        appendUILogAsync(log);
                         break;
                     case ATT_SELLOUT_WAIT_TO_GET_AWAY:
                         log = "取货口已打开，等待用户取走。";
@@ -263,6 +298,15 @@ public class ResultActivity extends AppCompatActivity {
                     //TODO 根据出货结果,进行其它业务处理
                     String log = "error = " + rspOutGoods.getFailedCountValue() + rspOutGoods.getEnErrorCodeDesc();
                     appendUILogAsync(log);
+
+                    if (currentSellOut == groupList.size() - 1) {
+                        appendUILogAsync("分组出货全部完成.");
+                        DoPickSuccess();
+                    } else {
+                        currentSellOut++;
+                        setllOut();
+                    }
+
                 }
                 return true;
             }

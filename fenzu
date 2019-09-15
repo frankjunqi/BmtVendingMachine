@@ -1,0 +1,82 @@
+09-14 17:49:24.297 32454-32514/com.seekwork.bangmart E/url: 货道数[66]
+    (area,floor,location,x,y)
+    区[0]
+    (0,0,0,0,1127) (0,0,1,311,1127) (0,0,2,629,1127) 本层货道数[3]
+    (0,1,0,0,772) (0,1,1,303,772) (0,1,2,621,772) 本层货道数[3]
+    (0,2,0,0,536) (0,2,1,185,536) (0,2,2,374,536) (0,2,3,563,536) (0,2,4,751,536) 本层货道数[5]
+    (0,3,0,0,300) (0,3,1,247,300) (0,3,2,495,300) (0,3,3,744,300) 本层货道数[4]
+    (0,4,0,0,65) (0,4,1,260,65) (0,4,2,507,65) (0,4,3,735,65) 本层货道数[4]
+
+    区[1]
+    (1,0,0,1082,1147) (1,0,1,1270,1147) (1,0,2,1456,1147) (1,0,3,1636,1147) (1,0,4,1715,1147) (1,0,5,1795,1147) (1,0,6,1874,1147) (1,0,7,1954,1147) 本层货道数[8]
+    (1,1,0,1081,969) (1,1,1,1271,969) (1,1,2,1459,969) (1,1,3,1649,969) (1,1,4,1728,969) (1,1,5,1809,969) (1,1,6,1890,969) (1,1,7,1970,969) 本层货道数[8]
+    (1,2,0,1083,792) (1,2,1,1272,792) (1,2,2,1459,792) (1,2,3,1649,792) (1,2,4,1728,792) (1,2,5,1808,792) (1,2,6,1888,792) (1,2,7,1968,792) 本层货道数[8]
+    (1,3,0,1085,595) (1,3,1,1274,595) (1,3,2,1462,595) (1,3,3,1652,595) (1,3,4,1732,595) (1,3,5,1812,595) (1,3,6,1892,595) 本层货道数[7]
+    (1,4,0,1087,339) (1,4,1,1236,339) (1,4,2,1325,339) (1,4,3,1414,339) (1,4,4,1504,339) (1,4,5,1594,339) (1,4,6,1692,339) (1,4,7,1862,339) 本层货道数[8]
+    (1,5,0,1090,64) (1,5,1,1277,64) (1,5,2,1466,64) (1,5,3,1655,64) (1,5,4,1734,64) (1,5,5,1814,64) (1,5,6,1893,64) (1,5,7,1974,64) 本层货道数[8]
+09-14 17:49:24.308 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 4column = 0width = 260
+09-14 17:49:24.308 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 4column = 1width = 247
+09-14 17:49:24.308 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 4column = 2width = 228
+09-14 17:49:24.308 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 4column = 3width = 225
+09-14 17:49:24.308 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 0column = 0width = 311
+09-14 17:49:24.308 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 0column = 1width = 318
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 0column = 2width = 331
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 1column = 0width = 303
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 1column = 1width = 318
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 1column = 2width = 339
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 3column = 0width = 247
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 3column = 1width = 248
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 3column = 2width = 249
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 3column = 3width = 216
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 2column = 0width = 185
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 2column = 1width = 189
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 2column = 2width = 189
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 2column = 3width = 188
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 0floor = 2column = 4width = 209
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 5column = 0width = 187
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 5column = 1width = 189
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 5column = 2width = 189
+09-14 17:49:24.309 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 5column = 3width = 79
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 5column = 4width = 80
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 5column = 5width = 79
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 5column = 6width = 81
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 5column = 7width = 152
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 4column = 0width = 149
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 4column = 1width = 89
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 4column = 2width = 89
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 4column = 3width = 90
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 4column = 4width = 90
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 4column = 5width = 98
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 4column = 6width = 170
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 4column = 7width = 264
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 0column = 0width = 188
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 0column = 1width = 186
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 0column = 2width = 180
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 0column = 3width = 79
+09-14 17:49:24.310 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 0column = 4width = 80
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 0column = 5width = 79
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 0column = 6width = 80
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 0column = 7width = 172
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 1column = 0width = 190
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 1column = 1width = 188
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 1column = 2width = 190
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 1column = 3width = 79
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 1column = 4width = 81
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 1column = 5width = 81
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 1column = 6width = 80
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 1column = 7width = 156
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 3column = 0width = 189
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 3column = 1width = 188
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 3column = 2width = 190
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 3column = 3width = 80
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 3column = 4width = 80
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 3column = 5width = 80
+09-14 17:49:24.311 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 3column = 6width = 234
+09-14 17:49:24.312 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 2column = 0width = 189
+09-14 17:49:24.312 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 2column = 1width = 187
+09-14 17:49:24.312 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 2column = 2width = 190
+09-14 17:49:24.312 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 2column = 3width = 79
+09-14 17:49:24.312 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 2column = 4width = 80
+09-14 17:49:24.312 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 2column = 5width = 80
+09-14 17:49:24.312 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 2column = 6width = 80
+09-14 17:49:24.312 32454-32514/com.seekwork.bangmart E/Tag,: area = 1floor = 2column = 7width = 158

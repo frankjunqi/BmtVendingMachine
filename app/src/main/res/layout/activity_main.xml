@@ -43,7 +43,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_sbs_channel_bg"
+            android:background="@drawable/selector_btn_meun"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -55,7 +55,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="劳保" />
+                android:layout_marginTop="@dimen/main_page_top"
+                android:text="劳保"
+                android:textColor="@color/main_page_meun"
+                android:textSize="@dimen/main_page_meun" />
         </LinearLayout>
 
         <LinearLayout
@@ -65,7 +68,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_sbs_channel_bg"
+            android:background="@drawable/selector_btn_meun"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -77,7 +80,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="五金" />
+                android:layout_marginTop="@dimen/main_page_top"
+                android:text="五金"
+                android:textColor="@color/main_page_meun"
+                android:textSize="@dimen/main_page_meun" />
         </LinearLayout>
 
         <LinearLayout
@@ -87,7 +93,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_sbs_channel_bg"
+            android:background="@drawable/selector_btn_meun"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -99,7 +105,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="文具" />
+                android:layout_marginTop="@dimen/main_page_top"
+                android:text="文具"
+                android:textColor="@color/main_page_meun"
+                android:textSize="@dimen/main_page_meun" />
         </LinearLayout>
 
     </LinearLayout>
@@ -120,7 +129,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_sbs_channel_bg"
+            android:background="@drawable/selector_btn_meun"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -132,7 +141,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="日用" />
+                android:layout_marginTop="@dimen/main_page_top"
+                android:text="日用"
+                android:textColor="@color/main_page_meun"
+                android:textSize="@dimen/main_page_meun" />
         </LinearLayout>
 
         <LinearLayout
@@ -142,7 +154,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_sbs_channel_bg"
+            android:background="@drawable/selector_btn_meun"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -154,7 +166,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="饮料" />
+                android:layout_marginTop="@dimen/main_page_top"
+                android:text="饮料"
+                android:textColor="@color/main_page_meun"
+                android:textSize="@dimen/main_page_meun" />
         </LinearLayout>
 
 
@@ -165,7 +180,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_sbs_channel_bg"
+            android:background="@drawable/selector_btn_meun"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -177,7 +192,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="食品" />
+                android:layout_marginTop="@dimen/main_page_top"
+                android:text="食品"
+                android:textColor="@color/main_page_meun"
+                android:textSize="@dimen/main_page_meun" />
         </LinearLayout>
 
     </LinearLayout>

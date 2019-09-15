@@ -12,15 +12,17 @@
     <color name="bg_or">#FFF5A623</color>
 
     <color name="title">#CC080606</color>
+    <color name="desc">#CC181717</color>
     <color name="un_title">#ccb4b1b1</color>
 
-    <color name="btn_take_un_enable">#A2E47A</color>
-    <color name="btn_take_un_press">#5abc20</color>
-    <color name="btn_take_press">#43AF04</color>
+    <color name="btn_take_un_enable">#3368A2</color>
+    <color name="btn_take_un_press">#1B569B</color>
+    <color name="btn_take_press">#155398</color>
 
     <color name="action_bg">#FFFFFF</color>
     <color name="seletotr_bg">#DDD9D9</color>
 
+    <color name="main_page_meun">#CC131212</color>
 
     <color name="main_color">#155398</color>
     <color name="time_back">#3A3939</color>
