@@ -44,7 +44,7 @@ public class SeekerSoftConstant {
     public static int BOX_HEIGHT = 0;
 
     // 初始化系统的时间
-    public static int INIT_SYS_TIME = 180;
+    public static int INIT_SYS_TIME = 18;
     // 商品列表页面到技术倒计时
     public static int INIT_PRO_LIST_TIME = 100;
     // 购物车页面的倒计时

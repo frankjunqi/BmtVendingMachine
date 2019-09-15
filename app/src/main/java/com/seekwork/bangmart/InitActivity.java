@@ -363,6 +363,9 @@ public class InitActivity extends AppCompatActivity {
                 } else {
                     appendUILogAsync("查询货道坐标列表（0x24）(异步) 命令执行 失败。 ");
                 }
+
+                btn_ok.setEnabled(true);
+
                 return true;
             }
         });
