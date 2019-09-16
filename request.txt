@@ -1,0 +1,10 @@
+2019-09-15 23:13:42.447 17144-17144/com.seekwork.bangmart E/Tag,: url = http://27.54.248.35:7852/api/BangMart/PickQuery
+2019-09-15 23:13:42.450 17144-17144/com.seekwork.bangmart E/Tag,: url = {"CardNo":"2032899024","Detail":[{"PickNum":1,"ProductID":275}],"MachineCode":"0512TC099"}
+2019-09-15 23:13:42.834 17144-17144/com.seekwork.bangmart E/Tag,: url = http://27.54.248.35:7852/api/BangMart/GetPickUpRoads
+2019-09-15 23:13:42.836 17144-17144/com.seekwork.bangmart E/Tag,: url = {"OrderID":111,"mBangmarNeedGoods":[{"PickNum":1,"ProductID":275}],"machineCode":"0512TC099"}
+2019-09-15 23:13:42.998 17144-17144/com.seekwork.bangmart E/Tag,: url = {"mBangmarProcPicks":[{"ProductID":275,"mBangmarProcPickRoads":[{"Area":1,"Column":0,"Floor":0,"OutNum":1,"RoadID":993}]}]}
+2019-09-15 23:15:15.568 17144-17144/com.seekwork.bangmart E/Tag,: url = http://27.54.248.35:7852/api/BangMart/PickQuery
+2019-09-15 23:15:15.570 17144-17144/com.seekwork.bangmart E/Tag,: url = {"CardNo":"2032899024","Detail":[{"PickNum":1,"ProductID":289},{"PickNum":1,"ProductID":124}],"MachineCode":"0512TC099"}
+2019-09-15 23:15:15.712 17144-17144/com.seekwork.bangmart E/Tag,: url = http://27.54.248.35:7852/api/BangMart/GetPickUpRoads
+2019-09-15 23:15:15.716 17144-17144/com.seekwork.bangmart E/Tag,: url = {"OrderID":112,"mBangmarNeedGoods":[{"PickNum":1,"ProductID":289},{"PickNum":1,"ProductID":124}],"machineCode":"0512TC099"}
+2019-09-15 23:15:15.824 17144-17144/com.seekwork.bangmart E/Tag,: url = {"mBangmarProcPicks":[{"ProductID":289,"mBangmarProcPickRoads":[{"Area":1,"Column":0,"Floor":0,"OutNum":1,"RoadID":1009}]},{"ProductID":124,"mBangmarProcPickRoads":[{"Area":1,"Column":0,"Floor":0,"OutNum":1,"RoadID":990}]}]}

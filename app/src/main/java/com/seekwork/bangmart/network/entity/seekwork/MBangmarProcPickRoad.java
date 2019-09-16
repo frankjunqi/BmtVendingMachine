@@ -18,9 +18,9 @@ public class MBangmarProcPickRoad implements Serializable {
      */
     private int OutNum;
 
-    private int Area = 1;
-    private int Floor = 0;
-    private int Column = 0;
+    private int Area;
+    private int Floor;
+    private int Column;
 
     public int getArea() {
         return Area;

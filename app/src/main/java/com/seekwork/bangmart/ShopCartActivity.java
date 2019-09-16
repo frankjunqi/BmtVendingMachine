@@ -12,7 +12,6 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -31,6 +30,8 @@ import com.seekwork.bangmart.network.api.SrvResult;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarNeedGood;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarPickRoadDetailRequest;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmarPickRoadDetailResponse;
+import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPick;
+import com.seekwork.bangmart.network.entity.seekwork.MBangmarProcPickRoad;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartAuthPickUpRequest;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartAuthPickUpResponse;
 import com.seekwork.bangmart.network.entity.seekwork.MBangmartProductDetail;
@@ -353,7 +354,7 @@ public class ShopCartActivity extends AppCompatActivity {
         final MBangmarPickRoadDetailRequest request = new MBangmarPickRoadDetailRequest();
         request.setMachineCode(SeekerSoftConstant.MachineNo);
         request.setOrderID(orderId);
-        List<MBangmarNeedGood> mBangmarNeedGoods = new ArrayList<>();
+        final List<MBangmarNeedGood> mBangmarNeedGoods = new ArrayList<>();
         for (int i = 0; AddToBangmartRoadList != null && i < AddToBangmartRoadList.size(); i++) {
             MBangmarNeedGood good = new MBangmarNeedGood();
             good.setPickNum(AddToBangmartRoadList.get(i).getChooseNum());
@@ -382,6 +383,73 @@ public class ShopCartActivity extends AppCompatActivity {
                     // TODO 出货
                     Intent intent = new Intent(ShopCartActivity.this, ResultActivity.class);
                     MBangmarPickRoadDetailResponse outResponse = response.body().getData();
+
+                    List<MBangmarProcPick> mBangmarProcPicks = outResponse.getmBangmarProcPicks();
+                    int size = mBangmarProcPicks.size();
+                    for (int i = 0; i < size; i++) {
+                        MBangmarProcPick pick = mBangmarProcPicks.get(i);
+                        int pickSize = pick.getmBangmarProcPickRoads().size();
+                        for (int k = 0; k < pickSize; k++) {
+                            MBangmarProcPickRoad road = pick.getmBangmarProcPickRoads().get(k);
+                            for (int l = 0; l < 6; l++) {
+                                if (l == 0) {
+                                    for (int m = 0; m < SeekerSoftConstant.hashMap.get("A").size(); m++) {
+                                        if (road.getRoadID() == SeekerSoftConstant.hashMap.get("A").get(m).getRoadID()) {
+                                            road.setArea(SeekerSoftConstant.hashMap.get("A").get(m).getArea());
+                                            road.setFloor(SeekerSoftConstant.hashMap.get("A").get(m).getFloor());
+                                            road.setColumn(SeekerSoftConstant.hashMap.get("A").get(m).getNum());
+                                            break;
+                                        }
+                                    }
+                                } else if (l == 1) {
+                                    for (int m = 0; m < SeekerSoftConstant.hashMap.get("B").size(); m++) {
+                                        if (road.getRoadID() == SeekerSoftConstant.hashMap.get("B").get(m).getRoadID()) {
+                                            road.setArea(SeekerSoftConstant.hashMap.get("B").get(m).getArea());
+                                            road.setFloor(SeekerSoftConstant.hashMap.get("B").get(m).getFloor());
+                                            road.setColumn(SeekerSoftConstant.hashMap.get("B").get(m).getNum());
+                                            break;
+                                        }
+                                    }
+                                } else if (l == 2) {
+                                    for (int m = 0; m < SeekerSoftConstant.hashMap.get("C").size(); m++) {
+                                        if (road.getRoadID() == SeekerSoftConstant.hashMap.get("C").get(m).getRoadID()) {
+                                            road.setArea(SeekerSoftConstant.hashMap.get("C").get(m).getArea());
+                                            road.setFloor(SeekerSoftConstant.hashMap.get("C").get(m).getFloor());
+                                            road.setColumn(SeekerSoftConstant.hashMap.get("C").get(m).getNum());
+                                            break;
+                                        }
+                                    }
+                                } else if (l == 3) {
+                                    for (int m = 0; m < SeekerSoftConstant.hashMap.get("D").size(); m++) {
+                                        if (road.getRoadID() == SeekerSoftConstant.hashMap.get("D").get(m).getRoadID()) {
+                                            road.setArea(SeekerSoftConstant.hashMap.get("D").get(m).getArea());
+                                            road.setFloor(SeekerSoftConstant.hashMap.get("D").get(m).getFloor());
+                                            road.setColumn(SeekerSoftConstant.hashMap.get("D").get(m).getNum());
+                                            break;
+                                        }
+                                    }
+                                } else if (l == 4) {
+                                    for (int m = 0; m < SeekerSoftConstant.hashMap.get("E").size(); m++) {
+                                        if (road.getRoadID() == SeekerSoftConstant.hashMap.get("E").get(m).getRoadID()) {
+                                            road.setArea(SeekerSoftConstant.hashMap.get("E").get(m).getArea());
+                                            road.setFloor(SeekerSoftConstant.hashMap.get("E").get(m).getFloor());
+                                            road.setColumn(SeekerSoftConstant.hashMap.get("E").get(m).getNum());
+                                            break;
+                                        }
+                                    }
+                                } else if (l == 5) {
+                                    for (int m = 0; m < SeekerSoftConstant.hashMap.get("F").size(); m++) {
+                                        if (road.getRoadID() == SeekerSoftConstant.hashMap.get("F").get(m).getRoadID()) {
+                                            road.setArea(SeekerSoftConstant.hashMap.get("F").get(m).getArea());
+                                            road.setFloor(SeekerSoftConstant.hashMap.get("F").get(m).getFloor());
+                                            road.setColumn(SeekerSoftConstant.hashMap.get("F").get(m).getNum());
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     Gson gson = new Gson();
                     String json = gson.toJson(outResponse);
