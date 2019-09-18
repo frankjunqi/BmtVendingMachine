@@ -134,6 +134,12 @@ public class ProList2Activity extends AppCompatActivity {
                     singleCountDownViewPop.stopCountDown();
                     singleCountDownViewPop = null;
                 }
+
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("success", isSuccess);
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
                 ProList2Activity.this.finish();
             }
         });
@@ -148,7 +154,7 @@ public class ProList2Activity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(SeekerSoftConstant.ADDCARTLIST, AddToBangmartRoadList);
                     intent.putExtras(bundle);
-                    startActivity(intent);
+                    startActivityForResult(intent, 100);
                 }
             }
         });
@@ -173,6 +179,11 @@ public class ProList2Activity extends AppCompatActivity {
         singleCountDownViewPop.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
             public void onSingleCountDownEnd() {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("success", isSuccess);
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
                 ProList2Activity.this.finish();
             }
         });
@@ -364,6 +375,31 @@ public class ProList2Activity extends AppCompatActivity {
             mBangmartRoads = SeekerSoftConstant.hashMap.get("F");
         }
         gridAdapter.setDataList(mBangmartRoads);
+    }
+
+
+    private boolean isSuccess = false;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            AddToBangmartRoadList.clear();
+            if (data.getExtras() != null) {
+                isSuccess = data.getExtras().getBoolean("success");
+            }
+            if (tv_shopping != null && AddToBangmartRoadList != null) {
+                tv_shopping.setText("去购物车(" + AddToBangmartRoadList.size() + ")");
+            }
+        }
+        if (requestCode == 100 && resultCode == 10 && data != null) {
+            AddToBangmartRoadList.clear();
+            AddToBangmartRoadList = (ArrayList<MBangmartRoad>) data.getExtras().getSerializable(SeekerSoftConstant.ADDCARTLIST);
+            if (tv_shopping != null && AddToBangmartRoadList != null) {
+                tv_shopping.setText("去购物车(" + AddToBangmartRoadList.size() + ")");
+            }
+        }
+
     }
 
     @Override

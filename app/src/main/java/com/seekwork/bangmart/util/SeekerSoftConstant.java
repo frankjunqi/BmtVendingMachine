@@ -19,7 +19,6 @@ public class SeekerSoftConstant {
     // 柜子的数据：包括 area follor column x y width
     public static List<List<List<SerialLocationBean>>> list;
     public static HashMap<String, List<MBangmartRoad>> hashMap = new HashMap<>();
-    ;
 
     // 小车的宽度
     public static final int MACHINE_WIDTH = 300;
@@ -44,7 +43,7 @@ public class SeekerSoftConstant {
     public static int BOX_HEIGHT = 0;
 
     // 初始化系统的时间
-    public static int INIT_SYS_TIME = 18;
+    public static int INIT_SYS_TIME = 100;
     // 商品列表页面到技术倒计时
     public static int INIT_PRO_LIST_TIME = 100;
     // 购物车页面的倒计时

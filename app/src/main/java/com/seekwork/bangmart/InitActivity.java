@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -29,7 +28,6 @@ import com.bangmart.nt.vendingmachine.model.RspGetDeviceParameter;
 import com.bangmart.nt.vendingmachine.model.RspGetLocationCoordinateData;
 import com.seekwork.bangmart.model.SerialLocationBean;
 import com.seekwork.bangmart.util.BmtVendingMachineUtil;
-import com.seekwork.bangmart.util.LogCat;
 import com.seekwork.bangmart.util.SeekerSoftConstant;
 import com.seekwork.bangmart.view.SingleCountDownView;
 
@@ -41,6 +39,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static com.bangmart.nt.command.CommandDef.ID_GET_LOCATION_DATA;
+import static com.bangmart.nt.command.CommandDef.ID_LOCATION_SCAN;
 import static com.seekwork.bangmart.util.SeekerSoftConstant.INIT_SYS_TIME;
 
 public class InitActivity extends AppCompatActivity {
@@ -72,7 +71,12 @@ public class InitActivity extends AppCompatActivity {
         singleCountDownView.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
             public void onSingleCountDownEnd() {
-                btn_ok.setEnabled(true);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        btn_ok.setEnabled(true);
+                    }
+                });
             }
         });
         singleCountDownView.startCountDown();
@@ -284,7 +288,7 @@ public class InitActivity extends AppCompatActivity {
         /**
          *1.构造命令(异步)
          */
-        Command cmd = Command.create(ID_GET_LOCATION_DATA, null, Command.TYPE_ASYNC);
+        Command cmd = Command.create(ID_LOCATION_SCAN, null, Command.TYPE_ASYNC);
         /**
          * 2.监听相关回调
          */
@@ -301,8 +305,6 @@ public class InitActivity extends AppCompatActivity {
                         RspGetLocationCoordinateData rspGetCargoRoadCoordinateData = RspGetLocationCoordinateData.valueOf(data);
                         if (null != rspGetCargoRoadCoordinateData) {
                             appendUILogAsync("查询货道坐标列表（0x24）(异步) 命令执行 成功。");
-
-                            Log.e("url", rspGetCargoRoadCoordinateData.toString());
 
                             //TODO 1.解析货道坐标
                             SeekerSoftConstant.list = handleLocationList(rspGetCargoRoadCoordinateData);
@@ -342,20 +344,6 @@ public class InitActivity extends AppCompatActivity {
                             } else {
                                 appendUILogAsync("解析货道坐标返回数据为空。");
                             }
-
-                            for (int i = 0; i < SeekerSoftConstant.list.size(); i++) {
-                                int floor = SeekerSoftConstant.list.get(i).size();
-                                for (int k = 0; k < floor; k++) {
-                                    int column = SeekerSoftConstant.list.get(i).get(k).size();
-                                    for (int l = 0; l < column; l++) {
-                                        LogCat.e("area = " + SeekerSoftConstant.list.get(i).get(k).get(l).getAreaValue() +
-                                                "floor = " + SeekerSoftConstant.list.get(i).get(k).get(l).getFloorValue() +
-                                                "column = " + SeekerSoftConstant.list.get(i).get(k).get(l).getLocationValue() +
-                                                "width = " + SeekerSoftConstant.list.get(i).get(k).get(l).getWidth());
-                                    }
-                                }
-                            }
-
                         }
                     } else {
                         appendUILogAsync("查询货道坐标列表（0x24）(异步) 命令执行 返回数据失败。");
@@ -364,7 +352,13 @@ public class InitActivity extends AppCompatActivity {
                     appendUILogAsync("查询货道坐标列表（0x24）(异步) 命令执行 失败。 ");
                 }
 
-                btn_ok.setEnabled(true);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        btn_ok.setEnabled(true);
+                    }
+                });
+
 
                 return true;
             }

@@ -1,5 +1,6 @@
 package com.seekwork.bangmart;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -89,6 +90,11 @@ public class ResultActivity extends AppCompatActivity {
         ll_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("success", mBangmarSuccessGoods.size() > 0);
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
                 ResultActivity.this.finish();
             }
         });
@@ -101,6 +107,8 @@ public class ResultActivity extends AppCompatActivity {
         singleCountDownViewPop.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
             public void onSingleCountDownEnd() {
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
                 ResultActivity.this.finish();
             }
         });

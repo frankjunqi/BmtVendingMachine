@@ -90,6 +90,11 @@ public class ShopCartActivity extends AppCompatActivity {
         ll_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(SeekerSoftConstant.ADDCARTLIST, AddToBangmartRoadList);
+                intent.putExtras(bundle);
+                setResult(10, intent);
                 ShopCartActivity.this.finish();
             }
         });
@@ -117,6 +122,11 @@ public class ShopCartActivity extends AppCompatActivity {
         singleCountDownView.setSingleCountDownEndListener(new SingleCountDownView.SingleCountDownEndListener() {
             @Override
             public void onSingleCountDownEnd() {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(SeekerSoftConstant.ADDCARTLIST, AddToBangmartRoadList);
+                intent.putExtras(bundle);
+                setResult(10, intent);
                 ShopCartActivity.this.finish();
             }
         });
@@ -460,9 +470,7 @@ public class ShopCartActivity extends AppCompatActivity {
                     bundle.putSerializable(SeekerSoftConstant.CardNo, CardNo);
                     bundle.putInt(SeekerSoftConstant.OrderID, orderId);
                     intent.putExtras(bundle);
-                    startActivity(intent);
-
-                    ShopCartActivity.this.finish();
+                    startActivityForResult(intent, 100);
                 } else {
                     // 异常
                     ll_take.setVisibility(View.INVISIBLE);
@@ -500,6 +508,18 @@ public class ShopCartActivity extends AppCompatActivity {
         if (promissionDialog != null && promissionDialog.isShowing()) {
             promissionDialog.dismiss();
             promissionDialog = null;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("success", data.getExtras().getBoolean("success"));
+            setResult(RESULT_OK, intent);
+            ShopCartActivity.this.finish();
         }
     }
 }

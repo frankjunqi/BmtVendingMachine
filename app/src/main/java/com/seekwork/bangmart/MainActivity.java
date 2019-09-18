@@ -163,23 +163,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this, ProList2Activity.class);
-        Bundle bundle = new Bundle();
-        if (v.getId() == R.id.ll_naobao) {
-            bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 0);
-        } else if (v.getId() == R.id.ll_wujin) {
-            bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 1);
-        } else if (v.getId() == R.id.ll_wenju) {
-            bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 2);
-        } else if (v.getId() == R.id.ll_riyong) {
-            bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 3);
-        } else if (v.getId() == R.id.ll_yinliao) {
-            bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 4);
-        } else if (v.getId() == R.id.ll_shipin) {
-            bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 5);
+        if (SeekerSoftConstant.hashMap.containsKey("A")) {
+            Intent intent = new Intent(this, ProList2Activity.class);
+            Bundle bundle = new Bundle();
+            if (v.getId() == R.id.ll_naobao) {
+                bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 0);
+            } else if (v.getId() == R.id.ll_wujin) {
+                bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 1);
+            } else if (v.getId() == R.id.ll_wenju) {
+                bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 2);
+            } else if (v.getId() == R.id.ll_riyong) {
+                bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 3);
+            } else if (v.getId() == R.id.ll_yinliao) {
+                bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 4);
+            } else if (v.getId() == R.id.ll_shipin) {
+                bundle.putInt(SeekerSoftConstant.CHOOSE_POSITION, 5);
+            }
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 100);
         }
-        intent.putExtras(bundle);
-        startActivity(intent);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            boolean isSuccess = data.getExtras().getBoolean("success");
+            if (isSuccess) {
+                SeekerSoftConstant.hashMap.clear();
+                bangMartQueryRoad();
+            }
+        }
     }
 
     /**
